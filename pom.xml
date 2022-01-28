@@ -20,4 +20,25 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>xelians-maven-group</id>
+            <url>https://nexus.teamdlab.com/repository/xelian-maven-group/</url>
+        </repository>
+        <repository>
+            <id>shibboleth-maven</id>
+            <url>https://build.shibboleth.net/nexus/content/repositories/releases/</url>
+        </repository>
+    </repositories>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>xelians-maven-snapshots</id>
+            <url>https://nexus.teamdlab.com/repository/xelians-maven-snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>xelians-maven-releases</id>
+            <url>https://nexus.teamdlab.com/repository/xelians-maven-releases/</url>
+        </repository>
+    </distributionManagement>
+
 </project>
