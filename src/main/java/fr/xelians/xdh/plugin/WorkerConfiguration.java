@@ -1,5 +1,6 @@
 package fr.xelians.xdh.plugin;
 
+
 import fr.xelians.xdh.plugin.form.WorkerForm;
 
 /**
@@ -9,6 +10,8 @@ public interface WorkerConfiguration {
 
 	String getName();
 
-	WorkerForm getForm();
+	String version();
+
+	WorkerForm.Form getForm();
 
 }
