@@ -8,10 +8,12 @@ import fr.xelians.xdh.plugin.form.WorkerForm;
  */
 public interface WorkerConfiguration {
 
-	String getName();
+	String name();
+
+	String id();
 
 	String version();
 
-	WorkerForm.Form getForm();
+	WorkerForm.Form form();
 
 }
