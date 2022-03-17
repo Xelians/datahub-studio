@@ -141,6 +141,11 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		return new InputFormFileSpec(parameter, label, mandatory, this);
 	}
 
+	@Override
+	public WorkerForm.InputFormTableSpec addInputFormTable(String parameter, String label, boolean mandatory) {
+		return new InputFormTableSpec(parameter, label, mandatory, this);
+	}
+
 	private WorkerFormBuilder addInput(WorkerForm.InputFormBase inputFormBase){
 		inputForms.add(inputFormBase);
 		return this;
@@ -204,16 +209,112 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 	}
 
+	private class InputFormTableSpec implements WorkerForm.InputFormTableSpec{
+
+		private InputFormTable inputFormTable;
+		private WorkerFormBuilder builder;
+
+		private InputFormTableSpec(String parameter, String label, boolean mandatory, WorkerFormBuilder builder){
+			this.inputFormTable = new InputFormTable();
+			this.inputFormTable.setInputFormType(InputFormType.TABLE);
+			this.inputFormTable.setParameter(parameter);
+			this.inputFormTable.setLabel(label);
+			this.inputFormTable.setMandatory(mandatory);
+			this.builder = builder;
+		}
+
+		@Override
+		public WorkerForm.InputTextTableSpec addInputTextText(String parameter, String label, boolean mandatory) {
+			return new InputTextTableSpec(InputValueType.TEXT, InputFormType.TEXT, parameter, label, mandatory, this);
+		}
+
+		@Override
+		public WorkerForm.InputFormMultiTableSpec addInputSelectText(String parameter, String label, boolean mandatory) {
+			return new InputFormMultiTableSpec(InputValueType.TEXT, InputFormType.SELECT, parameter, label, mandatory, this);
+		}
+
+		@Override
+		public WorkerForm.Builder and() {
+			return builder.addInput(inputFormTable);
+		}
+
+		private void addInputForm(WorkerForm.InputFormBase inputFormBase){
+			inputFormTable.addInputFormColumn(inputFormBase);
+		}
+
+		private class InputFormMultiTableSpec implements WorkerForm.InputFormMultiTableSpec{
+
+			protected InputFormMulti<String> inputFormMulti;
+
+			private InputFormTableSpec inputFormTableSpec;
+
+			private InputFormMultiTableSpec(InputValueType inputValueType, InputFormType inputFormType, String parameter, String label, boolean mandatory, InputFormTableSpec inputFormTableSpec){
+				this.inputFormMulti = new InputFormMulti();
+				this.inputFormMulti.setInputValueType(inputValueType);
+				this.inputFormMulti.setParameter(parameter);
+				this.inputFormMulti.setLabel(label);
+				this.inputFormMulti.setMandatory(mandatory);
+				this.inputFormMulti.setInputFormType(inputFormType);
+				this.inputFormTableSpec = inputFormTableSpec;
+			}
+
+			public InputFormMultiTableSpec withValues(List<String> values){
+				inputFormMulti.setValues(values);
+				return this;
+			}
+
+			public InputFormTableSpec and(){
+				inputFormTableSpec.addInputForm(inputFormMulti);
+				return inputFormTableSpec;
+			}
+
+		}
+
+		private class InputTextTableSpec implements WorkerForm.InputTextTableSpec{
+
+			private InputFormUnique<String> inputFormUnique;
+
+			private InputFormTableSpec inputFormTableSpec;
+
+			private InputTextTableSpec(InputValueType inputValueType, InputFormType inputFormType, String parameter, String label, boolean mandatory, InputFormTableSpec inputFormTableSpec){
+				this.inputFormUnique = new InputFormUnique();
+				this.inputFormUnique.setInputFormType(InputFormType.TEXT);
+				this.inputFormUnique.setInputValueType(inputValueType);
+				this.inputFormUnique.setParameter(parameter);
+				this.inputFormUnique.setLabel(label);
+				this.inputFormUnique.setMandatory(mandatory);
+				this.inputFormUnique.setInputFormType(inputFormType);
+				this.inputFormTableSpec = inputFormTableSpec;
+			}
+
+			@Override
+			public WorkerForm.InputTextTableSpec withMinValue(String value) {
+				inputFormUnique.setMin(value);
+				return this;
+			}
+
+			@Override
+			public WorkerForm.InputTextTableSpec withMaxValue(String value) {
+				inputFormUnique.setMax(value);
+				return this;
+			}
+
+			@Override
+			public WorkerForm.InputFormTableSpec and() {
+				inputFormTableSpec.addInputForm(inputFormUnique);
+				return inputFormTableSpec;
+			}
+		}
+	}
+
 	private class InputFormFileSpec implements WorkerForm.InputFormFileSpec {
 
 		private InputFormFile inputFormFile;
-
 		private WorkerFormBuilder builder;
 
 		private InputFormFileSpec(String parameter, String label, boolean mandatory, WorkerFormBuilder builder){
 			this.inputFormFile = new InputFormFile();
 			this.inputFormFile.setInputFormType(InputFormType.FILE);
-			this.inputFormFile.setInputValueType(InputValueType.TEXT);
 			this.inputFormFile.setParameter(parameter);
 			this.inputFormFile.setLabel(label);
 			this.inputFormFile.setMandatory(mandatory);
@@ -275,6 +376,15 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		private InputFormMulti() {}
 
+		private InputValueType inputValueType;
+
+		private void setInputValueType(InputValueType inputValueType) {
+			this.inputValueType = inputValueType;
+		}
+		public InputValueType getInputValueType() {
+			return inputValueType;
+		}
+
 		private void setValues(List<T> values) {
 			this.values = values;
 		}
@@ -299,13 +409,36 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		}
 	}
 
+	private class InputFormTable extends InputFormBase implements WorkerForm.InputFormTable{
+
+		private List<WorkerForm.InputFormBase> inputFormColumns = new ArrayList<>();
+
+		private void addInputFormColumn(WorkerForm.InputFormBase inputFormBase){
+			inputFormColumns.add(inputFormBase);
+		}
+
+		@Override
+		public List<WorkerForm.InputFormBase> getInputFormColumns() {
+			return inputFormColumns;
+		}
+	}
+
 	private class InputFormUnique<T> extends InputFormBase implements WorkerForm.InputFormUnique<T>{
 
 		private T min;
 
 		private T max;
 
+		private InputValueType inputValueType;
+
 		private InputFormUnique() {}
+
+		private void setInputValueType(InputValueType inputValueType) {
+			this.inputValueType = inputValueType;
+		}
+		public InputValueType getInputValueType() {
+			return inputValueType;
+		}
 
 		private void setMin(T min) {
 			this.min = min;
@@ -328,8 +461,6 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		private InputFormType inputFormType;
 
-		private InputValueType inputValueType;
-
 		private String label;
 
 		private String parameter;
@@ -338,10 +469,6 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		public InputFormType getInputFormType() {
 			return inputFormType;
-		}
-
-		public InputValueType getInputValueType() {
-			return inputValueType;
 		}
 
 		public String getLabel() {
@@ -358,10 +485,6 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		protected void setInputFormType(InputFormType inputFormType) {
 			this.inputFormType = inputFormType;
-		}
-
-		protected void setInputValueType(InputValueType inputValueType) {
-			this.inputValueType = inputValueType;
 		}
 
 		protected void setLabel(String label) {

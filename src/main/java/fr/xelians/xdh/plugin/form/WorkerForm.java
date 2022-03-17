@@ -42,6 +42,7 @@ public class WorkerForm {
 		InputFormMultiSpec<String> addInputRadioText(String parameter, String label, boolean mandatory);
 
 		InputFormFileSpec addInputFormFile(String parameter, String label, boolean mandatory);
+		InputFormTableSpec addInputFormTable(String parameter, String label, boolean mandatory);
 
 		Form build();
 
@@ -51,7 +52,6 @@ public class WorkerForm {
 		InputFormMultiSpec withValues(List<T> values);
 		Builder and();
 	}
-
 
 	public interface InputTextSpec<T>{
 		InputTextSpec withMinValue(T value);
@@ -64,28 +64,55 @@ public class WorkerForm {
 		Builder and();
 	}
 
+	public interface InputFormMultiTableSpec{
+		InputFormMultiTableSpec withValues(List<String> values);
+		InputFormTableSpec and();
+	}
+
+	public interface InputTextTableSpec{
+		InputTextTableSpec withMinValue(String value);
+		InputTextTableSpec withMaxValue(String value);
+		InputFormTableSpec and();
+	}
+
+	public interface InputFormTableSpec{
+
+		InputTextTableSpec addInputTextText(String parameter, String label, boolean mandatory);
+		InputFormMultiTableSpec addInputSelectText(String parameter, String label, boolean mandatory);
+		Builder and();
+
+	}
+
 	public interface Form {
 		List<InputFormBase> getInputForms();
 	}
 
-	public interface InputFormMulti<T> extends InputFormBase {
-		public List<T> getValues();
+	public interface InputFormMulti<T> extends InputFormBaseValue {
+		List<T> getValues();
 	}
 
 	public interface InputFormFile extends InputFormBase {
-		public List<String> getFileExtensions();
+		List<String> getFileExtensions();
 	}
 
-	public interface InputFormUnique<T> extends InputFormBase {
+	public interface InputFormTable extends InputFormBase {
+		List<InputFormBase> getInputFormColumns();
+	}
+
+	public interface InputFormUnique<T> extends InputFormBaseValue {
 		T getMin();
 		T getMax();
 	}
 
+	public interface InputFormBaseValue extends InputFormBase{
+		InputValueType getInputValueType();
+	}
+
 	public interface InputFormBase {
 		InputFormType getInputFormType();
-		InputValueType getInputValueType();
 		String getLabel();
 		String getParameter();
 		boolean isMandatory();
 	}
+
 }

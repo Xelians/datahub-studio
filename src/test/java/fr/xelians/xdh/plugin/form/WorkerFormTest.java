@@ -17,12 +17,14 @@ public class WorkerFormTest {
 	private static final String LABEL_3 = "LABEL_3";
 	private static final String LABEL_4 = "LABEL_4";
 	private static final String LABEL_5 = "LABEL_5";
+	private static final String LABEL_6 = "LABEL_6";
 
 	private static final String PARAM_1 = "PARAM_1";
 	private static final String PARAM_2 = "PARAM_2";
 	private static final String PARAM_3 = "PARAM_3";
 	private static final String PARAM_4 = "PARAM_4";
 	private static final String PARAM_5 = "PARAM_5";
+	private static final String PARAM_6 = "PARAM_6";
 
 	private static final Float MIN_VALUE = 2.6f;
 	private static final Float MAX_VALUE = 10.f;
@@ -32,6 +34,8 @@ public class WorkerFormTest {
 
 	private static final Double VALUE_3 = 1.0;
 	private static final Double VALUE_4 = 2.2;
+	private static final String VALUE_5 = "VALUE_5";
+	private static final String VALUE_6 = "VALUE_6";
 
 	@Test
 	public void testWorkerForm(){
@@ -52,15 +56,23 @@ public class WorkerFormTest {
 				.and()
 				.addInputFormFile(PARAM_5, LABEL_5, false)
 				.and()
+				.addInputFormTable(PARAM_6, LABEL_6, true)
+				.addInputTextText(PARAM_1, LABEL_1, false)
+				.and()
+				.addInputSelectText(PARAM_2, LABEL_2, true)
+				.withValues(List.of(VALUE_5, VALUE_6))
+				.and()
+				.and()
 				.build();
 
 		List<WorkerForm.InputFormBase> inputFormBases = form.getInputForms();
-		assertEquals(5, inputFormBases.size());
+		assertEquals(6, inputFormBases.size());
 		WorkerForm.InputFormBase inputFormBase1 = inputFormBases.get(0);
 		WorkerForm.InputFormBase inputFormBase2 = inputFormBases.get(1);
 		WorkerForm.InputFormBase inputFormBase3 = inputFormBases.get(2);
 		WorkerForm.InputFormBase inputFormBase4 = inputFormBases.get(3);
 		WorkerForm.InputFormBase inputFormBase5 = inputFormBases.get(4);
+		WorkerForm.InputFormBase inputFormBase6 = inputFormBases.get(5);
 
 		assertTrue(inputFormBase1 instanceof WorkerForm.InputFormUnique);
 		WorkerForm.InputFormUnique<Float> inputFormUnique1 = (WorkerForm.InputFormUnique) inputFormBase1;
@@ -105,8 +117,34 @@ public class WorkerFormTest {
 		assertEquals(LABEL_5, inputFormFile.getLabel());
 		assertFalse(inputFormFile.isMandatory());
 		assertEquals(InputFormType.FILE, inputFormFile.getInputFormType());
-		assertEquals(InputValueType.TEXT, inputFormFile.getInputValueType());
 
+		assertTrue(inputFormBase6 instanceof WorkerForm.InputFormTable);
+		WorkerForm.InputFormTable inputFormTable = (WorkerForm.InputFormTable) inputFormBase6;
+		assertEquals(PARAM_6, inputFormTable.getParameter());
+		assertEquals(LABEL_6, inputFormTable.getLabel());
+		assertTrue(inputFormTable.isMandatory());
+		assertEquals(InputFormType.TABLE, inputFormTable.getInputFormType());
+		List<WorkerForm.InputFormBase> inputFormColumns = inputFormTable.getInputFormColumns();
+
+		WorkerForm.InputFormBase inputFormColum1 = inputFormColumns.get(0);
+		WorkerForm.InputFormBase inputFormColum2 = inputFormColumns.get(1);
+
+		assertTrue(inputFormColum1 instanceof WorkerForm.InputFormUnique);
+		WorkerForm.InputFormUnique inputFormUniqueColumn1 = (WorkerForm.InputFormUnique) inputFormColum1;
+		assertEquals(PARAM_1, inputFormUniqueColumn1.getParameter());
+		assertEquals(LABEL_1, inputFormUniqueColumn1.getLabel());
+		assertEquals(InputFormType.TEXT, inputFormUniqueColumn1.getInputFormType());
+		assertEquals(InputValueType.TEXT, inputFormUniqueColumn1.getInputValueType());
+		assertFalse(inputFormUniqueColumn1.isMandatory());
+
+		assertTrue(inputFormColum2 instanceof WorkerForm.InputFormMulti);
+		WorkerForm.InputFormMulti inputFormMultiColum2 = (WorkerForm.InputFormMulti) inputFormColum2;
+		assertEquals(PARAM_2, inputFormMultiColum2.getParameter());
+		assertEquals(LABEL_2, inputFormMultiColum2.getLabel());
+		assertTrue(inputFormMultiColum2.isMandatory());
+		assertEquals(InputFormType.SELECT, inputFormMultiColum2.getInputFormType());
+		assertEquals(InputValueType.TEXT, inputFormMultiColum2.getInputValueType());
+		assertEquals(List.of(VALUE_5, VALUE_6), inputFormMultiColum2.getValues());
 
 	}
 
