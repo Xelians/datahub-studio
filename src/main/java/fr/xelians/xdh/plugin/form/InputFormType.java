@@ -10,5 +10,6 @@ public enum InputFormType {
 	CHECKBOX,
 	FILE,
 	TABLE,
+	TOGGLE,
 	RADIO
 }

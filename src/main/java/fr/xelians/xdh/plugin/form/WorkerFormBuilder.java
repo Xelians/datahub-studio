@@ -146,6 +146,11 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		return new InputFormTableSpec(parameter, label, mandatory, this);
 	}
 
+	@Override
+	public WorkerForm.InputFormToggleSpec addInputFormToggle(String parameter, String label, boolean mandatory) {
+		return new InputFormToggleSpec(parameter, label, mandatory, this);
+	}
+
 	private WorkerFormBuilder addInput(WorkerForm.InputFormBase inputFormBase){
 		inputForms.add(inputFormBase);
 		return this;
@@ -209,6 +214,26 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 	}
 
+	private class InputFormToggleSpec implements WorkerForm.InputFormToggleSpec{
+
+		private InputFormToggle inputFormToggle;
+		private WorkerFormBuilder builder;
+
+		private InputFormToggleSpec(String parameter, String label, boolean mandatory, WorkerFormBuilder builder) {
+			this.inputFormToggle = new InputFormToggle();
+			this.inputFormToggle.setInputFormType(InputFormType.TOGGLE);
+			this.inputFormToggle.setParameter(parameter);
+			this.inputFormToggle.setLabel(label);
+			this.inputFormToggle.setMandatory(mandatory);
+			this.builder = builder;
+		}
+
+		@Override
+		public WorkerForm.Builder and() {
+			return builder;
+		}
+	}
+
 	private class InputFormTableSpec implements WorkerForm.InputFormTableSpec{
 
 		private InputFormTable inputFormTable;
@@ -231,6 +256,11 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		@Override
 		public WorkerForm.InputFormMultiTableSpec addInputSelectText(String parameter, String label, boolean mandatory) {
 			return new InputFormMultiTableSpec(InputValueType.TEXT, InputFormType.SELECT, parameter, label, mandatory, this);
+		}
+
+		@Override
+		public WorkerForm.InputFormToggleTableSpec addInputFormToggle(String parameter, String label, boolean mandatory) {
+			return new InputFormToggleTableSpec(parameter, label, mandatory, this);
 		}
 
 		@Override
@@ -302,6 +332,27 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 			@Override
 			public WorkerForm.InputFormTableSpec and() {
 				inputFormTableSpec.addInputForm(inputFormUnique);
+				return inputFormTableSpec;
+			}
+		}
+
+		private class InputFormToggleTableSpec implements WorkerForm.InputFormToggleTableSpec{
+
+			private InputFormToggle inputFormToggle;
+			private InputFormTableSpec inputFormTableSpec;
+
+			private InputFormToggleTableSpec(String parameter, String label, boolean mandatory, InputFormTableSpec inputFormTableSpec) {
+				this.inputFormToggle = new InputFormToggle();
+				this.inputFormToggle.setInputFormType(InputFormType.TOGGLE);
+				this.inputFormToggle.setParameter(parameter);
+				this.inputFormToggle.setLabel(label);
+				this.inputFormToggle.setMandatory(mandatory);
+				this.inputFormTableSpec = inputFormTableSpec;
+			}
+
+
+			@Override
+			public WorkerForm.InputFormTableSpec and() {
 				return inputFormTableSpec;
 			}
 		}
@@ -421,6 +472,10 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		public List<WorkerForm.InputFormBase> getInputFormColumns() {
 			return inputFormColumns;
 		}
+	}
+
+	private class InputFormToggle extends InputFormBase implements WorkerForm.InputFormToggle{
+
 	}
 
 	private class InputFormUnique<T> extends InputFormBase implements WorkerForm.InputFormUnique<T>{

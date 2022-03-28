@@ -43,6 +43,7 @@ public class WorkerForm {
 
 		InputFormFileSpec addInputFormFile(String parameter, String label, boolean mandatory);
 		InputFormTableSpec addInputFormTable(String parameter, String label, boolean mandatory);
+		InputFormToggleSpec addInputFormToggle(String parameter, String label, boolean mandatory);
 
 		Form build();
 
@@ -75,12 +76,19 @@ public class WorkerForm {
 		InputFormTableSpec and();
 	}
 
-	public interface InputFormTableSpec{
+	public interface InputFormToggleTableSpec{
+		InputFormTableSpec and();
+	}
 
+	public interface InputFormTableSpec{
 		InputTextTableSpec addInputTextText(String parameter, String label, boolean mandatory);
 		InputFormMultiTableSpec addInputSelectText(String parameter, String label, boolean mandatory);
+		InputFormToggleTableSpec addInputFormToggle(String parameter, String label, boolean mandatory);
 		Builder and();
+	}
 
+	public interface InputFormToggleSpec{
+		Builder and();
 	}
 
 	public interface Form {
@@ -93,6 +101,10 @@ public class WorkerForm {
 
 	public interface InputFormFile extends InputFormBase {
 		List<String> getFileExtensions();
+	}
+
+	public interface InputFormToggle extends InputFormBase {
+
 	}
 
 	public interface InputFormTable extends InputFormBase {
