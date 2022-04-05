@@ -230,7 +230,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		@Override
 		public WorkerForm.Builder and() {
-			return builder;
+			return builder.addInput(inputFormToggle);
 		}
 	}
 
