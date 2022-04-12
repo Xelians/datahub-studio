@@ -12,6 +12,10 @@ public interface WorkerConfiguration {
 
 	String id();
 
+	default String description(){
+		return "";
+	}
+
 	String version();
 
 	WorkerForm.Form form();
