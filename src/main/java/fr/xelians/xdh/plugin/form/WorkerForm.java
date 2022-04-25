@@ -88,6 +88,7 @@ public class WorkerForm {
 		InputFormMultiTableSpec addInputSelectText(String parameter, String label, boolean mandatory);
 		InputFormToggleTableSpec addInputFormToggle(String parameter, String label, boolean mandatory);
 		InputFormTableSpec withInformation(String information);
+		InputFormTableSpec withTableLabel(String tableLabel);
 
 	}
 
@@ -119,6 +120,7 @@ public class WorkerForm {
 
 	public interface InputFormTable extends InputFormBase {
 		List<InputFormBase> getInputFormColumns();
+		String getTableLabel();
 	}
 
 	public interface InputFormUnique<T> extends InputFormBaseValue {

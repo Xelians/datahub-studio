@@ -282,6 +282,12 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		}
 
 		@Override
+		public WorkerForm.InputFormTableSpec withTableLabel(String tableLabel) {
+			this.inputFormTable.tableLabel = tableLabel;
+			return this;
+		}
+
+		@Override
 		public WorkerForm.Builder and() {
 			return builder.addInput(inputFormTable);
 		}
@@ -493,6 +499,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 	private class InputFormTable extends InputFormBase implements WorkerForm.InputFormTable{
 
 		private List<WorkerForm.InputFormBase> inputFormColumns = new ArrayList<>();
+		private String tableLabel;
 
 		private void addInputFormColumn(WorkerForm.InputFormBase inputFormBase){
 			inputFormColumns.add(inputFormBase);
@@ -501,6 +508,11 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		@Override
 		public List<WorkerForm.InputFormBase> getInputFormColumns() {
 			return inputFormColumns;
+		}
+
+		@Override
+		public String getTableLabel() {
+			return tableLabel;
 		}
 	}
 
