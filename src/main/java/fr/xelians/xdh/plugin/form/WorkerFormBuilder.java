@@ -353,6 +353,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 			@Override
 			public WorkerForm.InputFormTableSpec and() {
+				inputFormTableSpec.addInputForm(inputFormToggle);
 				return inputFormTableSpec;
 			}
 		}
