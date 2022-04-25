@@ -49,20 +49,23 @@ public class WorkerForm {
 
 	}
 
-	public interface InputFormMultiSpec<T>{
+	public interface InputFormMultiSpec<T> extends InputFormBaseSpec{
 		InputFormMultiSpec withValues(List<T> values);
-		Builder and();
+		InputFormMultiSpec withInformation(String information);
+
 	}
 
-	public interface InputTextSpec<T>{
+	public interface InputTextSpec<T> extends InputFormBaseSpec{
 		InputTextSpec withMinValue(T value);
 		InputTextSpec withMaxValue(T value);
-		Builder and();
+		InputTextSpec withInformation(String information);
+
 	}
 
-	public interface InputFormFileSpec {
+	public interface InputFormFileSpec extends InputFormBaseSpec{
 		InputFormFileSpec withFileExtensions(List<String> fileExtensions);
-		Builder and();
+		InputFormFileSpec withInformation(String information);
+
 	}
 
 	public interface InputFormMultiTableSpec{
@@ -80,15 +83,22 @@ public class WorkerForm {
 		InputFormTableSpec and();
 	}
 
-	public interface InputFormTableSpec{
+	public interface InputFormTableSpec extends InputFormBaseSpec{
 		InputTextTableSpec addInputTextText(String parameter, String label, boolean mandatory);
 		InputFormMultiTableSpec addInputSelectText(String parameter, String label, boolean mandatory);
 		InputFormToggleTableSpec addInputFormToggle(String parameter, String label, boolean mandatory);
-		Builder and();
+		InputFormTableSpec withInformation(String information);
+
 	}
 
-	public interface InputFormToggleSpec{
+	public interface InputFormBaseSpec{
+
 		Builder and();
+
+	}
+
+	public interface InputFormToggleSpec extends InputFormBaseSpec{
+		InputFormToggleSpec withInformation(String information);
 	}
 
 	public interface Form {
@@ -125,6 +135,7 @@ public class WorkerForm {
 		String getLabel();
 		String getParameter();
 		boolean isMandatory();
+		String getInformation();
 	}
 
 }

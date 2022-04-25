@@ -185,6 +185,12 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		public WorkerFormBuilder and() {
 			return builder.addInput(inputFormUnique);
 		}
+
+		@Override
+		public InputTextSpec withInformation(String information) {
+			inputFormUnique.setInformation(information);
+			return this;
+		}
 	}
 
 	private class InputFormCheckboxSpec<T> extends InputFormMultiSpec<T> {
@@ -232,6 +238,12 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		public WorkerForm.Builder and() {
 			return builder.addInput(inputFormToggle);
 		}
+
+		@Override
+		public WorkerForm.InputFormToggleSpec withInformation(String information) {
+			inputFormToggle.setInformation(information);
+			return this;
+		}
 	}
 
 	private class InputFormTableSpec implements WorkerForm.InputFormTableSpec{
@@ -261,6 +273,12 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		@Override
 		public WorkerForm.InputFormToggleTableSpec addInputFormToggle(String parameter, String label, boolean mandatory) {
 			return new InputFormToggleTableSpec(parameter, label, mandatory, this);
+		}
+
+		@Override
+		public WorkerForm.InputFormTableSpec withInformation(String information) {
+			inputFormTable.setInformation(information);
+			return this;
 		}
 
 		@Override
@@ -378,6 +396,12 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 			return this;
 		}
 
+		@Override
+		public WorkerForm.InputFormFileSpec withInformation(String information) {
+			inputFormFile.setInformation(information);
+			return this;
+		}
+
 		public WorkerFormBuilder and() {
 			return builder.addInput(inputFormFile);
 		}
@@ -406,6 +430,11 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		public WorkerFormBuilder and() {
 			return builder.addInput(inputFormMulti);
+		}
+
+		public InputFormMultiSpec withInformation(String information){
+			inputFormMulti.setInformation(information);
+			return this;
 		}
 	}
 
@@ -523,6 +552,8 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		private boolean mandatory;
 
+		private String information;
+
 		public InputFormType getInputFormType() {
 			return inputFormType;
 		}
@@ -553,6 +584,14 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		protected void setMandatory(boolean mandatory) {
 			this.mandatory = mandatory;
+		}
+
+		public String getInformation() {
+			return information;
+		}
+
+		protected void setInformation(String information) {
+			this.information = information;
 		}
 	}
 
