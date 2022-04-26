@@ -59,6 +59,7 @@ public class WorkerForm {
 		InputTextSpec withMinValue(T value);
 		InputTextSpec withMaxValue(T value);
 		InputTextSpec withInformation(String information);
+		InputTextSpec obfuscate();
 
 	}
 
@@ -126,6 +127,7 @@ public class WorkerForm {
 	public interface InputFormUnique<T> extends InputFormBaseValue {
 		T getMin();
 		T getMax();
+		boolean isObfuscate();
 	}
 
 	public interface InputFormBaseValue extends InputFormBase{

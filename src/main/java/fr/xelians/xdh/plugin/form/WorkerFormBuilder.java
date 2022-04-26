@@ -191,6 +191,12 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 			inputFormUnique.setInformation(information);
 			return this;
 		}
+
+		@Override
+		public WorkerForm.InputTextSpec obfuscate() {
+			inputFormUnique.setObfuscate(true);
+			return this;
+		}
 	}
 
 	private class InputFormCheckboxSpec<T> extends InputFormMultiSpec<T> {
@@ -374,7 +380,6 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 				this.inputFormTableSpec = inputFormTableSpec;
 			}
 
-
 			@Override
 			public WorkerForm.InputFormTableSpec and() {
 				inputFormTableSpec.addInputForm(inputFormToggle);
@@ -523,10 +528,9 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 	private class InputFormUnique<T> extends InputFormBase implements WorkerForm.InputFormUnique<T>{
 
 		private T min;
-
 		private T max;
-
 		private InputValueType inputValueType;
+		private boolean obfuscate;
 
 		private InputFormUnique() {}
 
@@ -545,12 +549,21 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 			this.max = max;
 		}
 
+		private void setObfuscate(boolean obfuscate){
+			this.obfuscate = true;
+		}
+
 		public T getMin() {
 			return min;
 		}
 
 		public T getMax() {
 			return max;
+		}
+
+		@Override
+		public boolean isObfuscate() {
+			return obfuscate;
 		}
 	}
 
