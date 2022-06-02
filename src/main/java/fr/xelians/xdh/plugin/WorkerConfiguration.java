@@ -2,6 +2,7 @@ package fr.xelians.xdh.plugin;
 
 
 import fr.xelians.xdh.plugin.form.WorkerForm;
+import fr.xelians.xdh.plugin.translation.Label;
 
 /**
  * @author aurelien on 17/01/2022

@@ -1,5 +1,6 @@
 package fr.xelians.xdh.plugin.form;
 
+import fr.xelians.xdh.plugin.translation.Label;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -41,25 +42,25 @@ public class WorkerFormTest {
 	public void testWorkerForm(){
 
 		WorkerForm.Form form = WorkerForm.builder()
-				.addInputTextFloat(PARAM_1, LABEL_1, true)
+				.addInputTextFloat(PARAM_1, Label.of(LABEL_1, LABEL_1), true)
 				.withMinValue(MIN_VALUE)
 				.withMaxValue(MAX_VALUE)
 				.and()
-				.addInputCheckboxBoolean(PARAM_2, LABEL_2, false)
+				.addInputCheckboxBoolean(PARAM_2, Label.of(LABEL_2, LABEL_2), false)
 				.withValues(List.of(true, false))
 				.and()
-				.addInputRadioInt(PARAM_3, LABEL_3, false)
+				.addInputRadioInt(PARAM_3, Label.of(LABEL_3, LABEL_3), false)
 				.withValues(List.of(VALUE_1, VALUE_2))
 				.and()
-				.addInputSelectDouble(PARAM_4, LABEL_4, true)
+				.addInputSelectDouble(PARAM_4, Label.of(LABEL_4, LABEL_4), true)
 				.withValues(List.of(VALUE_3, VALUE_4))
 				.and()
-				.addInputFormFile(PARAM_5, LABEL_5, false)
+				.addInputFormFile(PARAM_5, Label.of(LABEL_5, LABEL_5), false)
 				.and()
-				.addInputFormTable(PARAM_6, LABEL_6, true)
-				.addInputTextText(PARAM_1, LABEL_1, false)
+				.addInputFormTable(PARAM_6, Label.of(LABEL_6, LABEL_6), true)
+				.addInputTextText(PARAM_1, Label.of(LABEL_1, LABEL_1), false)
 				.and()
-				.addInputSelectText(PARAM_2, LABEL_2, true)
+				.addInputSelectText(PARAM_2, Label.of(LABEL_2, LABEL_2), true)
 				.withValues(List.of(VALUE_5, VALUE_6))
 				.and()
 				.and()
@@ -77,7 +78,7 @@ public class WorkerFormTest {
 		assertTrue(inputFormBase1 instanceof WorkerForm.InputFormUnique);
 		WorkerForm.InputFormUnique<Float> inputFormUnique1 = (WorkerForm.InputFormUnique) inputFormBase1;
 		assertEquals(PARAM_1, inputFormUnique1.getParameter());
-		assertEquals(LABEL_1, inputFormUnique1.getLabel());
+		assertEquals(LABEL_1, inputFormUnique1.getLabel().getFr());
 		assertTrue(inputFormUnique1.isMandatory());
 		assertEquals(InputFormType.TEXT, inputFormUnique1.getInputFormType());
 		assertEquals(InputValueType.FLOAT, inputFormUnique1.getInputValueType());
@@ -87,7 +88,7 @@ public class WorkerFormTest {
 		assertTrue(inputFormBase2 instanceof WorkerForm.InputFormMulti);
 		WorkerForm.InputFormMulti<Boolean> inputFormMulti2 = (WorkerForm.InputFormMulti<Boolean>) inputFormBase2;
 		assertEquals(PARAM_2, inputFormMulti2.getParameter());
-		assertEquals(LABEL_2, inputFormMulti2.getLabel());
+		assertEquals(LABEL_2, inputFormMulti2.getLabel().getEn());
 		assertFalse(inputFormMulti2.isMandatory());
 		assertEquals(InputFormType.CHECKBOX, inputFormMulti2.getInputFormType());
 		assertEquals(InputValueType.BOOLEAN, inputFormMulti2.getInputValueType());
@@ -96,7 +97,7 @@ public class WorkerFormTest {
 		assertTrue(inputFormBase3 instanceof WorkerForm.InputFormMulti);
 		WorkerForm.InputFormMulti<Integer> inputFormMulti3 = (WorkerForm.InputFormMulti<Integer>) inputFormBase3;
 		assertEquals(PARAM_3, inputFormMulti3.getParameter());
-		assertEquals(LABEL_3, inputFormMulti3.getLabel());
+		assertEquals(LABEL_3, inputFormMulti3.getLabel().getFr());
 		assertFalse(inputFormMulti3.isMandatory());
 		assertEquals(InputFormType.RADIO, inputFormMulti3.getInputFormType());
 		assertEquals(InputValueType.INTEGER, inputFormMulti3.getInputValueType());
@@ -105,7 +106,7 @@ public class WorkerFormTest {
 		assertTrue(inputFormBase4 instanceof WorkerForm.InputFormMulti);
 		WorkerForm.InputFormMulti<Double> inputFormMulti4 = (WorkerForm.InputFormMulti<Double>) inputFormBase4;
 		assertEquals(PARAM_4, inputFormMulti4.getParameter());
-		assertEquals(LABEL_4, inputFormMulti4.getLabel());
+		assertEquals(LABEL_4, inputFormMulti4.getLabel().getEn());
 		assertTrue(inputFormMulti4.isMandatory());
 		assertEquals(InputFormType.SELECT, inputFormMulti4.getInputFormType());
 		assertEquals(InputValueType.DOUBLE, inputFormMulti4.getInputValueType());
@@ -114,14 +115,14 @@ public class WorkerFormTest {
 		assertTrue(inputFormBase5 instanceof WorkerForm.InputFormFile);
 		WorkerForm.InputFormFile inputFormFile = (WorkerForm.InputFormFile) inputFormBase5;
 		assertEquals(PARAM_5, inputFormFile.getParameter());
-		assertEquals(LABEL_5, inputFormFile.getLabel());
+		assertEquals(LABEL_5, inputFormFile.getLabel().getFr());
 		assertFalse(inputFormFile.isMandatory());
 		assertEquals(InputFormType.FILE, inputFormFile.getInputFormType());
 
 		assertTrue(inputFormBase6 instanceof WorkerForm.InputFormTable);
 		WorkerForm.InputFormTable inputFormTable = (WorkerForm.InputFormTable) inputFormBase6;
 		assertEquals(PARAM_6, inputFormTable.getParameter());
-		assertEquals(LABEL_6, inputFormTable.getLabel());
+		assertEquals(LABEL_6, inputFormTable.getLabel().getFr());
 		assertTrue(inputFormTable.isMandatory());
 		assertEquals(InputFormType.TABLE, inputFormTable.getInputFormType());
 		List<WorkerForm.InputFormBase> inputFormColumns = inputFormTable.getInputFormColumns();
@@ -132,7 +133,7 @@ public class WorkerFormTest {
 		assertTrue(inputFormColum1 instanceof WorkerForm.InputFormUnique);
 		WorkerForm.InputFormUnique inputFormUniqueColumn1 = (WorkerForm.InputFormUnique) inputFormColum1;
 		assertEquals(PARAM_1, inputFormUniqueColumn1.getParameter());
-		assertEquals(LABEL_1, inputFormUniqueColumn1.getLabel());
+		assertEquals(LABEL_1, inputFormUniqueColumn1.getLabel().getFr());
 		assertEquals(InputFormType.TEXT, inputFormUniqueColumn1.getInputFormType());
 		assertEquals(InputValueType.TEXT, inputFormUniqueColumn1.getInputValueType());
 		assertFalse(inputFormUniqueColumn1.isMandatory());
@@ -140,7 +141,7 @@ public class WorkerFormTest {
 		assertTrue(inputFormColum2 instanceof WorkerForm.InputFormMulti);
 		WorkerForm.InputFormMulti inputFormMultiColum2 = (WorkerForm.InputFormMulti) inputFormColum2;
 		assertEquals(PARAM_2, inputFormMultiColum2.getParameter());
-		assertEquals(LABEL_2, inputFormMultiColum2.getLabel());
+		assertEquals(LABEL_2, inputFormMultiColum2.getLabel().getFr());
 		assertTrue(inputFormMultiColum2.isMandatory());
 		assertEquals(InputFormType.SELECT, inputFormMultiColum2.getInputFormType());
 		assertEquals(InputValueType.TEXT, inputFormMultiColum2.getInputValueType());

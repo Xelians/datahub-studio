@@ -1,11 +1,13 @@
 package fr.xelians.xdh.plugin.form;
 
+import fr.xelians.xdh.plugin.translation.Label;
+
 import java.util.List;
 
 /**
  * @author aurelien on 08/03/2022
  */
-public class WorkerForm {
+public class  WorkerForm {
 
 	public static Builder builder(){
 		return new WorkerFormBuilder();
@@ -13,37 +15,37 @@ public class WorkerForm {
 
 	public interface Builder{
 
-		InputTextSpec<Integer> addInputTextInt(String parameter, String label, boolean mandatory);
-		InputTextSpec<Double> addInputTextDouble(String parameter, String label, boolean mandatory);
-		InputTextSpec<Float> addInputTextFloat(String parameter, String label, boolean mandatory);
-		InputTextSpec<Long> addInputTextLong(String parameter, String label, boolean mandatory);
-		InputTextSpec<Boolean> addInputTextBoolean(String parameter, String label, boolean mandatory);
-		InputTextSpec<String> addInputTextText(String parameter, String label, boolean mandatory);
+		InputTextSpec<Integer> addInputTextInt(String parameter, Label.Translation label, boolean mandatory);
+		InputTextSpec<Double> addInputTextDouble(String parameter, Label.Translation label, boolean mandatory);
+		InputTextSpec<Float> addInputTextFloat(String parameter, Label.Translation label, boolean mandatory);
+		InputTextSpec<Long> addInputTextLong(String parameter, Label.Translation label, boolean mandatory);
+		InputTextSpec<Boolean> addInputTextBoolean(String parameter, Label.Translation label, boolean mandatory);
+		InputTextSpec<String> addInputTextText(String parameter, Label.Translation label, boolean mandatory);
 
-		InputFormMultiSpec<Integer> addInputSelectInt(String parameter, String label, boolean mandatory);
-		InputFormMultiSpec<Double> addInputSelectDouble(String parameter, String label, boolean mandatory);
-		InputFormMultiSpec<Float> addInputSelectFloat(String parameter, String label, boolean mandatory);
-		InputFormMultiSpec<Long> addInputSelectLong(String parameter, String label, boolean mandatory);
-		InputFormMultiSpec<Boolean> addInputSelectBoolean(String parameter, String label, boolean mandatory);
-		InputFormMultiSpec<String> addInputSelectText(String parameter, String label, boolean mandatory);
+		InputFormMultiSpec<Integer> addInputSelectInt(String parameter, Label.Translation label, boolean mandatory);
+		InputFormMultiSpec<Double> addInputSelectDouble(String parameter, Label.Translation label, boolean mandatory);
+		InputFormMultiSpec<Float> addInputSelectFloat(String parameter, Label.Translation label, boolean mandatory);
+		InputFormMultiSpec<Long> addInputSelectLong(String parameter, Label.Translation label, boolean mandatory);
+		InputFormMultiSpec<Boolean> addInputSelectBoolean(String parameter, Label.Translation label, boolean mandatory);
+		InputFormMultiSpec<String> addInputSelectText(String parameter, Label.Translation label, boolean mandatory);
 
-		InputFormMultiSpec<Integer> addInputCheckboxInt(String parameter, String label, boolean mandatory);
-		InputFormMultiSpec<Double> addInputCheckboxDouble(String parameter, String label, boolean mandatory);
-		InputFormMultiSpec<Float> addInputCheckboxFloat(String parameter, String label, boolean mandatory);
-		InputFormMultiSpec<Long> addInputCheckboxLong(String parameter, String label, boolean mandatory);
-		InputFormMultiSpec<Boolean> addInputCheckboxBoolean(String parameter, String label, boolean mandatory);
-		InputFormMultiSpec<String> addInputCheckboxText(String parameter, String label, boolean mandatory);
+		InputFormMultiSpec<Integer> addInputCheckboxInt(String parameter, Label.Translation label, boolean mandatory);
+		InputFormMultiSpec<Double> addInputCheckboxDouble(String parameter, Label.Translation label, boolean mandatory);
+		InputFormMultiSpec<Float> addInputCheckboxFloat(String parameter, Label.Translation label, boolean mandatory);
+		InputFormMultiSpec<Long> addInputCheckboxLong(String parameter, Label.Translation label, boolean mandatory);
+		InputFormMultiSpec<Boolean> addInputCheckboxBoolean(String parameter, Label.Translation label, boolean mandatory);
+		InputFormMultiSpec<String> addInputCheckboxText(String parameter, Label.Translation label, boolean mandatory);
 
-		InputFormMultiSpec<Integer> addInputRadioInt(String parameter, String label, boolean mandatory);
-		InputFormMultiSpec<Double> addInputRadioDouble(String parameter, String label, boolean mandatory);
-		InputFormMultiSpec<Float> addInputRadioFloat(String parameter, String label, boolean mandatory);
-		InputFormMultiSpec<Long> addInputRadioLong(String parameter, String label, boolean mandatory);
-		InputFormMultiSpec<Boolean> addInputRadioBoolean(String parameter, String label, boolean mandatory);
-		InputFormMultiSpec<String> addInputRadioText(String parameter, String label, boolean mandatory);
+		InputFormMultiSpec<Integer> addInputRadioInt(String parameter, Label.Translation label, boolean mandatory);
+		InputFormMultiSpec<Double> addInputRadioDouble(String parameter, Label.Translation label, boolean mandatory);
+		InputFormMultiSpec<Float> addInputRadioFloat(String parameter, Label.Translation label, boolean mandatory);
+		InputFormMultiSpec<Long> addInputRadioLong(String parameter, Label.Translation label, boolean mandatory);
+		InputFormMultiSpec<Boolean> addInputRadioBoolean(String parameter, Label.Translation label, boolean mandatory);
+		InputFormMultiSpec<String> addInputRadioText(String parameter, Label.Translation label, boolean mandatory);
 
-		InputFormFileSpec addInputFormFile(String parameter, String label, boolean mandatory);
-		InputFormTableSpec addInputFormTable(String parameter, String label, boolean mandatory);
-		InputFormToggleSpec addInputFormToggle(String parameter, String label, boolean mandatory);
+		InputFormFileSpec addInputFormFile(String parameter, Label.Translation label, boolean mandatory);
+		InputFormTableSpec addInputFormTable(String parameter, Label.Translation label, boolean mandatory);
+		InputFormToggleSpec addInputFormToggle(String parameter, Label.Translation label, boolean mandatory);
 
 		Form build();
 
@@ -51,21 +53,21 @@ public class WorkerForm {
 
 	public interface InputFormMultiSpec<T> extends InputFormBaseSpec{
 		InputFormMultiSpec withValues(List<T> values);
-		InputFormMultiSpec withInformation(String information);
+		InputFormMultiSpec withInformation(Label.Translation information);
 
 	}
 
 	public interface InputTextSpec<T> extends InputFormBaseSpec{
 		InputTextSpec withMinValue(T value);
 		InputTextSpec withMaxValue(T value);
-		InputTextSpec withInformation(String information);
+		InputTextSpec withInformation(Label.Translation information);
 		InputTextSpec obfuscate();
 
 	}
 
 	public interface InputFormFileSpec extends InputFormBaseSpec{
 		InputFormFileSpec withFileExtensions(List<String> fileExtensions);
-		InputFormFileSpec withInformation(String information);
+		InputFormFileSpec withInformation(Label.Translation information);
 
 	}
 
@@ -85,11 +87,11 @@ public class WorkerForm {
 	}
 
 	public interface InputFormTableSpec extends InputFormBaseSpec{
-		InputTextTableSpec addInputTextText(String parameter, String label, boolean mandatory);
-		InputFormMultiTableSpec addInputSelectText(String parameter, String label, boolean mandatory);
-		InputFormToggleTableSpec addInputFormToggle(String parameter, String label, boolean mandatory);
-		InputFormTableSpec withInformation(String information);
-		InputFormTableSpec withTableLabel(String tableLabel);
+		InputTextTableSpec addInputTextText(String parameter, Label.Translation label, boolean mandatory);
+		InputFormMultiTableSpec addInputSelectText(String parameter, Label.Translation label, boolean mandatory);
+		InputFormToggleTableSpec addInputFormToggle(String parameter, Label.Translation label, boolean mandatory);
+		InputFormTableSpec withInformation(Label.Translation information);
+		InputFormTableSpec withTableLabel(Label.Translation tableLabel);
 
 	}
 
@@ -100,7 +102,7 @@ public class WorkerForm {
 	}
 
 	public interface InputFormToggleSpec extends InputFormBaseSpec{
-		InputFormToggleSpec withInformation(String information);
+		InputFormToggleSpec withInformation(Label.Translation information);
 	}
 
 	public interface Form {
@@ -121,7 +123,7 @@ public class WorkerForm {
 
 	public interface InputFormTable extends InputFormBase {
 		List<InputFormBase> getInputFormColumns();
-		String getTableLabel();
+		Label.Translation getTableLabel();
 	}
 
 	public interface InputFormUnique<T> extends InputFormBaseValue {
@@ -136,10 +138,10 @@ public class WorkerForm {
 
 	public interface InputFormBase {
 		InputFormType getInputFormType();
-		String getLabel();
+		Label.Translation getLabel();
 		String getParameter();
 		boolean isMandatory();
-		String getInformation();
+		Label.Translation getInformation();
 	}
 
 }
