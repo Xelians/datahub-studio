@@ -9,6 +9,6 @@ import java.nio.file.Path;
  */
 public interface Sender {
 
-	void send(String fileName, Path fromDirectory, Logger logger) throws Exception;
+	String send(String fileName, Path fromDirectory, Logger logger) throws Exception;
 
 }
