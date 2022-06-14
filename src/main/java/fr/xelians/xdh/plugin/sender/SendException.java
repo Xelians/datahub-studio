@@ -5,7 +5,21 @@ package fr.xelians.xdh.plugin.sender;
  */
 public class SendException extends Exception{
 
+	private String code;
 	public SendException(String message) {
 		super(message);
+	}
+
+	public SendException(String message, String code) {
+		super(message);
+		this.code = code;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 }
