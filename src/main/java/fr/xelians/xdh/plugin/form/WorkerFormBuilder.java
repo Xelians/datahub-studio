@@ -195,6 +195,12 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		}
 
 		@Override
+		public WorkerForm.InputTextSpec withPlaceholder(Label.Translation placeholder) {
+			inputFormUnique.setPlaceholder(placeholder);
+			return this;
+		}
+
+		@Override
 		public WorkerForm.InputTextSpec obfuscate() {
 			inputFormUnique.setObfuscate(true);
 			return this;
@@ -468,13 +474,15 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 	private class InputFormMulti<T> extends InputFormBase implements WorkerForm.InputFormMulti<T>{
 
-		private InputFormMulti() {}
-
 		private InputValueType inputValueType;
+
+		private InputFormMulti() {}
 
 		private void setInputValueType(InputValueType inputValueType) {
 			this.inputValueType = inputValueType;
 		}
+
+		@Override
 		public InputValueType getInputValueType() {
 			return inputValueType;
 		}
@@ -485,9 +493,11 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		private List<T> values;
 
+		@Override
 		public List<T> getValues() {
 			return values;
 		}
+
 	}
 
 	private class InputFormFile extends InputFormBase implements WorkerForm.InputFormFile{
@@ -521,6 +531,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		public Label.Translation getTableLabel() {
 			return tableLabel;
 		}
+
 	}
 
 	private class InputFormToggle extends InputFormBase implements WorkerForm.InputFormToggle{
@@ -531,6 +542,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		private T min;
 		private T max;
+		private Label.Translation placeholder;
 		private InputValueType inputValueType;
 		private boolean obfuscate;
 
@@ -555,12 +567,20 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 			this.obfuscate = true;
 		}
 
+		private void setPlaceholder(Label.Translation placeholder){
+			this.placeholder = placeholder;
+		}
+
 		public T getMin() {
 			return min;
 		}
 
 		public T getMax() {
 			return max;
+		}
+
+		public Label.Translation getPlaceholder(){
+			return this.placeholder;
 		}
 
 		@Override

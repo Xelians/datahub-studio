@@ -25,7 +25,7 @@ public class  WorkerForm {
 	public interface Builder{
 
 		/**
-		 * Add an input text for integer values
+		 * Add an input text for integer values. The parameter should be of type Integer.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation
 		 * @param mandatory if the form field is mandatory
@@ -34,7 +34,7 @@ public class  WorkerForm {
 		InputTextSpec<Integer> addInputTextInt(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input text for double precision values
+		 * Add an input text for double precision values. The parameter should be of type Double.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation
 		 * @param mandatory if the form field is mandatory
@@ -43,7 +43,7 @@ public class  WorkerForm {
 		InputTextSpec<Double> addInputTextDouble(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input text for float values
+		 * Add an input text for float values. The parameter should be of type Float.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -52,7 +52,7 @@ public class  WorkerForm {
 		InputTextSpec<Float> addInputTextFloat(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input text for long values
+		 * Add an input text for long values. The parameter should be of type Long.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -61,7 +61,7 @@ public class  WorkerForm {
 		InputTextSpec<Long> addInputTextLong(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input text for Boolean values
+		 * Add an input text for Boolean values. The parameter should be of type Boolean.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -70,7 +70,7 @@ public class  WorkerForm {
 		InputTextSpec<Boolean> addInputTextBoolean(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input text for text values
+		 * Add an input text for text values. The parameter should be of type String.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -79,7 +79,7 @@ public class  WorkerForm {
 		InputTextSpec<String> addInputTextText(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input select for integer values
+		 * Add an input select for integer values. The parameter should be of type Integer.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -88,7 +88,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<Integer> addInputSelectInt(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input select for double precision values
+		 * Add an input select for double precision values. The parameter should be of type Double.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -97,7 +97,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<Double> addInputSelectDouble(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input select for float values
+		 * Add an input select for float values. The parameter should be of type Float.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -106,7 +106,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<Float> addInputSelectFloat(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input select for long values
+		 * Add an input select for long values. The parameter should be of type Long.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -115,7 +115,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<Long> addInputSelectLong(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input select for boolean values
+		 * Add an input select for boolean values. The parameter should be of type Boolean.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -124,7 +124,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<Boolean> addInputSelectBoolean(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input select for text values
+		 * Add an input select for text values. The parameter should be of type String.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -133,7 +133,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<String> addInputSelectText(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input checkbox for integer values
+		 * Add an input checkbox for integer values. The parameter should be of type List<Integer>.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -142,7 +142,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<Integer> addInputCheckboxInt(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input checkbox for double values
+		 * Add an input checkbox for double values. The parameter should be of type List<Double>.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -151,7 +151,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<Double> addInputCheckboxDouble(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input checkbox for float values
+		 * Add an input checkbox for float values. The parameter should be of type List<Float>.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -160,7 +160,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<Float> addInputCheckboxFloat(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input checkbox for long values
+		 * Add an input checkbox for long values. The parameter should be of type List<Long>.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -169,7 +169,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<Long> addInputCheckboxLong(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input checkbox for boolean values
+		 * Add an input checkbox for boolean values. The parameter should be of type List<Boolean>.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -178,7 +178,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<Boolean> addInputCheckboxBoolean(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input checkbox for text values
+		 * Add an input checkbox for text values. The parameter should be of type List<String>.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -187,7 +187,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<String> addInputCheckboxText(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input radio for integer values
+		 * Add an input radio for integer values. The parameter should be of type Integer.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -196,7 +196,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<Integer> addInputRadioInt(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input radio for double values
+		 * Add an input radio for double values. The parameter should be of type Double.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -205,7 +205,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<Double> addInputRadioDouble(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input radio for float values
+		 * Add an input radio for float values. The parameter should be of type Float.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -214,7 +214,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<Float> addInputRadioFloat(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input radio for long values
+		 * Add an input radio for long values. The parameter should be of type Long.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -223,7 +223,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<Long> addInputRadioLong(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input radio for boolean values
+		 * Add an input radio for boolean values. The parameter should be of type Boolean
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -232,7 +232,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<Boolean> addInputRadioBoolean(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input radio for text values
+		 * Add an input radio for text values. The parameter should be of type String
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -241,7 +241,7 @@ public class  WorkerForm {
 		InputFormMultiSpec<String> addInputRadioText(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input file
+		 * Add an input file. The parameter should be of type Path.
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -250,7 +250,7 @@ public class  WorkerForm {
 		InputFormFileSpec addInputFormFile(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input table
+		 * Add an input table. The parameter should be of type boolean List<Map> (correspond to the list of rows, the key of the Map is the parameter name).
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -259,7 +259,7 @@ public class  WorkerForm {
 		InputFormTableSpec addInputFormTable(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
-		 * Add an input toggle the parameter should be of type boolean
+		 * Add an input toggle. The parameter should be of type boolean
 		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
 		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
 		 * @param mandatory if the form field is mandatory
@@ -294,6 +294,7 @@ public class  WorkerForm {
 		 */
 		InputFormMultiSpec withInformation(Label.Translation information);
 
+
 	}
 
 	/**
@@ -323,6 +324,13 @@ public class  WorkerForm {
 		InputTextSpec withInformation(Label.Translation information);
 
 		/**
+		 * Add a placeholder
+		 * @param placeholder the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for placeholder translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
+		 * @return {{@link InputTextSpec}}
+		 */
+		InputTextSpec withPlaceholder(Label.Translation placeholder);
+
+		/**
 		 * Obfuscate the field
 		 * @return {{@link InputTextSpec}}
 		 */
@@ -330,82 +338,296 @@ public class  WorkerForm {
 
 	}
 
+	/**
+	 * Interface for input file specification
+	 */
 	public interface InputFormFileSpec extends InputFormBaseSpec{
+
+		/**
+		 * Add file extension constraint
+		 * @param fileExtensions list of file extensions exemple:".jpg"
+		 * @return {{@link InputFormFileSpec}}
+		 */
 		InputFormFileSpec withFileExtensions(List<String> fileExtensions);
+
+		/**
+		 * Add an information
+		 * @param information the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for information translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
+		 * @return {{@link InputFormFileSpec}}
+		 */
 		InputFormFileSpec withInformation(Label.Translation information);
 
 	}
 
+	/**
+	 * Interface for input multi (checkboxes, selects, radios) specification for table field
+	 */
 	public interface InputFormMultiTableSpec{
+
+		/**
+		 * Add a list of available values for the field
+		 * @param values the list of values
+		 * @return {{@link InputFormMultiTableSpec}}
+		 */
 		InputFormMultiTableSpec withValues(List<String> values);
+
+
+		/**
+		 * Effectively add the field
+		 * @return {{@link InputFormTableSpec}}
+		 */
 		InputFormTableSpec and();
 	}
 
+	/**
+	 * Interface for input text specification for table field
+	 */
 	public interface InputTextTableSpec{
+
+		/**
+		 * Add min value constraint
+		 * @param value the min value
+		 * @return {{@link InputTextTableSpec}}
+		 */
 		InputTextTableSpec withMinValue(String value);
+
+		/**
+		 * Add max value constraint
+		 * @param value the max value
+		 * @return {{@link InputTextTableSpec}}
+		 */
 		InputTextTableSpec withMaxValue(String value);
+
+		/**
+		 * Effectively add the field
+		 * @return {{@link InputFormTableSpec}}
+		 */
 		InputFormTableSpec and();
 	}
 
+	/**
+	 * Interface for input toggle specification for table field
+	 */
 	public interface InputFormToggleTableSpec{
+
+		/**
+		 * Effectively add the field
+		 * @return {{@link InputFormTableSpec}}
+		 */
 		InputFormTableSpec and();
 	}
 
+	/**
+	 * Interface for table field specification
+	 */
 	public interface InputFormTableSpec extends InputFormBaseSpec{
+
+		/**
+		 * Add an input text for text values. The value of the corresponding key will be of type String
+		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
+		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
+		 * @param mandatory if the form field is mandatory
+		 * @return {{@link InputTextTableSpec<String>}} specification for input text with text values
+		 */
 		InputTextTableSpec addInputTextText(String parameter, Label.Translation label, boolean mandatory);
+
+		/**
+		 * Add an input select for text values. The value of the corresponding key will be of type String
+		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
+		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
+		 * @param mandatory if the form field is mandatory
+		 * @return {{@link InputFormMultiTableSpec<String>}} specification for input multivalued
+		 */
 		InputFormMultiTableSpec addInputSelectText(String parameter, Label.Translation label, boolean mandatory);
+
+		/**
+		 * Add an input toggle. The value of the corresponding key will be of type Boolean
+		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
+		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
+		 * @param mandatory if the form field is mandatory
+		 * @return {{@link InputTextTableSpec<String>}} specification for input text with text values
+		 */
 		InputFormToggleTableSpec addInputFormToggle(String parameter, Label.Translation label, boolean mandatory);
+
+		/**
+		 * Add an information
+		 * @param information the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for information translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
+		 * @return {{@link InputFormTableSpec}}
+		 */
 		InputFormTableSpec withInformation(Label.Translation information);
+
+		/**
+		 * Add a Label for the table field in the open state.
+		 * @param tableLabel the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for information translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
+		 * @return {{@link InputFormTableSpec}}
+		 */
 		InputFormTableSpec withTableLabel(Label.Translation tableLabel);
 
 	}
 
+	/**
+	 * Base interface of input form specification
+	 */
 	public interface InputFormBaseSpec{
 
+		/**
+		 * Effectively add the input form
+		 * @return the form builder {{@link Builder}}
+		 */
 		Builder and();
 
 	}
 
+	/**
+	 * Interface for input form toggle specification
+	 */
 	public interface InputFormToggleSpec extends InputFormBaseSpec{
+
+		/**
+		 * Add an information
+		 * @param information the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for information translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
+		 * @return {{@link InputFormToggleSpec}}
+		 */
 		InputFormToggleSpec withInformation(Label.Translation information);
 	}
 
+	/**
+	 * Interface for forms
+	 */
 	public interface Form {
+
+		/**
+		 * Get input forms
+		 * @return list of {{@link InputFormBase}}
+		 */
 		List<InputFormBase> getInputForms();
 	}
 
+	/**
+	 * Interface for input forms with multiple values constraint
+	 */
 	public interface InputFormMulti<T> extends InputFormBaseValue {
+
+		/**
+		 * Get the list of values available
+		 * @return list of values
+		 */
 		List<T> getValues();
 	}
 
+	/**
+	 * Interface for input form file
+	 */
 	public interface InputFormFile extends InputFormBase {
+
+		/**
+		 * Get authorized file extensions
+		 * @return List of file extension
+		 */
 		List<String> getFileExtensions();
 	}
 
+	/**
+	 * Interface for input form toggle
+	 */
 	public interface InputFormToggle extends InputFormBase {
 
 	}
 
+	/**
+	 * Interface for input form table
+	 */
 	public interface InputFormTable extends InputFormBase {
+
+		/**
+		 * Get the input form columns of the table
+		 * @return {{@link InputFormBase}}
+		 */
 		List<InputFormBase> getInputFormColumns();
+
+		/**
+		 * Get the table Label
+		 * @return the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation.
+		 */
 		Label.Translation getTableLabel();
 	}
 
+	/**
+	 * Interface for input form field with unique value
+	 */
 	public interface InputFormUnique<T> extends InputFormBaseValue {
+
+		/**
+		 * Get the constraint min value
+		 * @return the min value
+		 */
 		T getMin();
+
+		/**
+		 * Get the constraint max value
+		 * @return the max value
+		 */
 		T getMax();
+
+		/**
+		 * If the field is obfuscate (like password fields)
+		 * @return is obfuscate
+		 */
 		boolean isObfuscate();
+
+		/**
+		 * The placeholder of the input form
+		 * @return the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation.
+		 */
+		Label.Translation getPlaceholder();
 	}
 
+	/**
+	 * Input form base interface for value fields
+	 */
 	public interface InputFormBaseValue extends InputFormBase{
+
+		/**
+		 * Get the input value type
+		 * @return {{@link InputValueType}}
+		 */
 		InputValueType getInputValueType();
+
 	}
 
+	/**
+	 * Input form base interface
+	 */
 	public interface InputFormBase {
+
+		/**
+		 * The input form type
+		 * @return {{@link InputFormType}}
+		 */
 		InputFormType getInputFormType();
+
+		/**
+		 * The label of the input form
+		 * @return the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation.
+		 */
 		Label.Translation getLabel();
+
+		/**
+		 * get the parameter name
+		 * @return the parameter name
+		 */
 		String getParameter();
+
+		/**
+		 * If the field is mandatory
+		 * @return is mandatory
+		 */
 		boolean isMandatory();
+
+		/**
+		 * Get the information of the field
+		 * @return the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation.
+		 */
 		Label.Translation getInformation();
 	}
 

@@ -26,6 +26,7 @@ public class WorkerFormTest {
 	private static final String PARAM_4 = "PARAM_4";
 	private static final String PARAM_5 = "PARAM_5";
 	private static final String PARAM_6 = "PARAM_6";
+	private static final String PLACEHOLDER = "PLACEHOLDER";
 
 	private static final Float MIN_VALUE = 2.6f;
 	private static final Float MAX_VALUE = 10.f;
@@ -43,6 +44,7 @@ public class WorkerFormTest {
 
 		WorkerForm.Form form = WorkerForm.builder()
 				.addInputTextFloat(PARAM_1, Label.of(LABEL_1, LABEL_1), true)
+				.withPlaceholder(Label.of(LABEL_2, LABEL_2))
 				.withMinValue(MIN_VALUE)
 				.withMaxValue(MAX_VALUE)
 				.and()
@@ -79,6 +81,8 @@ public class WorkerFormTest {
 		WorkerForm.InputFormUnique<Float> inputFormUnique1 = (WorkerForm.InputFormUnique) inputFormBase1;
 		assertEquals(PARAM_1, inputFormUnique1.getParameter());
 		assertEquals(LABEL_1, inputFormUnique1.getLabel().getFr());
+		assertEquals(LABEL_2, inputFormUnique1.getPlaceholder().getFr());
+		assertEquals(LABEL_2, inputFormUnique1.getPlaceholder().getEn());
 		assertTrue(inputFormUnique1.isMandatory());
 		assertEquals(InputFormType.TEXT, inputFormUnique1.getInputFormType());
 		assertEquals(InputValueType.FLOAT, inputFormUnique1.getInputValueType());
