@@ -28,8 +28,9 @@ Les types de paramètres autorisés :
 - Float / float
 - Long / long
 - String
-
-Les paramètres de type **List** sont autorisés avec comme type paramétré un des types précédemment cités. Le type paramétré par défaut sera String si aucun type paramétré n'est défini.
+- Path
+- List<Map>
+- List<Integer | Boolean | Double | Float | Long | String>
 
 ### Configuration
 
@@ -37,10 +38,11 @@ Pour qu'un collector soit pris en compte il faudra définir une configuration im
 
 ```java
 Class<? extends Collector> getCollectorClass(); // renvoi la classe de l'implémentation du collector en question
-
-String getName(); // le nom du collector
-
-PluginForm getForm(); // la définition du formulaire de paramétrage du plugin
+String getName(); // le nom du collector afficher sur l'interface
+String description(); // La description du collector, par défaut vide
+String id(); // id du collector
+String version(); // La version du collector
+WorkerForm.Form getForm(); // la définition du formulaire de paramétrage du collector
 ```
 
 
@@ -69,8 +71,9 @@ Les types de paramètres autorisés :
 - Float / float
 - Long / long
 - String
-
-Les paramètres de type **List** sont autorisés avec comme type paramétré un des types précédemment cités. Le type paramétré par défaut sera String si aucun type paramétré n'est défini.
+- Path
+- List<Map>
+- List<Integer | Boolean | Double | Float | Long | String>
 
 ### Configuration
 
@@ -78,10 +81,11 @@ Pour qu'un transformer soit pris en compte il faudra définir une configuration 
 
 ```java
 Class<? extends Transformer> getTransformerClass(); // renvoi la classe de l'implémentation du transformer en question
-
-String getName(); // le nom du transformer
-
-PluginForm getForm(); // la définition du formulaire de paramétrage du plugin
+String getName(); // le nom du transformer afficher sur l'interface
+String description(); // La description du transformer, par défaut vide
+String id(); // id du transformer
+String version(); // La version du transformer
+WorkerForm.Form getForm(); // la définition du formulaire de paramétrage du transformer
 ```
 
 
@@ -107,8 +111,9 @@ Les types de paramètres autorisés :
 - Float / float
 - Long / long
 - String
-
-Les paramètres de type **List** sont autorisés avec comme type paramétré un des types précédemment cités. Le type paramétré par défaut sera String si aucun type paramétré n'est défini.
+- Path
+- List<Map>
+- List<Integer | Boolean | Double | Float | Long | String>
 
 ### Configuration
 
@@ -116,12 +121,17 @@ Pour qu'un sender soit pris en compte il faudra définir une configuration impl�
 
 ```java
 Class<? extends Sender> getSenderClass(); // renvoi la classe de l'implémentation du sender en question
-
-String getName(); // le nom du transformer
-
-PluginForm getForm(); // la définition du formulaire de paramétrage du plugin
+String getName(); // le nom du sender afficher sur l'interface
+String description(); // La description du sender, par défaut vide
+String id(); // id du sender
+String version(); // La version du sender
+WorkerForm.Form getForm(); // la définition du formulaire de paramétrage du sender
 ```
 
+## Formulaire
+
+Pour construire le formulaire  ```WorkerForm.Form ```  il est conseillé d'utiliser le builder ```WorkerFormBuilder ``` en utilisant la méthode ```WorkerForm.builder()```
+Bien suivre les instructions de la javadoc de l'interface ```WorkerForm```. Bien veillez à respecter le nom des paramètres et le type des inputs qui doit matcher avec le type des paramètres sinon le worker ne sera pas ajouté au démarrage de l'application.
 
 ## Ajout du plugin
 
