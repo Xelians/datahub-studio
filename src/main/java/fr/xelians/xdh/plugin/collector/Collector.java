@@ -19,10 +19,11 @@ public interface Collector {
 	/**
 	 * Collect operation
 	 * @param toDirectory The directory path where the files should be collected
+	 * @param webhook The value is set if webhook is available for the channel
 	 * @param logger The logger to use. Log files are in the log folder of the channel directory under the base datahub folder.
 	 * @return The list of filenames collected, be careful to give only the filename not the path.
 	 * @throws Exception For exception to be displayed as a functional exception you should throw a {{@link CollectException}}
 	 */
-	List<String> collect(Path toDirectory, Logger logger) throws Exception;
+	List<String> collect(Path toDirectory, String webhook, Logger logger) throws Exception;
 
 }
