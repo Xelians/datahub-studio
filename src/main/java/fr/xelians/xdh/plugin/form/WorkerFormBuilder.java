@@ -546,6 +546,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		private InputValueType inputValueType;
 		private boolean obfuscate;
 
+
 		private InputFormUnique() {}
 
 		private void setInputValueType(InputValueType inputValueType) {
