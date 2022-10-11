@@ -3,7 +3,7 @@ package fr.xelians.xdh.plugin.logging;
 
 import org.slf4j.Logger;
 
-public class XDHProcessLogger {
+public final class XDHProcessLogger {
 
     private String collectId;
     private Step step;
