@@ -6,12 +6,12 @@ import org.slf4j.Logger;
 public final class XDHProcessLogger {
 
     private String collectId;
-    private Step step;
+    private String step;
     private Logger logger;
 
     public XDHProcessLogger(String collectId, Step step, Logger logger) {
-        this.collectId = collectId != null ? collectId: "";
-        this.step = step;
+        this.collectId = collectId != null ? String.format("%-5s",collectId) : "     ";
+        this.step = String.format("%-14s", step);
         this.logger = logger;
     }
 
