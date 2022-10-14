@@ -109,6 +109,11 @@
             <artifactId>commons-vfs2</artifactId>
             <version>${apache.commons-vfs2.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.84.Final</version>
+        </dependency>
     </dependencies>
 
     <repositories>
