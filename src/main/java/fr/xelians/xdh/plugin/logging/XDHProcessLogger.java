@@ -3,6 +3,14 @@ package fr.xelians.xdh.plugin.logging;
 
 import org.slf4j.Logger;
 
+/**
+ * The logger to use when logging inside workers.
+ * This allows the application to format correctly the logs for monitoring.
+ */
+
+/**
+ * @author aurelien on 10/01/2022
+ */
 public final class XDHProcessLogger {
 
     private String collectId;
