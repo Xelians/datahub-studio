@@ -640,7 +640,7 @@ public class WorkerForm {
 		}
 
 		/**
-		 * Create a ChoiceMultiForm object
+		 * Create a Choice object
 		 * @param label the translation label
 		 * @param value the value
 		 * @return {{@link Choice}}
@@ -648,7 +648,7 @@ public class WorkerForm {
 		public static <T> Choice of(Label.Translation label, T value) { return new Choice(label, value); }
 
 		/**
-		 * Create a ChoiceMultiForm object
+		 * Create a Choice object
 		 * label Choice's param is created automatically with the value as french label and english label
 		 * @param value the value
 		 * @return {{@link Choice}}
