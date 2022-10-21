@@ -49,13 +49,13 @@ public class WorkerFormTest {
 				.withMaxValue(MAX_VALUE)
 				.and()
 				.addInputCheckboxBoolean(PARAM_2, Label.of(LABEL_2, LABEL_2), false)
-				.withValues(List.of(true, false))
+				.withChoices(List.of(WorkerForm.MultiValueChoice.of(true), WorkerForm.MultiValueChoice.of(false)))
 				.and()
 				.addInputRadioInt(PARAM_3, Label.of(LABEL_3, LABEL_3), false)
-				.withValues(List.of(VALUE_1, VALUE_2))
+				.withChoices(List.of(WorkerForm.MultiValueChoice.of(VALUE_1), WorkerForm.MultiValueChoice.of(VALUE_2)))
 				.and()
 				.addInputSelectDouble(PARAM_4, Label.of(LABEL_4, LABEL_4), true)
-				.withValues(List.of(VALUE_3, VALUE_4))
+				.withChoices(List.of(WorkerForm.MultiValueChoice.of(VALUE_3), WorkerForm.MultiValueChoice.of(VALUE_4)))
 				.and()
 				.addInputFormFile(PARAM_5, Label.of(LABEL_5, LABEL_5), false)
 				.and()
@@ -63,7 +63,7 @@ public class WorkerFormTest {
 				.addInputTextText(PARAM_1, Label.of(LABEL_1, LABEL_1), false)
 				.and()
 				.addInputSelectText(PARAM_2, Label.of(LABEL_2, LABEL_2), true)
-				.withValues(List.of(VALUE_5, VALUE_6))
+				.withChoices(List.of(WorkerForm.MultiValueChoice.of(VALUE_5), WorkerForm.MultiValueChoice.of(VALUE_6)))
 				.and()
 				.and()
 				.build();
@@ -96,7 +96,8 @@ public class WorkerFormTest {
 		assertFalse(inputFormMulti2.isMandatory());
 		assertEquals(InputFormType.CHECKBOX, inputFormMulti2.getInputFormType());
 		assertEquals(InputValueType.BOOLEAN, inputFormMulti2.getInputValueType());
-		assertEquals(List.of(true, false), inputFormMulti2.getValues());
+		assertEquals(true, inputFormMulti2.getChoices().get(0).getValue());
+		assertEquals(false, inputFormMulti2.getChoices().get(1).getValue());
 
 		assertTrue(inputFormBase3 instanceof WorkerForm.InputFormMulti);
 		WorkerForm.InputFormMulti<Integer> inputFormMulti3 = (WorkerForm.InputFormMulti<Integer>) inputFormBase3;
@@ -105,7 +106,8 @@ public class WorkerFormTest {
 		assertFalse(inputFormMulti3.isMandatory());
 		assertEquals(InputFormType.RADIO, inputFormMulti3.getInputFormType());
 		assertEquals(InputValueType.INTEGER, inputFormMulti3.getInputValueType());
-		assertEquals(List.of(VALUE_1, VALUE_2), inputFormMulti3.getValues());
+		assertEquals(VALUE_1, inputFormMulti3.getChoices().get(0).getValue());
+		assertEquals(VALUE_2, inputFormMulti3.getChoices().get(1).getValue());
 
 		assertTrue(inputFormBase4 instanceof WorkerForm.InputFormMulti);
 		WorkerForm.InputFormMulti<Double> inputFormMulti4 = (WorkerForm.InputFormMulti<Double>) inputFormBase4;
@@ -114,7 +116,8 @@ public class WorkerFormTest {
 		assertTrue(inputFormMulti4.isMandatory());
 		assertEquals(InputFormType.SELECT, inputFormMulti4.getInputFormType());
 		assertEquals(InputValueType.DOUBLE, inputFormMulti4.getInputValueType());
-		assertEquals(List.of(VALUE_3, VALUE_4), inputFormMulti4.getValues());
+		assertEquals(VALUE_3, inputFormMulti4.getChoices().get(0).getValue());
+		assertEquals(VALUE_4, inputFormMulti4.getChoices().get(1).getValue());
 
 		assertTrue(inputFormBase5 instanceof WorkerForm.InputFormFile);
 		WorkerForm.InputFormFile inputFormFile = (WorkerForm.InputFormFile) inputFormBase5;
@@ -143,14 +146,14 @@ public class WorkerFormTest {
 		assertFalse(inputFormUniqueColumn1.isMandatory());
 
 		assertTrue(inputFormColum2 instanceof WorkerForm.InputFormMulti);
-		WorkerForm.InputFormMulti inputFormMultiColum2 = (WorkerForm.InputFormMulti) inputFormColum2;
+		WorkerForm.InputFormMulti<String> inputFormMultiColum2 = (WorkerForm.InputFormMulti<String>) inputFormColum2;
 		assertEquals(PARAM_2, inputFormMultiColum2.getParameter());
 		assertEquals(LABEL_2, inputFormMultiColum2.getLabel().getFr());
 		assertTrue(inputFormMultiColum2.isMandatory());
 		assertEquals(InputFormType.SELECT, inputFormMultiColum2.getInputFormType());
 		assertEquals(InputValueType.TEXT, inputFormMultiColum2.getInputValueType());
-		assertEquals(List.of(VALUE_5, VALUE_6), inputFormMultiColum2.getValues());
-
+		assertEquals(VALUE_5, inputFormMultiColum2.getChoices().get(0).getValue());
+		assertEquals(VALUE_6, inputFormMultiColum2.getChoices().get(1).getValue());
 	}
 
 }

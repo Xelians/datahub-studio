@@ -9,7 +9,7 @@ import java.util.List;
  *
  * This class contain all the interfaces for builders and form components
  */
-public class  WorkerForm {
+public class WorkerForm {
 
 	/**
 	 * Get a new {{@link WorkerFormBuilder}}
@@ -282,10 +282,10 @@ public class  WorkerForm {
 
 		/**
 		 * Add a list of available values for the field
-		 * @param values the list of values
+		 * @param choices the list of values
 		 * @return {{@link InputFormMultiSpec}}
 		 */
-		InputFormMultiSpec withValues(List<T> values);
+		InputFormMultiSpec withChoices(List<MultiValueChoice.Choice<T>> choices);
 
 		/**
 		 * Add an information text for the input field
@@ -366,11 +366,10 @@ public class  WorkerForm {
 
 		/**
 		 * Add a list of available values for the field
-		 * @param values the list of values
+		 * @param choices the list of values
 		 * @return {{@link InputFormMultiTableSpec}}
 		 */
-		InputFormMultiTableSpec withValues(List<String> values);
-
+		InputFormMultiTableSpec withChoices(List<WorkerForm.MultiValueChoice.Choice<String>> choices);
 
 		/**
 		 * Effectively add the field
@@ -512,7 +511,8 @@ public class  WorkerForm {
 		 * Get the list of values available
 		 * @return list of values
 		 */
-		List<T> getValues();
+		List<WorkerForm.MultiValueChoice.Choice<T>> getChoices();
+
 	}
 
 	/**
@@ -629,6 +629,50 @@ public class  WorkerForm {
 		 * @return the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation.
 		 */
 		Label.Translation getInformation();
+	}
+
+	/**
+	 * The class MultiValueChoice is used for multi forms to have the value and her translate label
+	 */
+	public final class MultiValueChoice {
+
+		private MultiValueChoice (){
+		}
+
+		/**
+		 * Create a Choice object
+		 * @param label the translation label
+		 * @param value the value
+		 * @return {{@link Choice}}
+		 */
+		public static <T> Choice of(Label.Translation label, T value) { return new Choice(label, value); }
+
+		/**
+		 * Create a Choice object
+		 * label Choice's param is created automatically with the value as french label and english label
+		 * @param value the value
+		 * @return {{@link Choice}}
+		 */
+		public static <T> Choice of(T value) { return new Choice<T>(value); }
+
+		public static class Choice<T> {
+			private Label.Translation label;
+			private T value;
+
+			private Choice(Label.Translation label, T value){
+				this.label = label;
+				this.value = value;
+			}
+
+			private Choice(T value){
+				this.value = value;
+				this.label = Label.of(value.toString(),value.toString());
+			}
+
+			public Label.Translation getLabel() { return label; }
+
+			public T getValue() { return value; }
+		}
 	}
 
 }

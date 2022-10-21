@@ -326,8 +326,8 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 				this.inputFormTableSpec = inputFormTableSpec;
 			}
 
-			public InputFormMultiTableSpec withValues(List<String> values){
-				inputFormMulti.setValues(values);
+			public InputFormMultiTableSpec withChoices(List<WorkerForm.MultiValueChoice.Choice<String>> choices){
+				inputFormMulti.setChoices(choices);
 				return this;
 			}
 
@@ -442,8 +442,8 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 			this.builder = builder;
 		}
 
-		public InputFormMultiSpec<T> withValues(List<T> values){
-			inputFormMulti.setValues(values);
+		public InputFormMultiSpec<T> withChoices(List<WorkerForm.MultiValueChoice.Choice<T>> choices){
+			inputFormMulti.setChoices(choices);
 			return this;
 		}
 
@@ -487,15 +487,15 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 			return inputValueType;
 		}
 
-		private void setValues(List<T> values) {
-			this.values = values;
+		private void setChoices(List<WorkerForm.MultiValueChoice.Choice<T>> choices) {
+			this.choices = choices;
 		}
 
-		private List<T> values;
+		private List<WorkerForm.MultiValueChoice.Choice<T>> choices;
 
 		@Override
-		public List<T> getValues() {
-			return values;
+		public List<WorkerForm.MultiValueChoice.Choice<T>> getChoices() {
+			return choices;
 		}
 
 	}
