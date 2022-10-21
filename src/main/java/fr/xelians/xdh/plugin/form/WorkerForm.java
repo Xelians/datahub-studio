@@ -632,7 +632,7 @@ public class WorkerForm {
 	}
 
 	/**
-	 * The class ChoiceMultiForm is used for multi forms to have the value and her translate label
+	 * The class MultiValueChoice is used for multi forms to have the value and her translate label
 	 */
 	public final class MultiValueChoice {
 
