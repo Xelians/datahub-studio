@@ -153,6 +153,11 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		return new InputFormToggleSpec(parameter, label, mandatory, this);
 	}
 
+	@Override
+	public WorkerForm.InputTextAreaSpec addInputFormTextArea(String parameter, Label.Translation label, boolean mandatory) {
+		return new InputFormTextAreaSpec(parameter, label, mandatory, this);
+	}
+
 	private WorkerFormBuilder addInput(WorkerForm.InputFormBase inputFormBase){
 		inputForms.add(inputFormBase);
 		return this;
@@ -203,6 +208,38 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		@Override
 		public WorkerForm.InputTextSpec obfuscate() {
 			inputFormUnique.setObfuscate(true);
+			return this;
+		}
+	}
+
+	private class InputFormTextAreaSpec implements WorkerForm.InputTextAreaSpec {
+
+		private InputFormTextArea inputFormTextArea;
+
+		private WorkerFormBuilder builder;
+
+		private InputFormTextAreaSpec(String parameter, Label.Translation label, boolean mandatory, WorkerFormBuilder builder){
+			this.inputFormTextArea = new InputFormTextArea();
+			this.inputFormTextArea.setInputFormType(InputFormType.TEXTAREA);
+			this.inputFormTextArea.setParameter(parameter);
+			this.inputFormTextArea.setLabel(label);
+			this.inputFormTextArea.setMandatory(mandatory);
+			this.builder = builder;
+		}
+
+		public WorkerFormBuilder and() {
+			return builder.addInput(inputFormTextArea);
+		}
+
+		@Override
+		public WorkerForm.InputTextAreaSpec withInformation(Label.Translation information) {
+			inputFormTextArea.setInformation(information);
+			return this;
+		}
+
+		@Override
+		public WorkerForm.InputTextAreaSpec withPlaceholder(Label.Translation placeholder) {
+			inputFormTextArea.setPlaceholder(placeholder);
 			return this;
 		}
 	}
@@ -588,6 +625,22 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		public boolean isObfuscate() {
 			return obfuscate;
 		}
+	}
+
+	private class InputFormTextArea extends InputFormBase implements WorkerForm.InputFormTextArea {
+
+		private Label.Translation placeholder;
+
+		private InputFormTextArea() {}
+
+		private void setPlaceholder(Label.Translation placeholder){
+			this.placeholder = placeholder;
+		}
+
+		public Label.Translation getPlaceholder(){
+			return this.placeholder;
+		}
+
 	}
 
 	private abstract class InputFormBase {

@@ -268,6 +268,15 @@ public class WorkerForm {
 		InputFormToggleSpec addInputFormToggle(String parameter, Label.Translation label, boolean mandatory);
 
 		/**
+		 * Add an input textarea. The parameter should be of type string
+		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
+		 * @param label the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
+		 * @param mandatory if the form field is mandatory
+		 * @return {{@link InputTextAreaSpec}} specification for input textarea
+		 */
+		InputTextAreaSpec addInputFormTextArea(String parameter, Label.Translation label, boolean mandatory);
+
+		/**
 		 * Build the form and get an instance of type {{@link Form}}
 		 * @return the {{@link Form}}
 		 */
@@ -335,6 +344,28 @@ public class WorkerForm {
 		 * @return {{@link InputTextSpec}}
 		 */
 		InputTextSpec obfuscate();
+
+	}
+
+	/**
+	 * Interface for input textarea specification
+	 */
+	public interface InputTextAreaSpec extends InputFormBaseSpec{
+
+		/**
+		 * Add an information
+		 * @param information the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for information translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
+		 * @return {{@link InputTextAreaSpec}}
+		 */
+		InputTextAreaSpec withInformation(Label.Translation information);
+
+		/**
+		 * Add a placeholder
+		 * @param placeholder the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for placeholder translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} instances
+		 * @return {{@link InputTextAreaSpec}}
+		 */
+		InputTextAreaSpec withPlaceholder(Label.Translation placeholder);
+
 
 	}
 
@@ -574,6 +605,18 @@ public class WorkerForm {
 		 * @return is obfuscate
 		 */
 		boolean isObfuscate();
+
+		/**
+		 * The placeholder of the input form
+		 * @return the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation.
+		 */
+		Label.Translation getPlaceholder();
+	}
+
+	/**
+	 * Interface for input form field of type textArea
+	 */
+	public interface InputFormTextArea extends InputFormBase {
 
 		/**
 		 * The placeholder of the input form

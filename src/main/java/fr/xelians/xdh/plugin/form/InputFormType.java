@@ -6,6 +6,7 @@ package fr.xelians.xdh.plugin.form;
 public enum InputFormType {
 
 	TEXT,
+	TEXTAREA,
 	SELECT,
 	CHECKBOX,
 	FILE,
