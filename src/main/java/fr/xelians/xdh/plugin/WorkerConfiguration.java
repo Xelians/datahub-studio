@@ -14,9 +14,9 @@ public interface WorkerConfiguration {
 	/**
 	 * Get the name of the worker.
 	 * This name will be displayed on the User Interface of the Xelians DataHub.
-	 * @return The name of the worker
+	 * @return the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for label translation.
 	 */
-	String name();
+	Label.Translation name();
 
 	/**
 	 * Get the worker id.
@@ -27,10 +27,10 @@ public interface WorkerConfiguration {
 
 	/**
 	 * Get the description displayed on the User Interface of the Xelians DataHub.
-	 * @return the description
+	 * @return the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for label translation.
 	 */
-	default String description(){
-		return "";
+	default Label.Translation description(){
+		return Label.of("");
 	}
 
 	/**

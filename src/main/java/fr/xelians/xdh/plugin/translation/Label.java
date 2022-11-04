@@ -22,6 +22,15 @@ public final class Label {
 		return new Translation(fr, en);
 	}
 
+	/**
+	 * Create a Translation object with same label for each language
+	 * @param label the label
+	 * @return {{@link Translation}}
+	 */
+	public static Translation of(String label){
+		return new Translation(label, label);
+	}
+
 	public static class Translation{
 
 		private String fr;
