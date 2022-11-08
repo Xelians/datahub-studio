@@ -14,4 +14,8 @@ public class DelayExecutionException extends Exception{
     public DelayExecutionException(int delay) {
         this.delay = delay;
     }
+
+    public int getDelay() {
+        return delay;
+    }
 }
