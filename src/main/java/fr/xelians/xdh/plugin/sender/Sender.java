@@ -1,7 +1,6 @@
 package fr.xelians.xdh.plugin.sender;
 
 import fr.xelians.xdh.plugin.logging.XDHProcessLogger;
-import org.slf4j.Logger;
 
 import java.nio.file.Path;
 
@@ -22,7 +21,7 @@ public interface Sender {
 	 * @param fromDirectory the path of the directory where is the file to send
 	 * @param logger The logger to use. Log files are in the log folder of the channel directory under the base datahub folder.
 	 * @return The detail of a successful send operation to be displayed on the user interface
-	 * @throws Exception For exception to be displayed as a functional exception you should throw a {{@link SendException}}
+	 * @throws Exception For exception to be displayed as a functional exception you should throw a {{@link SendException}}. To delay the execution you should throw a {{@link  DelayExecutionException}}.
 	 */
 	String send(String fileName, Path fromDirectory, XDHProcessLogger logger) throws Exception;
 
