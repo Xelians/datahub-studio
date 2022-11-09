@@ -1,7 +1,7 @@
 package fr.xelians.xdh.plugin.collector;
 
 import fr.xelians.xdh.plugin.logging.XDHProcessLogger;
-import org.slf4j.Logger;
+import reactor.core.publisher.Mono;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -25,6 +25,6 @@ public interface Collector {
 	 * @return The list of filenames collected, be careful to give only the filename not the path.
 	 * @throws Exception For exception to be displayed as a functional exception you should throw a {{@link CollectException}}
 	 */
-	List<String> collect(Path toDirectory, String webhook, XDHProcessLogger logger) throws Exception;
+	Mono<List<String>> collect(Path toDirectory, String webhook, XDHProcessLogger logger) throws Exception;
 
 }

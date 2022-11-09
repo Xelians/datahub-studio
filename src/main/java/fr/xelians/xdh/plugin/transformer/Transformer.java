@@ -3,6 +3,7 @@ package fr.xelians.xdh.plugin.transformer;
 import fr.xelians.xdh.plugin.logging.XDHProcessLogger;
 import fr.xelians.xdh.plugin.sender.SendException;
 import org.slf4j.Logger;
+import reactor.core.publisher.Mono;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -27,6 +28,6 @@ public interface Transformer {
 	 * @return The filename of the new file.
 	 * @throws Exception For exception to be displayed as a functional exception you should throw a {{@link TransformException}}
 	 */
-	String transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger) throws Exception;
+	Mono<String> transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger) throws Exception;
 
 }
