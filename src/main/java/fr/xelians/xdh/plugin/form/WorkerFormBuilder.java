@@ -242,6 +242,12 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 			inputFormTextArea.setPlaceholder(placeholder);
 			return this;
 		}
+
+		@Override
+		public WorkerForm.InputTextAreaSpec obfuscate() {
+			inputFormTextArea.setObfuscate(true);
+			return this;
+		}
 	}
 
 	private class InputFormCheckboxSpec<T> extends InputFormMultiSpec<T> {
@@ -630,6 +636,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 	private class InputFormTextArea extends InputFormBase implements WorkerForm.InputFormTextArea {
 
 		private Label.Translation placeholder;
+		private boolean obfuscate;
 
 		private InputFormTextArea() {}
 
@@ -641,6 +648,14 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 			return this.placeholder;
 		}
 
+		private void setObfuscate(boolean obfuscate){
+			this.obfuscate = true;
+		}
+
+		@Override
+		public boolean isObfuscate() {
+			return obfuscate;
+		}
 	}
 
 	private abstract class InputFormBase {
