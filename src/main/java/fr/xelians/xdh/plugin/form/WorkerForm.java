@@ -366,7 +366,11 @@ public class WorkerForm {
 		 */
 		InputTextAreaSpec withPlaceholder(Label.Translation placeholder);
 
-
+		/**
+		 * Obfuscate the field
+		 * @return {{@link InputTextAreaSpec}}
+		 */
+		InputTextAreaSpec obfuscate();
 	}
 
 	/**
@@ -623,6 +627,12 @@ public class WorkerForm {
 		 * @return the {{@link fr.xelians.xdh.plugin.translation.Label.Translation}} use for form labels translation.
 		 */
 		Label.Translation getPlaceholder();
+
+		/**
+		 * If the field is obfuscate (like password fields)
+		 * @return is obfuscate
+		 */
+		boolean isObfuscate();
 	}
 
 	/**
