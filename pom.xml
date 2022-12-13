@@ -6,7 +6,7 @@
 
     <groupId>fr.xelians.xdh</groupId>
     <artifactId>xdh-plugin</artifactId>
-    <version>1.3.0</version>
+    <version>1.4.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
