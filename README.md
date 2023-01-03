@@ -1,0 +1,168 @@
+# Xelians DataHub Studio
+
+L'ajout de nouvelles capacités (collector, transformer et sender) à la solution est possible via le module **datahub-studio**.
+Pour cela il suffit d'importer le module dans un nouveau projet java et de suivre les instructions qui suivent.
+
+## Collector
+
+### Interface
+Un collector doit nécessairement implémenter l'interface **Collector**
+
+```java
+Mono<List<String>> collect(Path toDirectory, String webhook, XDHProcessLogger logger) throws Exception;
+```
+La méthode **collect** prend en paramètre :
+- le chemin du répertoire ou doivent être stockés les fichiers collectés.
+- webhook si le canal utilise les webhooks comme notification de collecte. L'argument correspond au body de la requête webhook.
+- Le loggeur à utiliser pour écrire des logs dans le fichier de log du canal
+
+Cette méthode renvoie le nom des fichiers stockés. La lecture ne doit pas être bloquées indéfiniment, elle doit stocker un nombre fini de fichier et renvoyé la liste. Les n fichiers correspondent à un flux de collecte et sont envoyés par paquet au transformer.
+A chaque opération de lecture entre 1 et n (éviter de dépasser un max d'une centaine de fichiers) fichiers doivent être stockés, on peut donc avoir un collector stateful pour stocker l'état de la lecture sur le channel.
+Les collects se font de manières non concurrentes un seul thread à la fois effectuera une opération de lecture sur 1 channel particulier.
+
+Les paramètres du collector correspondent à des variables d'instances de l'implémentation qui doivent être initialisés via le constructeur.
+Pour ajouter des paramètres, il suffira donc de définir des paramètres dans le constructeur de l'implémentation.
+Les types de paramètres autorisés :
+- Integer / int
+- Boolean / boolean
+- Double /  double
+- Float / float
+- Long / long
+- String
+- Path
+- List<Map>
+- List<Integer | Boolean | Double | Float | Long | String>
+
+### Gestion des erreurs
+
+Pour afficher une erreur fonctionnelle sur l'interface et dans les logs, il suffit de lancer une ```CollectException```.
+Il est possible de rajouter un code erreur :
+
+```java
+throw new CollectException("message d'erreur", "CODE_1");
+```
+
+### Configuration
+
+Pour qu'un collector soit pris en compte il faudra définir une configuration implémentant l'interface **CollectorConfiguration**
+
+```java
+Class<? extends Collector> getCollectorClass(); // renvoi la classe de l'implémentation du collector en question
+Label.Translation getName(); // le nom du collector afficher sur l'interface
+Label.Translation description(); // La description du collector, par défaut vide
+String id(); // id du collector
+String version(); // La version du collector
+WorkerForm.Form getForm(); // la définition du formulaire de paramétrage du collector
+```
+
+
+## Transformer
+
+### Interface
+Un transformer doit nécessairement implémenter l'interface **Transformer**
+
+```java
+Mono<String> transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger) throws Exception;
+```
+La méthode **transform** prend en paramètre :
+- La liste des noms de fichiers à transformer
+- le chemin du répertoire ou sont stockés les fichiers à transformer.
+- le nom du répertoire ou il faut stocker le fichier transformé.
+- Le loggeur à utiliser pour écrire des logs dans le fichier de log du canal.
+
+Cette étape correspond à la transformation de n fichiers en 1 fichier.
+Cette méthode renvoie le nom du fichier transformé. La transformation est nécessairement stateless
+
+Les paramètres du transformer correspondent à des variables d'instances de l'implémentation qui doivent être initialisés via le constructeur.
+Pour ajouter des paramètres, il suffira donc de définir des paramètres dans le constructeur de l'implémentation.
+Les types de paramètres autorisés :
+- Integer / int
+- Boolean / boolean
+- Double /  double
+- Float / float
+- Long / long
+- String
+- Path
+- List<Map>
+- List<Integer | Boolean | Double | Float | Long | String>
+
+### Gestion des erreurs
+
+Pour afficher une erreur fonctionnelle sur l'interface et dans les logs, il suffit de lancer une ```TransformException```.
+Il est possible de rajouter un code erreur :
+
+```java
+throw new TransformException("message d'erreur", "CODE_1");
+```
+
+### Configuration
+
+Pour qu'un transformer soit pris en compte il faudra définir une configuration implémentant l'interface **TransformerConfiguration**
+
+```java
+Class<? extends Transformer> getTransformerClass(); // renvoi la classe de l'implémentation du transformer en question
+Label.Translation getName(); // le nom du transformer afficher sur l'interface.
+Label.Translation description(); // La description du transformer, par défaut vide
+String id(); // id du transformer
+String version(); // La version du transformer
+WorkerForm.Form getForm(); // la définition du formulaire de paramétrage du transformer
+```
+
+
+## Sender
+
+### Interface
+Un sender doit nécessairement implémenter l'interface **Sender**
+
+```java
+Mono<String> send(String fileName, Path fromDirectory, XDHProcessLogger logger) throws Exception;
+```
+La méthode **send** prend en paramètre :
+- Le nom du fichier à envoyer
+- le chemin du répertoire ou se situe le fichier
+- Le loggeur à utiliser pour écrire des logs dans le fichier de log du canal.
+
+Les paramètres du sender correspondent à des variables d'instances de l'implémentation qui doivent être initialisés via le constructeur.
+Pour ajouter des paramètres, il suffira donc de définir des paramètres dans le constructeur de l'implémentation.
+Les types de paramètres autorisés :
+- Integer / int
+- Boolean / boolean
+- Double /  double
+- Float / float
+- Long / long
+- String
+- Path
+- List<Map>
+- List<Integer | Boolean | Double | Float | Long | String>
+
+### Gestion des erreurs
+
+Pour afficher une erreur fonctionnelle sur l'interface et dans les logs, il suffit de lancer une ```SendException```.
+Il est possible de rajouter un code erreur :
+
+```java
+throw new SendException("message d'erreur", "CODE_1");
+```
+
+### Configuration
+
+Pour qu'un sender soit pris en compte il faudra définir une configuration implémentant l'interface **TransformerConfiguration**
+
+```java
+Class<? extends Sender> getSenderClass(); // renvoi la classe de l'implémentation du sender en question
+Label.Translation getName(); // le nom du sender afficher sur l'interface
+Label.Translation description(); // La description du sender, par défaut vide
+String id(); // id du sender
+String version(); // La version du sender
+WorkerForm.Form getForm(); // la définition du formulaire de paramétrage du sender
+```
+
+## Formulaire
+
+Pour construire le formulaire  ```WorkerForm.Form ```  il est conseillé d'utiliser le builder ```WorkerFormBuilder ``` en utilisant la méthode ```WorkerForm.builder()```
+Bien suivre les instructions de la javadoc de l'interface ```WorkerForm```. Bien veillez à respecter le nom des paramètres et le type des inputs qui doit être cohérent avec le type des paramètres sinon le worker ne sera pas ajouté au démarrage de l'application.
+
+## Ajout des nouveaux workers
+
+Pour ajouter le nouveau plugin à la solution, il suffit de packager le projet en une archive de type **jar** et déposer cette archive dans un dossier "**/lib**" à créer à la racine du répertoire root de l'application.
+Lors du lancement de l'application les collectors, transformers et senders implémentés correctement seront chargés dans le contexte de worker de l'application.
