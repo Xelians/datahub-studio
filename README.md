@@ -8,7 +8,7 @@ Dans la mesure du possible utiliser les librairies déjà disponibles dans **le 
 
 ### Canal
 
-Le transfert de donnée via le datahub est modelisé par un canal. Un canal possède une instance de 3 types de **workers** appelés **Collector**, **transformer** et **Sender**.
+Le transfert de donnée via le datahub est modelisé par un canal. Un canal possède une instance de 3 types de **workers** appelés **Collector**, **Transformer** et **Sender**.
 Lors du démarrage d'un canal les workers sont instanciés avec les valeurs entrées lors du paramétrage du canal via l'interface du datahub.
 
 ### Workflow
@@ -47,7 +47,7 @@ La méthode **collect** prend en paramètre :
 - webhook si le canal utilise les webhooks comme notification de collecte. L'argument correspond au body de la requête webhook.
 - Le loggeur à utiliser pour écrire des logs dans le fichier de log du canal
 
-Cette méthode renvoie le nom des fichiers stockés, si une liste vide est renvoyée aucun flux n'est créé. La lecture ne doit pas être bloquée indéfiniment, elle doit stocker un nombre fini de fichier et renvoyer la liste. Les n fichiers correspondent à un flux de collecte et sont envoyés par paquet au transformer.
+Cette méthode renvoie le nom des fichiers stockés, si une liste vide est renvoyée aucun traitement n'est créé. La lecture ne doit pas être bloquée indéfiniment, elle doit stocker un nombre fini de fichier et renvoyer la liste. Les n fichiers correspondent à un flux de collecte et sont envoyés par paquet au transformer.
 A chaque opération de lecture entre 1 et n (éviter de dépasser un max d'une centaine de fichiers) fichiers doivent être stockés, on peut donc avoir un collector stateful pour stocker l'état de la lecture sur le canal.
 Les collectes se font de manières non concurrentes un seul thread à la fois effectuera une opération de collecte sur 1 canal particulier.
 
