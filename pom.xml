@@ -31,7 +31,7 @@
         <reactor.version>3.4.23</reactor.version>
         <netty.version>4.1.84.Final</netty.version>
         <microsoft.graph.version>5.42.0</microsoft.graph.version>
-        <azure.identity.version>1.2.5</azure.identity.version>
+        <azure.identity.version>1.7.3</azure.identity.version>
         <modelmapper.version>2.4.5</modelmapper.version>
         <relaxng.version>20220510</relaxng.version>
         <droid.version>6.5.2</droid.version>
@@ -184,6 +184,11 @@
             <groupId>com.microsoft.graph</groupId>
             <artifactId>microsoft-graph</artifactId>
             <version>${microsoft.graph.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-identity</artifactId>
+            <version>${azure.identity.version}</version>
         </dependency>
         <dependency>
             <groupId>org.modelmapper</groupId>
