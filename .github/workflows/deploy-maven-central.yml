@@ -1,0 +1,46 @@
+name: DEPLOY TO MAVEN CENTRAL
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      options: --user root
+      image: rg.fr-par.scw.cloud/cicd/xelians-openjdk:17
+      credentials:
+        username: nologin
+        password: "${{ secrets.REGISTRY_SECRET }}"
+    steps:
+      - uses: actions/checkout@v2
+      # Step that does that actual cache save and restore
+      - uses: actions/cache@v2.1.4
+        with:
+          path: /github/home/.m2/repository
+          key: ${{ runner.os }}-maven-repo-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-repo
+      - name: Setup settings.xml
+        uses: s4u/maven-settings-action@v2.5.0
+        with:
+          servers: |
+            [
+               {
+                  "id":"sonatype-nexus-snapshots",
+                  "username":"${{ secrets.SONATYPE_USER }}",
+                  "password":"${{ secrets.SONATYPE_PASSWORD }}"
+               },
+               {
+                  "id":"sonatype-nexus-staging",
+                  "username":"${{ secrets.SONATYPE_USER }}",
+                  "password":"${{ secrets.SONATYPE_PASSWORD }}"
+               }
+            ]
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      - name: Build with Maven
+        run: mvn -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} -Dmaven.repo.local=/github/home/.m2/repository --settings /github/home/.m2/settings.xml clean deploy
