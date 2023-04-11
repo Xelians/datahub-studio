@@ -39,7 +39,7 @@ Le scheduler planifie des tâches de collecte régulièrement pour tous les cana
 #### 2 Collecte
 
 Un pool de thread fixe est chargé d'effectuer les tâches de collecte en récupérant l'instance du **collector** correspondant et en appliquant la méthode ```collect``` expliquée plus bas.
-Le ou les fichiers collectés sont écrit sur le disque dans un repertoire spécifique attribué au canal. Un broker permet de transmettre un tâche de transformation au pool suivant.
+Le ou les fichiers collectés sont écrit sur le disque dans un repertoire spécifique attribué au canal. Un broker permet de transmettre une tâche de transformation au pool suivant.
 
 #### 3 transformation
 
@@ -49,7 +49,7 @@ Le ou les fichiers sont transformés en un seul fichier écrit sur le disque dan
 #### 4 Transfert
 
 Un pool de thread fixe est chargé d'effectuer les tâches de transfert en récupérant l'instance du **sender** correspondant et en applicant la méthode ```send``` expliquée plus bas.
-Le fichier est envoyé un détail du transfert est visible via l'interface du datahub.
+Le fichier est envoyé et un détail du transfert est visible via l'interface du datahub.
 
 ## Collector
 
