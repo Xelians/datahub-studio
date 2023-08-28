@@ -6,7 +6,7 @@
 
     <groupId>fr.xelians</groupId>
     <artifactId>datahub-studio</artifactId>
-    <version>1.4.1</version>
+    <version>2.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>datahub-studio</name>
@@ -42,6 +42,15 @@
         <developer>
             <name>Marine Denis</name>
             <email>marine.denis@xelians.fr</email>
+            <organization>Xelians</organization>
+            <organizationUrl>https://www.xelians.fr/</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Mohamed ben abdallah</name>
+            <email>mohamed.ben-abdallah@xelians.fr</email>
             <organization>Xelians</organization>
             <organizationUrl>https://www.xelians.fr/</organizationUrl>
             <roles>
@@ -84,7 +93,7 @@
         <relaxng.version>20220510</relaxng.version>
         <droid.version>6.5.2</droid.version>
         <itext.version>5.5.13.3</itext.version>
-        <boucycatsle.version>1.67</boucycatsle.version>
+        <bouncycastle.version>1.67</bouncycastle.version>
         <apache.commons-vfs2.version>2.9.0</apache.commons-vfs2.version>
         <jackson.datatype.version>2.13.4</jackson.datatype.version>
         <maven.source.version>3.2.1</maven.source.version>
@@ -254,7 +263,7 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-ext-jdk15to18</artifactId>
-            <version>${boucycatsle.version}</version>
+            <version>${bouncycastle.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>

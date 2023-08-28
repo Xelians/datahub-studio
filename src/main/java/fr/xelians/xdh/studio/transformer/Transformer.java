@@ -1,7 +1,7 @@
 package fr.xelians.xdh.studio.transformer;
 
+import fr.xelians.xdh.studio.ResourceHandler;
 import fr.xelians.xdh.studio.logging.XDHProcessLogger;
-import org.slf4j.Logger;
 import reactor.core.publisher.Mono;
 
 import java.nio.file.Path;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * @author aurelien on 10/01/2022
  */
-public interface Transformer {
+public interface Transformer extends ResourceHandler {
 
 	/**
 	 * The transform method to be implemented for transformation
