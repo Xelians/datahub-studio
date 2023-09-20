@@ -1,5 +1,6 @@
 package fr.xelians.xdh.studio.collector;
 
+import fr.xelians.xdh.studio.ResourceHandler;
 import fr.xelians.xdh.studio.logging.XDHProcessLogger;
 import reactor.core.publisher.Mono;
 
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * @author aurelien on 10/01/2022
  */
-public interface Collector {
+public interface Collector extends ResourceHandler {
 
 	/**
 	 * Collect operation

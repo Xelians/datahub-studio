@@ -2,7 +2,7 @@
 
 
 [![license](https://img.shields.io/badge/license-Apache--2.0-green)](http://www.apache.org/licenses/LICENSE-2.0)
-[![maven](https://img.shields.io/badge/maven--central-v1.4.1-blue)](https://search.maven.org/artifact/fr.xelians/datahub-studio/1.4.1/jar)
+[![maven](https://img.shields.io/badge/maven--central-v2.0.0-blue)](https://mvnrepository.com/artifact/fr.xelians/datahub-studio/2.0.0)
 
 Module ayant pour but d'ajouter des workers externes (collector, transformer et sender) à la solution Xelians Datahub.
 Pour cela il suffit d'importer le module dans un nouveau projet java et de suivre les instructions qui suivent.
@@ -16,7 +16,7 @@ Ajouter la dépendance dans le pom.xml
 <dependency>
     <groupId>fr.xelians</groupId>
     <artifactId>datahub-studio</artifactId>
-    <version>1.4.1</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
@@ -65,7 +65,8 @@ La méthode **collect** prend en paramètre :
 - webhook si le canal utilise les webhooks comme notification de collecte. L'argument correspond au body de la requête webhook.
 - Le loggeur à utiliser pour écrire des logs dans le fichier de log du canal
 
-Cette méthode renvoie le nom des fichiers stockés, si une liste vide est renvoyée aucun traitement n'est créé. La lecture ne doit pas être bloquée indéfiniment, elle doit stocker un nombre fini de fichier et renvoyer la liste. Les n fichiers correspondent à un flux de collecte et sont envoyés par paquet au transformer.
+Cette méthode renvoie le nom des fichiers stockés, si une liste vide est renvoyée aucun traitement n'est créé. Faire attention à nommer de manière unique les fichiers collectés (par exemple ajouter un suffix ou un prefix auto-généré)
+La lecture ne doit pas être bloquée indéfiniment, elle doit stocker un nombre fini de fichier et renvoyer la liste. Les n fichiers correspondent à un flux de collecte et sont envoyés par paquet au transformer.
 A chaque opération de lecture entre 1 et n (éviter de dépasser un max d'une centaine de fichiers) fichiers doivent être stockés, on peut donc avoir un collector stateful pour stocker l'état de la lecture sur le canal.
 Les collectes se font de manières non concurrentes un seul thread à la fois effectuera une opération de collecte sur 1 canal particulier.
 
@@ -124,7 +125,7 @@ La méthode **transform** prend en paramètre :
 - le nom du répertoire ou il faut stocker le fichier transformé.
 - Le loggeur à utiliser pour écrire des logs dans le fichier de log du canal.
 
-Cette étape correspond à la transformation de n fichiers en 1 fichier.
+Cette étape correspond à la transformation de n fichiers en 1 fichier. Faire attention à nommer de manière unique les fichiers transformés.
 Cette méthode renvoie le nom du fichier transformé. La transformation est nécessairement stateless
 
 Les paramètres du transformer correspondent à des variables d'instances de l'implémentation qui doivent être initialisées via le constructeur.
@@ -170,11 +171,12 @@ WorkerForm.Form getForm(); // la définition du formulaire de paramétrage du tr
 Un sender doit nécessairement implémenter l'interface **Sender**
 
 ```java
-Mono<String> send(String fileName, Path fromDirectory, XDHProcessLogger logger) throws Exception;
+Mono<String> send(String fileName, Path fromDirectory, Path resultDirectory, XDHProcessLogger logger) throws Exception;
 ```
 La méthode **send** prend en paramètre :
 - Le nom du fichier à envoyer
 - le chemin du répertoire ou se situe le fichier
+- Le chemin du répertoire ou l'on peut insérer des fichiers de retours ou résultats du transfert
 - Le loggeur à utiliser pour écrire des logs dans le fichier de log du canal.
 
 Les paramètres du sender correspondent à des variables d'instances de l'implémentation qui doivent être initialisées via le constructeur.
