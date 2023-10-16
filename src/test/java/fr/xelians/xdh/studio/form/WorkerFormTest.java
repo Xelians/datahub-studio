@@ -60,11 +60,9 @@ public class WorkerFormTest {
 				.addInputFormFile(PARAM_5, Label.of(LABEL_5, LABEL_5), false)
 				.and()
 				.addInputFormTable(PARAM_6, Label.of(LABEL_6, LABEL_6), true)
-				.addInputTextText(PARAM_1, Label.of(LABEL_1, LABEL_1), false)
-				.and()
-				.addInputSelectText(PARAM_2, Label.of(LABEL_2, LABEL_2), true)
-				.withChoices(List.of(WorkerForm.MultiValueChoice.of(VALUE_5), WorkerForm.MultiValueChoice.of(VALUE_6)))
-				.and()
+				.withFields(WorkerForm.builder().addInputTextText(PARAM_1, Label.of(LABEL_1, LABEL_1), false).and()
+						.addInputSelectText(PARAM_2, Label.of(LABEL_2, LABEL_2), true)
+						.withChoices(List.of(WorkerForm.MultiValueChoice.of(VALUE_5), WorkerForm.MultiValueChoice.of(VALUE_6))).and().build())
 				.and()
 				.build();
 

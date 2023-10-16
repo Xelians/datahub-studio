@@ -457,31 +457,11 @@ public class WorkerForm {
 	public interface InputFormTableSpec extends InputFormBaseSpec{
 
 		/**
-		 * Add an input text for text values. The value of the corresponding key will be of type String
-		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
-		 * @param label the {{@link fr.xelians.xdh.studio.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.studio.translation.Label.Translation}} instances
-		 * @param mandatory if the form field is mandatory
-		 * @return {{@link InputTextTableSpec}} specification for input text with text values
+		 * Add table fields columns
+		 * @param form a form object describing all the columns in the table
+		 * @return {{@link InputFormTableSpec}}
 		 */
-		InputTextTableSpec addInputTextText(String parameter, Label.Translation label, boolean mandatory);
-
-		/**
-		 * Add an input select for text values. The value of the corresponding key will be of type String
-		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
-		 * @param label the {{@link fr.xelians.xdh.studio.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.studio.translation.Label.Translation}} instances
-		 * @param mandatory if the form field is mandatory
-		 * @return {{@link InputFormMultiTableSpec}} specification for input multivalued
-		 */
-		InputFormMultiTableSpec addInputSelectText(String parameter, Label.Translation label, boolean mandatory);
-
-		/**
-		 * Add an input toggle. The value of the corresponding key will be of type Boolean
-		 * @param parameter the name fo the parameter should be equal to the parameter name of the constructor
-		 * @param label the {{@link fr.xelians.xdh.studio.translation.Label.Translation}} use for form labels translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.studio.translation.Label.Translation}} instances
-		 * @param mandatory if the form field is mandatory
-		 * @return {{@link InputTextTableSpec}} specification for input text with text values
-		 */
-		InputFormToggleTableSpec addInputFormToggle(String parameter, Label.Translation label, boolean mandatory);
+		InputFormTableSpec withFields(Form form);
 
 		/**
 		 * Add an information

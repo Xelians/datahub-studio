@@ -6,7 +6,7 @@
 
     <groupId>fr.xelians</groupId>
     <artifactId>datahub-studio</artifactId>
-    <version>2.0.1</version>
+    <version>3.0.0</version>
     <packaging>jar</packaging>
 
     <name>datahub-studio</name>
@@ -259,6 +259,12 @@
             <groupId>org.relaxng</groupId>
             <artifactId>jing</artifactId>
             <version>${relaxng.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.ibissource</groupId>
+                    <artifactId>ibis-xerces</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>

@@ -318,18 +318,9 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		}
 
 		@Override
-		public WorkerForm.InputTextTableSpec addInputTextText(String parameter, Label.Translation label, boolean mandatory) {
-			return new InputTextTableSpec(InputValueType.TEXT, InputFormType.TEXT, parameter, label, mandatory, this);
-		}
-
-		@Override
-		public WorkerForm.InputFormMultiTableSpec addInputSelectText(String parameter, Label.Translation label, boolean mandatory) {
-			return new InputFormMultiTableSpec(InputValueType.TEXT, InputFormType.SELECT, parameter, label, mandatory, this);
-		}
-
-		@Override
-		public WorkerForm.InputFormToggleTableSpec addInputFormToggle(String parameter, Label.Translation label, boolean mandatory) {
-			return new InputFormToggleTableSpec(parameter, label, mandatory, this);
+		public WorkerForm.InputFormTableSpec withFields(WorkerForm.Form form) {
+			this.inputFormTable.inputFormColumns = form.getInputForms();
+			return this;
 		}
 
 		@Override
@@ -349,94 +340,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 			return builder.addInput(inputFormTable);
 		}
 
-		private void addInputForm(WorkerForm.InputFormBase inputFormBase){
-			inputFormTable.addInputFormColumn(inputFormBase);
-		}
 
-		private class InputFormMultiTableSpec implements WorkerForm.InputFormMultiTableSpec{
-
-			protected InputFormMulti<String> inputFormMulti;
-
-			private InputFormTableSpec inputFormTableSpec;
-
-			private InputFormMultiTableSpec(InputValueType inputValueType, InputFormType inputFormType, String parameter, Label.Translation label, boolean mandatory, InputFormTableSpec inputFormTableSpec){
-				this.inputFormMulti = new InputFormMulti();
-				this.inputFormMulti.setInputValueType(inputValueType);
-				this.inputFormMulti.setParameter(parameter);
-				this.inputFormMulti.setLabel(label);
-				this.inputFormMulti.setMandatory(mandatory);
-				this.inputFormMulti.setInputFormType(inputFormType);
-				this.inputFormTableSpec = inputFormTableSpec;
-			}
-
-			public InputFormMultiTableSpec withChoices(List<WorkerForm.MultiValueChoice.Choice<String>> choices){
-				inputFormMulti.setChoices(choices);
-				return this;
-			}
-
-			public InputFormTableSpec and(){
-				inputFormTableSpec.addInputForm(inputFormMulti);
-				return inputFormTableSpec;
-			}
-
-		}
-
-		private class InputTextTableSpec implements WorkerForm.InputTextTableSpec{
-
-			private InputFormUnique<String> inputFormUnique;
-
-			private InputFormTableSpec inputFormTableSpec;
-
-			private InputTextTableSpec(InputValueType inputValueType, InputFormType inputFormType, String parameter, Label.Translation label, boolean mandatory, InputFormTableSpec inputFormTableSpec){
-				this.inputFormUnique = new InputFormUnique();
-				this.inputFormUnique.setInputFormType(InputFormType.TEXT);
-				this.inputFormUnique.setInputValueType(inputValueType);
-				this.inputFormUnique.setParameter(parameter);
-				this.inputFormUnique.setLabel(label);
-				this.inputFormUnique.setMandatory(mandatory);
-				this.inputFormUnique.setInputFormType(inputFormType);
-				this.inputFormTableSpec = inputFormTableSpec;
-			}
-
-			@Override
-			public WorkerForm.InputTextTableSpec withMinValue(String value) {
-				inputFormUnique.setMin(value);
-				return this;
-			}
-
-			@Override
-			public WorkerForm.InputTextTableSpec withMaxValue(String value) {
-				inputFormUnique.setMax(value);
-				return this;
-			}
-
-			@Override
-			public WorkerForm.InputFormTableSpec and() {
-				inputFormTableSpec.addInputForm(inputFormUnique);
-				return inputFormTableSpec;
-			}
-		}
-
-		private class InputFormToggleTableSpec implements WorkerForm.InputFormToggleTableSpec{
-
-			private InputFormToggle inputFormToggle;
-			private InputFormTableSpec inputFormTableSpec;
-
-			private InputFormToggleTableSpec(String parameter, Label.Translation label, boolean mandatory, InputFormTableSpec inputFormTableSpec) {
-				this.inputFormToggle = new InputFormToggle();
-				this.inputFormToggle.setInputFormType(InputFormType.TOGGLE);
-				this.inputFormToggle.setParameter(parameter);
-				this.inputFormToggle.setLabel(label);
-				this.inputFormToggle.setMandatory(mandatory);
-				this.inputFormTableSpec = inputFormTableSpec;
-			}
-
-			@Override
-			public WorkerForm.InputFormTableSpec and() {
-				inputFormTableSpec.addInputForm(inputFormToggle);
-				return inputFormTableSpec;
-			}
-		}
 	}
 
 	private class InputFormFileSpec implements WorkerForm.InputFormFileSpec {
