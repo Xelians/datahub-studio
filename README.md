@@ -2,7 +2,7 @@
 
 
 [![license](https://img.shields.io/badge/license-Apache--2.0-green)](http://www.apache.org/licenses/LICENSE-2.0)
-[![maven](https://img.shields.io/badge/maven--central-v2.0.1-blue)](https://mvnrepository.com/artifact/fr.xelians/datahub-studio/2.0.1)
+[![maven](https://img.shields.io/badge/maven--central-v3.0.0-blue)](https://mvnrepository.com/artifact/fr.xelians/datahub-studio/3.0.0)
 
 Module ayant pour but d'ajouter des workers externes (collector, transformer et sender) à la solution Xelians Datahub.
 Pour cela il suffit d'importer le module dans un nouveau projet java et de suivre les instructions qui suivent.
@@ -16,7 +16,7 @@ Ajouter la dépendance dans le pom.xml
 <dependency>
     <groupId>fr.xelians</groupId>
     <artifactId>datahub-studio</artifactId>
-    <version>2.0.1</version>
+    <version>3.0.0</version>
 </dependency>
 ```
 
