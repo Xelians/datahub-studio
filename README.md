@@ -105,11 +105,6 @@ String version(); // La version du collector
 WorkerForm.Form getForm(); // la définition du formulaire de paramétrage du collector
 ```
 
-### temporisation
-
-La collecte étant thread safe il est possible de temporiser la collecte en mémorisant via un attribut du collector la date de la dernière execution.
-Il suffit ensuite de renvoyer une liste vide pour n'effectuer aucune collecte.
-
 ## Transformer
 
 
