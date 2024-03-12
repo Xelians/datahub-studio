@@ -2,7 +2,6 @@ package fr.xelians.xdh.studio.sender;
 
 import fr.xelians.xdh.studio.ResourceHandler;
 import fr.xelians.xdh.studio.logging.XDHProcessLogger;
-import reactor.core.publisher.Mono;
 
 import java.nio.file.Path;
 
@@ -26,6 +25,6 @@ public interface Sender extends ResourceHandler {
 	 * @return The detail of a successful send operation to be displayed on the user interface
 	 * @throws Exception For exception to be displayed as a functional exception you should throw a {{@link SendException}}. To delay the execution you should throw a {{@link  DelayExecutionException}}.
 	 */
-	Mono<SenderResult> send(String fileName, Path fromDirectory, Path resultDirectory, XDHProcessLogger logger) throws Exception;
+	SenderResult send(String fileName, Path fromDirectory, Path resultDirectory, XDHProcessLogger logger) throws Exception;
 
 }

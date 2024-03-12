@@ -58,7 +58,7 @@ Le fichier est envoyé et un détail du transfert est visible via l'interface du
 Un collector doit nécessairement implémenter l'interface **Collector**
 
 ```java
-Mono<List<String>> collect(Path toDirectory, String webhook, XDHProcessLogger logger) throws Exception;
+List<String> collect(Path toDirectory, String webhook, XDHProcessLogger logger) throws Exception;
 ```
 La méthode **collect** prend en paramètre :
 - le chemin du répertoire ou doivent être stockés les fichiers collectés.
@@ -117,7 +117,7 @@ Il suffit ensuite de renvoyer une liste vide pour n'effectuer aucune collecte.
 Un transformer doit nécessairement implémenter l'interface **Transformer**
 
 ```java
-Mono<TransformResult> transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger) throws Exception;
+TransformResult transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger) throws Exception;
 ```
 La méthode **transform** prend en paramètre :
 - La liste des noms de fichiers à transformer
@@ -172,7 +172,7 @@ WorkerForm.Form getForm(); // la définition du formulaire de paramétrage du tr
 Un sender doit nécessairement implémenter l'interface **Sender**
 
 ```java
-Mono<SenderResult> send(String fileName, Path fromDirectory, Path resultDirectory, XDHProcessLogger logger) throws Exception;
+SenderResult send(String fileName, Path fromDirectory, Path resultDirectory, XDHProcessLogger logger) throws Exception;
 ```
 La méthode **send** prend en paramètre :
 - Le nom du fichier à envoyer
