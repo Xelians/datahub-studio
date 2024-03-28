@@ -27,6 +27,6 @@ public interface Transformer extends ResourceHandler {
 	 * @return The filename of the new file.
 	 * @throws Exception For exception to be displayed as a functional exception you should throw a {{@link TransformException}}
 	 */
-	Mono<String> transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger) throws Exception;
+	Mono<TransformResult> transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger) throws Exception;
 
 }
