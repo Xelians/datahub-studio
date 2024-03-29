@@ -117,7 +117,7 @@ Il suffit ensuite de renvoyer une liste vide pour n'effectuer aucune collecte.
 Un transformer doit nécessairement implémenter l'interface **Transformer**
 
 ```java
-Mono<String> transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger) throws Exception;
+Mono<TransformResult> transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger) throws Exception;
 ```
 La méthode **transform** prend en paramètre :
 - La liste des noms de fichiers à transformer
@@ -125,8 +125,9 @@ La méthode **transform** prend en paramètre :
 - le nom du répertoire ou il faut stocker le fichier transformé.
 - Le loggeur à utiliser pour écrire des logs dans le fichier de log du canal.
 
-Cette étape correspond à la transformation de n fichiers en 1 fichier. Faire attention à nommer de manière unique les fichiers transformés.
-Cette méthode renvoie le nom du fichier transformé. La transformation est nécessairement stateless
+Cette étape correspond à la transformation de n fichiers en 1 fichier. Faire attention à nommer de manière unique les fichiers transformés.\
+Cette méthode renvoie le nom du fichier transformé ainsi qu'un message optionnel, de succés ou de succés avec alerte.\
+La transformation est nécessairement stateless
 
 Les paramètres du transformer correspondent à des variables d'instances de l'implémentation qui doivent être initialisées via le constructeur.
 Pour ajouter des paramètres, il suffira donc de définir des paramètres dans le constructeur de l'implémentation.
@@ -171,13 +172,15 @@ WorkerForm.Form getForm(); // la définition du formulaire de paramétrage du tr
 Un sender doit nécessairement implémenter l'interface **Sender**
 
 ```java
-Mono<String> send(String fileName, Path fromDirectory, Path resultDirectory, XDHProcessLogger logger) throws Exception;
+Mono<SenderResult> send(String fileName, Path fromDirectory, Path resultDirectory, XDHProcessLogger logger) throws Exception;
 ```
 La méthode **send** prend en paramètre :
 - Le nom du fichier à envoyer
 - le chemin du répertoire ou se situe le fichier
 - Le chemin du répertoire ou l'on peut insérer des fichiers de retours ou résultats du transfert
 - Le loggeur à utiliser pour écrire des logs dans le fichier de log du canal.
+  
+Cette méthode renvoie un message de succés ou de succés avec alerte qui sera affiché dans l'interface de supervision.
 
 Les paramètres du sender correspondent à des variables d'instances de l'implémentation qui doivent être initialisées via le constructeur.
 Pour ajouter des paramètres, il suffira donc de définir des paramètres dans le constructeur de l'implémentation.
