@@ -8,6 +8,11 @@ import fr.xelians.xdh.studio.StepResult;
 public class TransformResult extends StepResult{
     private String fileName;
 
+    public TransformResult(String fileName) {
+        super(null);
+        this.fileName=fileName;
+    }
+
     public TransformResult(String fileName, String message) {
         super(message);
         this.fileName=fileName;
