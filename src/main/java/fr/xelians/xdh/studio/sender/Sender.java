@@ -26,6 +26,6 @@ public interface Sender extends ResourceHandler {
 	 * @return The detail of a successful send operation to be displayed on the user interface
 	 * @throws Exception For exception to be displayed as a functional exception you should throw a {{@link SendException}}. To delay the execution you should throw a {{@link  DelayExecutionException}}.
 	 */
-	Mono<String> send(String fileName, Path fromDirectory, Path resultDirectory, XDHProcessLogger logger) throws Exception;
+	Mono<SenderResult> send(String fileName, Path fromDirectory, Path resultDirectory, XDHProcessLogger logger) throws Exception;
 
 }

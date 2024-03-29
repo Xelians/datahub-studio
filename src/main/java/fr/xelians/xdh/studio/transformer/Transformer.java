@@ -24,9 +24,9 @@ public interface Transformer extends ResourceHandler {
 	 * @param fromDirectory the directory where the files are
 	 * @param toDirectory the directory where the new file has to be created
 	 * @param logger The logger to use. Log files are in the log folder of the channel directory under the base datahub folder.
-	 * @return The filename of the new file.
+	 * @return The result containing success message and the name of the produced file.
 	 * @throws Exception For exception to be displayed as a functional exception you should throw a {{@link TransformException}}
 	 */
-	Mono<String> transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger) throws Exception;
+	Mono<TransformResult> transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger) throws Exception;
 
 }
