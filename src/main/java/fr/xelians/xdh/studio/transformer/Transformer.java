@@ -2,7 +2,6 @@ package fr.xelians.xdh.studio.transformer;
 
 import fr.xelians.xdh.studio.ResourceHandler;
 import fr.xelians.xdh.studio.logging.XDHProcessLogger;
-import reactor.core.publisher.Mono;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -27,6 +26,6 @@ public interface Transformer extends ResourceHandler {
 	 * @return The result containing success message and the name of the produced file.
 	 * @throws Exception For exception to be displayed as a functional exception you should throw a {{@link TransformException}}
 	 */
-	Mono<TransformResult> transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger) throws Exception;
+	TransformResult transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger) throws Exception;
 
 }
