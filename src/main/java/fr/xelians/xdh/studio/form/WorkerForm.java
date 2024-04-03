@@ -294,14 +294,14 @@ public class WorkerForm {
 		 * @param choices the list of values
 		 * @return {{@link InputFormMultiSpec}}
 		 */
-		InputFormMultiSpec withChoices(List<MultiValueChoice.Choice<T>> choices);
+		InputFormMultiSpec<T> withChoices(List<MultiValueChoice.Choice<T>> choices);
 
 		/**
 		 * Add an information text for the input field
 		 * @param information the {{@link fr.xelians.xdh.studio.translation.Label.Translation}} use for information translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.studio.translation.Label.Translation}} instances
 		 * @return {{@link InputFormMultiSpec}}
 		 */
-		InputFormMultiSpec withInformation(Label.Translation information);
+		InputFormMultiSpec<T> withInformation(Label.Translation information);
 
 
 	}
@@ -316,34 +316,41 @@ public class WorkerForm {
 		 * @param value the min value
 		 * @return {{@link InputTextSpec}}
 		 */
-		InputTextSpec withMinValue(T value);
+		InputTextSpec<T> withMinValue(T value);
 
 		/**
 		 * Add max value constraint
 		 * @param value the max value
 		 * @return {{@link InputTextSpec}}
 		 */
-		InputTextSpec withMaxValue(T value);
+		InputTextSpec<T> withMaxValue(T value);
 
 		/**
 		 * Add an information
 		 * @param information the {{@link fr.xelians.xdh.studio.translation.Label.Translation}} use for information translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.studio.translation.Label.Translation}} instances
 		 * @return {{@link InputTextSpec}}
 		 */
-		InputTextSpec withInformation(Label.Translation information);
+		InputTextSpec<T> withInformation(Label.Translation information);
 
 		/**
 		 * Add a placeholder
 		 * @param placeholder the {{@link fr.xelians.xdh.studio.translation.Label.Translation}} use for placeholder translation. Use {{@link Label#of(String, String)}} to get a {{@link fr.xelians.xdh.studio.translation.Label.Translation}} instances
 		 * @return {{@link InputTextSpec}}
 		 */
-		InputTextSpec withPlaceholder(Label.Translation placeholder);
+		InputTextSpec<T> withPlaceholder(Label.Translation placeholder);
 
 		/**
 		 * Obfuscate the field
 		 * @return {{@link InputTextSpec}}
 		 */
-		InputTextSpec obfuscate();
+		InputTextSpec<T> obfuscate();
+
+		/**
+		 * * Adds a display dependency for this input, indicating that it conditions the display of another input within the same form.
+		 * @param conditionalDisplay The ConditionalDisplay object specifying the conditions under which the dependent input is displayed.
+		 * @return {{@link InputTextSpec}}
+		 */
+		InputTextSpec<T> withDisplayDependency(ConditionalDisplay<T> conditionalDisplay);
 
 	}
 
@@ -371,6 +378,13 @@ public class WorkerForm {
 		 * @return {{@link InputTextAreaSpec}}
 		 */
 		InputTextAreaSpec obfuscate();
+
+		/**
+		 * * Adds a display dependency for this input, indicating that it conditions the display of another input within the same form.
+		 * @param conditionalDisplay The ConditionalDisplay object specifying the conditions under which the dependent input is displayed.
+		 * @return {{@link InputTextAreaSpec}}
+		 */
+		InputTextAreaSpec withDisplayDependency(ConditionalDisplay<?> conditionalDisplay);
 	}
 
 	/**
@@ -503,6 +517,13 @@ public class WorkerForm {
 		 * @return {{@link InputFormToggleSpec}}
 		 */
 		InputFormToggleSpec withInformation(Label.Translation information);
+
+		/**
+		 * * Adds a display dependency for this input, indicating that it conditions the display of another input within the same form.
+		 * @param conditionalDisplay The ConditionalDisplay object specifying the conditions under which the dependent input is displayed.
+		 * @return {{@link InputFormToggleSpec}}
+		 */
+		InputFormToggleSpec withDisplayDependency(ConditionalDisplay<?> conditionalDisplay);
 	}
 
 	/**
@@ -662,6 +683,8 @@ public class WorkerForm {
 		 * @return the {{@link fr.xelians.xdh.studio.translation.Label.Translation}} use for form labels translation.
 		 */
 		Label.Translation getInformation();
+
+		ConditionalDisplay<?> getConditionalDisplay();
 	}
 
 	/**

@@ -22,11 +22,15 @@ public class WorkerFormTest {
 
 	private static final String PARAM_1 = "PARAM_1";
 	private static final String PARAM_2 = "PARAM_2";
+	public static final ConditionalDisplay<Float> CONDITIONAL_DISPLAY = new ConditionalDisplay.Builder<Float>()
+			.dependentField(PARAM_2)
+			.isHidden()
+			.whenGreaterThanOrEqualTo(5.f)
+			.build();
 	private static final String PARAM_3 = "PARAM_3";
 	private static final String PARAM_4 = "PARAM_4";
 	private static final String PARAM_5 = "PARAM_5";
 	private static final String PARAM_6 = "PARAM_6";
-	private static final String PLACEHOLDER = "PLACEHOLDER";
 
 	private static final Float MIN_VALUE = 2.6f;
 	private static final Float MAX_VALUE = 10.f;
@@ -40,13 +44,14 @@ public class WorkerFormTest {
 	private static final String VALUE_6 = "VALUE_6";
 
 	@Test
-	public void testWorkerForm(){
+	void testWorkerForm(){
 
 		WorkerForm.Form form = WorkerForm.builder()
 				.addInputTextFloat(PARAM_1, Label.of(LABEL_1, LABEL_1), true)
 				.withPlaceholder(Label.of(LABEL_2, LABEL_2))
 				.withMinValue(MIN_VALUE)
 				.withMaxValue(MAX_VALUE)
+				.withDisplayDependency(CONDITIONAL_DISPLAY)
 				.and()
 				.addInputCheckboxBoolean(PARAM_2, Label.of(LABEL_2, LABEL_2), false)
 				.withChoices(List.of(WorkerForm.MultiValueChoice.of(true), WorkerForm.MultiValueChoice.of(false)))
@@ -84,6 +89,7 @@ public class WorkerFormTest {
 		assertTrue(inputFormUnique1.isMandatory());
 		assertEquals(InputFormType.TEXT, inputFormUnique1.getInputFormType());
 		assertEquals(InputValueType.FLOAT, inputFormUnique1.getInputValueType());
+		assertEquals(CONDITIONAL_DISPLAY, inputFormUnique1.getConditionalDisplay());
 		assertEquals(MAX_VALUE, inputFormUnique1.getMax());
 		assertEquals(MIN_VALUE, inputFormUnique1.getMin());
 
