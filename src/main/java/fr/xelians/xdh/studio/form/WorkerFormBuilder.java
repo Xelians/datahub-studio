@@ -20,122 +20,122 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 	@Override
 	public WorkerForm.InputTextSpec<Integer> addInputTextInt(String parameter, Label.Translation label, boolean mandatory){
-		return new InputTextSpec(InputValueType.INTEGER, parameter, label, mandatory, this);
+		return new InputTextSpec<>(InputValueType.INTEGER, parameter, label, mandatory, this);
 	}
 
 	@Override
 	public WorkerForm.InputTextSpec<Double> addInputTextDouble(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputTextSpec(InputValueType.DOUBLE, parameter, label, mandatory, this);
+		return new InputTextSpec<>(InputValueType.DOUBLE, parameter, label, mandatory, this);
 	}
 
 	@Override
 	public WorkerForm.InputTextSpec<Float> addInputTextFloat(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputTextSpec(InputValueType.FLOAT, parameter, label, mandatory, this);
+		return new InputTextSpec<>(InputValueType.FLOAT, parameter, label, mandatory, this);
 	}
 
 	@Override
 	public WorkerForm.InputTextSpec<Long> addInputTextLong(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputTextSpec(InputValueType.LONG, parameter, label, mandatory, this);
+		return new InputTextSpec<>(InputValueType.LONG, parameter, label, mandatory, this);
 	}
 
 	@Override
 	public WorkerForm.InputTextSpec<Boolean> addInputTextBoolean(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputTextSpec(InputValueType.BOOLEAN, parameter, label, mandatory, this);
+		return new InputTextSpec<>(InputValueType.BOOLEAN, parameter, label, mandatory, this);
 	}
 
 	@Override
 	public WorkerForm.InputTextSpec<String> addInputTextText(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputTextSpec(InputValueType.TEXT, parameter, label, mandatory, this);
+		return new InputTextSpec<>(InputValueType.TEXT, parameter, label, mandatory, this);
 	}
 
 	@Override
 	public WorkerForm.InputFormMultiSpec<Integer> addInputSelectInt(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormSelectSpec(InputValueType.INTEGER, parameter, label, mandatory, this);
+		return new InputFormSelectSpec<>(InputValueType.INTEGER, parameter, label, mandatory, this);
 	}
 
 	@Override
 	public WorkerForm.InputFormMultiSpec<Double> addInputSelectDouble(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormSelectSpec(InputValueType.DOUBLE, parameter, label, mandatory, this);
+		return new InputFormSelectSpec<>(InputValueType.DOUBLE, parameter, label, mandatory, this);
 	}
 
 	@Override
 	public WorkerForm.InputFormMultiSpec<Float> addInputSelectFloat(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormSelectSpec(InputValueType.FLOAT, parameter, label, mandatory, this);
+		return new InputFormSelectSpec<>(InputValueType.FLOAT, parameter, label, mandatory, this);
 	}
 
 	@Override
 	public WorkerForm.InputFormMultiSpec<Long> addInputSelectLong(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormSelectSpec(InputValueType.LONG, parameter, label, mandatory, this);
+		return new InputFormSelectSpec<>(InputValueType.LONG, parameter, label, mandatory, this);
 	}
 
 	@Override
 	public WorkerForm.InputFormMultiSpec<Boolean> addInputSelectBoolean(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormSelectSpec(InputValueType.BOOLEAN, parameter, label, mandatory, this);
+		return new InputFormSelectSpec<>(InputValueType.BOOLEAN, parameter, label, mandatory, this);
 	}
 
 	@Override
 	public WorkerForm.InputFormMultiSpec<String> addInputSelectText(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormSelectSpec(InputValueType.TEXT, parameter, label, mandatory, this);
+		return new InputFormSelectSpec<>(InputValueType.TEXT, parameter, label, mandatory, this);
 	}
 
 	@Override
 	public WorkerForm.InputFormMultiSpec<Integer> addInputCheckboxInt(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormCheckboxSpec(InputValueType.INTEGER, parameter, label, mandatory, this);
+		return new InputFormCheckboxSpec<>(InputValueType.INTEGER, parameter, label, mandatory, this);
 	}
 
 	@Override
 	public WorkerForm.InputFormMultiSpec<Double> addInputCheckboxDouble(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormCheckboxSpec(InputValueType.DOUBLE, parameter, label, mandatory, this);
+		return new InputFormCheckboxSpec<>(InputValueType.DOUBLE, parameter, label, mandatory, this);
 	}
 
 	@Override
 	public WorkerForm.InputFormMultiSpec<Float> addInputCheckboxFloat(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormCheckboxSpec(InputValueType.FLOAT, parameter, label, mandatory, this);
+		return new InputFormCheckboxSpec<>(InputValueType.FLOAT, parameter, label, mandatory, this);
 	}
 
 	@Override
 	public WorkerForm.InputFormMultiSpec<Long> addInputCheckboxLong(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormCheckboxSpec(InputValueType.LONG, parameter, label, mandatory, this);
+		return new InputFormCheckboxSpec<>(InputValueType.LONG, parameter, label, mandatory, this);
 	}
 
 	@Override
 	public WorkerForm.InputFormMultiSpec<Boolean> addInputCheckboxBoolean(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormCheckboxSpec(InputValueType.BOOLEAN, parameter, label, mandatory, this);
+		return new InputFormCheckboxSpec<>(InputValueType.BOOLEAN, parameter, label, mandatory, this);
 	}
 
 	@Override
 	public WorkerForm.InputFormMultiSpec<String> addInputCheckboxText(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormCheckboxSpec(InputValueType.TEXT, parameter, label, mandatory, this);
+		return new InputFormCheckboxSpec<>(InputValueType.TEXT, parameter, label, mandatory, this);
 	}
 
 	@Override
-	public WorkerForm.InputFormMultiSpec addInputRadioInt(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormRadioSpec(InputValueType.INTEGER, parameter, label, mandatory, this);
+	public WorkerForm.InputFormMultiSpec<Integer> addInputRadioInt(String parameter, Label.Translation label, boolean mandatory) {
+		return new InputFormRadioSpec<>(InputValueType.INTEGER, parameter, label, mandatory, this);
 	}
 
 	@Override
-	public WorkerForm.InputFormMultiSpec addInputRadioDouble(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormRadioSpec(InputValueType.DOUBLE, parameter, label, mandatory, this);
+	public WorkerForm.InputFormMultiSpec<Double> addInputRadioDouble(String parameter, Label.Translation label, boolean mandatory) {
+		return new InputFormRadioSpec<>(InputValueType.DOUBLE, parameter, label, mandatory, this);
 	}
 
 	@Override
-	public WorkerForm.InputFormMultiSpec addInputRadioFloat(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormRadioSpec(InputValueType.FLOAT, parameter, label, mandatory, this);
+	public WorkerForm.InputFormMultiSpec<Float> addInputRadioFloat(String parameter, Label.Translation label, boolean mandatory) {
+		return new InputFormRadioSpec<>(InputValueType.FLOAT, parameter, label, mandatory, this);
 	}
 
 	@Override
-	public WorkerForm.InputFormMultiSpec addInputRadioLong(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormRadioSpec(InputValueType.LONG, parameter, label, mandatory, this);
+	public WorkerForm.InputFormMultiSpec<Long> addInputRadioLong(String parameter, Label.Translation label, boolean mandatory) {
+		return new InputFormRadioSpec<>(InputValueType.LONG, parameter, label, mandatory, this);
 	}
 
 	@Override
-	public WorkerForm.InputFormMultiSpec addInputRadioBoolean(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormRadioSpec(InputValueType.BOOLEAN, parameter, label, mandatory, this);
+	public WorkerForm.InputFormMultiSpec<Boolean> addInputRadioBoolean(String parameter, Label.Translation label, boolean mandatory) {
+		return new InputFormRadioSpec<>(InputValueType.BOOLEAN, parameter, label, mandatory, this);
 	}
 
 	@Override
-	public WorkerForm.InputFormMultiSpec addInputRadioText(String parameter, Label.Translation label, boolean mandatory) {
-		return new InputFormRadioSpec(InputValueType.TEXT, parameter, label, mandatory, this);
+	public WorkerForm.InputFormMultiSpec<String> addInputRadioText(String parameter, Label.Translation label, boolean mandatory) {
+		return new InputFormRadioSpec<>(InputValueType.TEXT, parameter, label, mandatory, this);
 	}
 
 	@Override
@@ -170,7 +170,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		private WorkerFormBuilder builder;
 
 		private InputTextSpec(InputValueType inputValueType, String parameter, Label.Translation label, boolean mandatory, WorkerFormBuilder builder){
-			this.inputFormUnique = new InputFormUnique();
+			this.inputFormUnique = new InputFormUnique<>();
 			this.inputFormUnique.setInputFormType(InputFormType.TEXT);
 			this.inputFormUnique.setInputValueType(inputValueType);
 			this.inputFormUnique.setParameter(parameter);
@@ -194,20 +194,26 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		}
 
 		@Override
-		public InputTextSpec withInformation(Label.Translation information) {
+		public InputTextSpec<T> withInformation(Label.Translation information) {
 			inputFormUnique.setInformation(information);
 			return this;
 		}
 
 		@Override
-		public WorkerForm.InputTextSpec withPlaceholder(Label.Translation placeholder) {
+		public WorkerForm.InputTextSpec<T> withPlaceholder(Label.Translation placeholder) {
 			inputFormUnique.setPlaceholder(placeholder);
 			return this;
 		}
 
 		@Override
-		public WorkerForm.InputTextSpec obfuscate() {
+		public WorkerForm.InputTextSpec<T> obfuscate() {
 			inputFormUnique.setObfuscate(true);
+			return this;
+		}
+
+		@Override
+		public WorkerForm.InputTextSpec<T> withDisplayDependency(ConditionalDisplay<T> conditionalDisplay) {
+			inputFormUnique.setConditionalDisplay(conditionalDisplay);
 			return this;
 		}
 	}
@@ -229,6 +235,12 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		public WorkerFormBuilder and() {
 			return builder.addInput(inputFormTextArea);
+		}
+
+		@Override
+		public InputFormTextAreaSpec withDisplayDependency(ConditionalDisplay<?> conditionalDisplay) {
+			this.inputFormTextArea.setConditionalDisplay(conditionalDisplay);
+			return this;
 		}
 
 		@Override
@@ -299,6 +311,12 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		@Override
 		public WorkerForm.InputFormToggleSpec withInformation(Label.Translation information) {
 			inputFormToggle.setInformation(information);
+			return this;
+		}
+
+		@Override
+		public WorkerForm.InputFormToggleSpec withDisplayDependency(ConditionalDisplay<?> conditionalDisplay) {
+			this.inputFormToggle.setConditionalDisplay(conditionalDisplay);
 			return this;
 		}
 	}
@@ -372,6 +390,12 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 			return builder.addInput(inputFormFile);
 		}
 
+
+		public WorkerForm.InputFormFileSpec withDisplayDependency(ConditionalDisplay<?> conditionalDisplay) {
+			inputFormFile.setConditionalDisplay(conditionalDisplay);
+			return this;
+		}
+
 	}
 
 	private abstract class InputFormMultiSpec<T> implements WorkerForm.InputFormMultiSpec<T>{
@@ -381,7 +405,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		private WorkerFormBuilder builder;
 
 		private InputFormMultiSpec(InputValueType inputValueType, String parameter, Label.Translation label, boolean mandatory, WorkerFormBuilder builder){
-			this.inputFormMulti = new InputFormMulti();
+			this.inputFormMulti = new InputFormMulti<>();
 			this.inputFormMulti.setInputValueType(inputValueType);
 			this.inputFormMulti.setParameter(parameter);
 			this.inputFormMulti.setLabel(label);
@@ -398,7 +422,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 			return builder.addInput(inputFormMulti);
 		}
 
-		public InputFormMultiSpec withInformation(Label.Translation information){
+		public InputFormMultiSpec<T> withInformation(Label.Translation information){
 			inputFormMulti.setInformation(information);
 			return this;
 		}
@@ -574,6 +598,8 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		private Label.Translation information;
 
+		private ConditionalDisplay<?> conditionalDisplay;
+
 		public InputFormType getInputFormType() {
 			return inputFormType;
 		}
@@ -588,6 +614,10 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		public boolean isMandatory() {
 			return mandatory;
+		}
+
+		public ConditionalDisplay<?> getConditionalDisplay() {
+			return conditionalDisplay;
 		}
 
 		protected void setInputFormType(InputFormType inputFormType) {
@@ -612,6 +642,10 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		protected void setInformation(Label.Translation information) {
 			this.information = information;
+		}
+
+		protected void setConditionalDisplay(ConditionalDisplay<?> conditionalDisplay) {
+			this.conditionalDisplay = conditionalDisplay;
 		}
 	}
 
