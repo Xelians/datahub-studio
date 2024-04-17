@@ -22,11 +22,10 @@ public class WorkerFormTest {
 
 	private static final String PARAM_1 = "PARAM_1";
 	private static final String PARAM_2 = "PARAM_2";
-	public static final ConditionalDisplay<Float> CONDITIONAL_DISPLAY = new ConditionalDisplay.Builder<Float>()
-			.dependentField(PARAM_2)
-			.isHidden()
-			.whenGreaterThanOrEqualTo(5.f)
-			.build();
+	public static final ConditionalDisplay<Float> CONDITIONAL_DISPLAY = ConditionalDisplay.of(PARAM_2,
+			ConditionalDisplay.DisplayBehavior.HIDDEN,
+			ConditionalDisplay.ComparisonOperator.EQUAL,
+			5.f);
 	private static final String PARAM_3 = "PARAM_3";
 	private static final String PARAM_4 = "PARAM_4";
 	private static final String PARAM_5 = "PARAM_5";
