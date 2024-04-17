@@ -13,22 +13,22 @@ public class ConditionalDisplay<T> {
     /**
      * The name of the dependent field.
      */
-    private String dependentFieldName;
+    private final String dependentFieldName;
 
     /**
      * The comparison operator used to evaluate the condition.
      */
-    private ComparisonOperator comparisonOperator;
+    private final ComparisonOperator comparisonOperator;
 
     /**
      * The behavior to be applied for display based on the condition.
      */
-    private DisplayBehavior displayBehavior;
+    private final DisplayBehavior displayBehavior;
 
     /**
      * The value on which the condition is dependent.
      */
-    private T comparedValue;
+    private final T comparedValue;
 
     private ConditionalDisplay(String dependentFieldName, ComparisonOperator comparisonOperator, DisplayBehavior displayBehavior, T comparedValue) {
         this.dependentFieldName = dependentFieldName;
@@ -44,12 +44,6 @@ public class ConditionalDisplay<T> {
         Objects.requireNonNull(comparedValue, "comparedValue must be set");
         return new ConditionalDisplay<>(dependentFieldName, comparisonOperator, displayBehavior, comparedValue);
     }
-
-    /**
-     * Constructs a new ConditionalDisplay instance with the provided builder.
-     *
-     * @param builder The builder containing all necessary parameters to create a ConditionalDisplay.
-     */
 
     /**
      * Enum representing different types of comparison operators.
@@ -79,4 +73,36 @@ public class ConditionalDisplay<T> {
         HIDDEN
     }
 
+    /**
+     * get the dependent field name
+     * @return the dependent field name
+     */
+    public String getDependentFieldName() {
+        return dependentFieldName;
+    }
+
+    /**
+     * get the comparison operator
+     * @return the comparison operator
+     */
+    public ComparisonOperator getComparisonOperator() {
+        return comparisonOperator;
+    }
+
+    /**
+     * get the display behavior
+     * @return the display behavior
+     */
+    public DisplayBehavior getDisplayBehavior() {
+        return displayBehavior;
+    }
+
+    /**
+     * get the compared value
+     * @return the compared value
+     */
+    public T getComparedValue() {
+        return comparedValue;
+    }
+    
 }
