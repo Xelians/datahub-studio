@@ -2,7 +2,7 @@
 
 
 [![license](https://img.shields.io/badge/license-Apache--2.0-green)](http://www.apache.org/licenses/LICENSE-2.0)
-[![maven](https://img.shields.io/badge/maven--central-v3.0.0-blue)](https://mvnrepository.com/artifact/fr.xelians/datahub-studio/3.0.0)
+[![maven](https://img.shields.io/badge/maven--central-v4.0.0-blue)](https://mvnrepository.com/artifact/fr.xelians/datahub-studio/4.0.0)
 
 Module ayant pour but d'ajouter des workers externes (collector, transformer et sender) à la solution Xelians Datahub.
 Pour cela il suffit d'importer le module dans un nouveau projet java et de suivre les instructions qui suivent.
@@ -16,7 +16,7 @@ Ajouter la dépendance dans le pom.xml
 <dependency>
     <groupId>fr.xelians</groupId>
     <artifactId>datahub-studio</artifactId>
-    <version>3.0.0</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 
@@ -58,7 +58,7 @@ Le fichier est envoyé et un détail du transfert est visible via l'interface du
 Un collector doit nécessairement implémenter l'interface **Collector**
 
 ```java
-Mono<List<String>> collect(Path toDirectory, String webhook, XDHProcessLogger logger) throws Exception;
+List<String> collect(Path toDirectory, String webhook, XDHProcessLogger logger) throws Exception;
 ```
 La méthode **collect** prend en paramètre :
 - le chemin du répertoire ou doivent être stockés les fichiers collectés.
@@ -112,7 +112,7 @@ WorkerForm.Form getForm(); // la définition du formulaire de paramétrage du co
 Un transformer doit nécessairement implémenter l'interface **Transformer**
 
 ```java
-Mono<String> transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger) throws Exception;
+TransformResult transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger) throws Exception;
 ```
 La méthode **transform** prend en paramètre :
 - La liste des noms de fichiers à transformer
@@ -120,8 +120,9 @@ La méthode **transform** prend en paramètre :
 - le nom du répertoire ou il faut stocker le fichier transformé.
 - Le loggeur à utiliser pour écrire des logs dans le fichier de log du canal.
 
-Cette étape correspond à la transformation de n fichiers en 1 fichier. Faire attention à nommer de manière unique les fichiers transformés.
-Cette méthode renvoie le nom du fichier transformé. La transformation est nécessairement stateless
+Cette étape correspond à la transformation de n fichiers en 1 fichier. Faire attention à nommer de manière unique les fichiers transformés.\
+Cette méthode renvoie le nom du fichier transformé ainsi qu'un message optionnel, de succés ou de succés avec alerte.\
+La transformation est nécessairement stateless
 
 Les paramètres du transformer correspondent à des variables d'instances de l'implémentation qui doivent être initialisées via le constructeur.
 Pour ajouter des paramètres, il suffira donc de définir des paramètres dans le constructeur de l'implémentation.
@@ -166,13 +167,15 @@ WorkerForm.Form getForm(); // la définition du formulaire de paramétrage du tr
 Un sender doit nécessairement implémenter l'interface **Sender**
 
 ```java
-Mono<String> send(String fileName, Path fromDirectory, Path resultDirectory, XDHProcessLogger logger) throws Exception;
+SenderResult send(String fileName, Path fromDirectory, Path resultDirectory, XDHProcessLogger logger) throws Exception;
 ```
 La méthode **send** prend en paramètre :
 - Le nom du fichier à envoyer
 - le chemin du répertoire ou se situe le fichier
 - Le chemin du répertoire ou l'on peut insérer des fichiers de retours ou résultats du transfert
 - Le loggeur à utiliser pour écrire des logs dans le fichier de log du canal.
+  
+Cette méthode renvoie un message de succés ou de succés avec alerte qui sera affiché dans l'interface de supervision.
 
 Les paramètres du sender correspondent à des variables d'instances de l'implémentation qui doivent être initialisées via le constructeur.
 Pour ajouter des paramètres, il suffira donc de définir des paramètres dans le constructeur de l'implémentation.
