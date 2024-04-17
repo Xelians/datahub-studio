@@ -104,5 +104,5 @@ public class ConditionalDisplay<T> {
     public T getComparedValue() {
         return comparedValue;
     }
-    
+
 }
