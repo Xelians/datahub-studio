@@ -238,12 +238,6 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		}
 
 		@Override
-		public InputFormTextAreaSpec withDisplayDependency(ConditionalDisplay<?> conditionalDisplay) {
-			this.inputFormTextArea.setConditionalDisplay(conditionalDisplay);
-			return this;
-		}
-
-		@Override
 		public WorkerForm.InputTextAreaSpec withInformation(Label.Translation information) {
 			inputFormTextArea.setInformation(information);
 			return this;
@@ -315,7 +309,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		}
 
 		@Override
-		public WorkerForm.InputFormToggleSpec withDisplayDependency(ConditionalDisplay<?> conditionalDisplay) {
+		public WorkerForm.InputFormToggleSpec withDisplayDependency(ConditionalDisplay<Boolean> conditionalDisplay) {
 			this.inputFormToggle.setConditionalDisplay(conditionalDisplay);
 			return this;
 		}
