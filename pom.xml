@@ -6,7 +6,7 @@
 
     <groupId>fr.xelians</groupId>
     <artifactId>datahub-studio</artifactId>
-    <version>4.0.1-SNAPSHOT</version>
+    <version>4.0.1</version>
     <packaging>jar</packaging>
 
     <name>datahub-studio</name>
