@@ -378,13 +378,6 @@ public class WorkerForm {
 		 * @return {{@link InputTextAreaSpec}}
 		 */
 		InputTextAreaSpec obfuscate();
-
-		/**
-		 * * Adds a display dependency for this input, indicating that it conditions the display of another input within the same form.
-		 * @param conditionalDisplay The ConditionalDisplay object specifying the conditions under which the dependent input is displayed.
-		 * @return {{@link InputTextAreaSpec}}
-		 */
-		InputTextAreaSpec withDisplayDependency(ConditionalDisplay<?> conditionalDisplay);
 	}
 
 	/**
@@ -523,7 +516,7 @@ public class WorkerForm {
 		 * @param conditionalDisplay The ConditionalDisplay object specifying the conditions under which the dependent input is displayed.
 		 * @return {{@link InputFormToggleSpec}}
 		 */
-		InputFormToggleSpec withDisplayDependency(ConditionalDisplay<?> conditionalDisplay);
+		InputFormToggleSpec withDisplayDependency(ConditionalDisplay<Boolean> conditionalDisplay);
 	}
 
 	/**
