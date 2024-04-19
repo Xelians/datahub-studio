@@ -1,5 +1,6 @@
 package fr.xelians.xdh.studio.form;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -13,7 +14,7 @@ public class ConditionalDisplay<T> {
     /**
      * The name of the dependent field.
      */
-    private final String dependentFieldName;
+    private final List<String> dependentFieldNames;
 
     /**
      * The comparison operator used to evaluate the condition.
@@ -30,19 +31,19 @@ public class ConditionalDisplay<T> {
      */
     private final T comparedValue;
 
-    private ConditionalDisplay(String dependentFieldName, ComparisonOperator comparisonOperator, DisplayBehavior displayBehavior, T comparedValue) {
-        this.dependentFieldName = dependentFieldName;
+    private ConditionalDisplay(List<String> dependentFieldNames, ComparisonOperator comparisonOperator, DisplayBehavior displayBehavior, T comparedValue) {
+        this.dependentFieldNames = dependentFieldNames;
         this.comparisonOperator = comparisonOperator;
         this.displayBehavior = displayBehavior;
         this.comparedValue = comparedValue;
     }
 
-    public static <T> ConditionalDisplay<T> of(String dependentFieldName, DisplayBehavior displayBehavior, ComparisonOperator comparisonOperator, T comparedValue) {
-        Objects.requireNonNull(dependentFieldName, "dependentFieldName must be set");
+    public static <T> ConditionalDisplay<T> of(List<String> dependentFieldNames, DisplayBehavior displayBehavior, ComparisonOperator comparisonOperator, T comparedValue) {
+        Objects.requireNonNull(dependentFieldNames, "dependentFieldName must be set");
         Objects.requireNonNull(comparisonOperator, "comparisonOperator must be set");
         Objects.requireNonNull(displayBehavior, "displayBehavior must be set");
         Objects.requireNonNull(comparedValue, "comparedValue must be set");
-        return new ConditionalDisplay<>(dependentFieldName, comparisonOperator, displayBehavior, comparedValue);
+        return new ConditionalDisplay<>(dependentFieldNames, comparisonOperator, displayBehavior, comparedValue);
     }
 
     /**
@@ -77,8 +78,8 @@ public class ConditionalDisplay<T> {
      * get the dependent field name
      * @return the dependent field name
      */
-    public String getDependentFieldName() {
-        return dependentFieldName;
+    public List<String> getDependentFieldNames() {
+        return dependentFieldNames;
     }
 
     /**

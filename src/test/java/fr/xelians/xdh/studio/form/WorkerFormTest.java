@@ -22,7 +22,7 @@ public class WorkerFormTest {
 
 	private static final String PARAM_1 = "PARAM_1";
 	private static final String PARAM_2 = "PARAM_2";
-	public static final ConditionalDisplay<Float> CONDITIONAL_DISPLAY = ConditionalDisplay.of(PARAM_2,
+	public static final ConditionalDisplay<Float> CONDITIONAL_DISPLAY = ConditionalDisplay.of(List.of(PARAM_2),
 			ConditionalDisplay.DisplayBehavior.HIDDEN,
 			ConditionalDisplay.ComparisonOperator.EQUAL,
 			5.f);
