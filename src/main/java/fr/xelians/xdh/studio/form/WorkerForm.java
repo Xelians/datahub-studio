@@ -303,6 +303,12 @@ public class WorkerForm {
 		 */
 		InputFormMultiSpec<T> withInformation(Label.Translation information);
 
+		/**
+		 * * Adds a display dependency for this input, indicating that it conditions the display of another input within the same form.
+		 * @param conditionalDisplay The ConditionalDisplay object specifying the conditions under which the dependent input is displayed.
+		 * @return {{@link InputFormMultiSpec}}
+		 */
+		InputFormMultiSpec<T> withDisplayDependency(ConditionalDisplay<T> conditionalDisplay);
 
 	}
 
@@ -401,62 +407,6 @@ public class WorkerForm {
 
 	}
 
-	/**
-	 * Interface for input multi (checkboxes, selects, radios) specification for table field
-	 */
-	public interface InputFormMultiTableSpec{
-
-		/**
-		 * Add a list of available values for the field
-		 * @param choices the list of values
-		 * @return {{@link InputFormMultiTableSpec}}
-		 */
-		InputFormMultiTableSpec withChoices(List<WorkerForm.MultiValueChoice.Choice<String>> choices);
-
-		/**
-		 * Effectively add the field
-		 * @return {{@link InputFormTableSpec}}
-		 */
-		InputFormTableSpec and();
-	}
-
-	/**
-	 * Interface for input text specification for table field
-	 */
-	public interface InputTextTableSpec{
-
-		/**
-		 * Add min value constraint
-		 * @param value the min value
-		 * @return {{@link InputTextTableSpec}}
-		 */
-		InputTextTableSpec withMinValue(String value);
-
-		/**
-		 * Add max value constraint
-		 * @param value the max value
-		 * @return {{@link InputTextTableSpec}}
-		 */
-		InputTextTableSpec withMaxValue(String value);
-
-		/**
-		 * Effectively add the field
-		 * @return {{@link InputFormTableSpec}}
-		 */
-		InputFormTableSpec and();
-	}
-
-	/**
-	 * Interface for input toggle specification for table field
-	 */
-	public interface InputFormToggleTableSpec{
-
-		/**
-		 * Effectively add the field
-		 * @return {{@link InputFormTableSpec}}
-		 */
-		InputFormTableSpec and();
-	}
 
 	/**
 	 * Interface for table field specification
@@ -528,7 +478,7 @@ public class WorkerForm {
 		 * Get input forms
 		 * @return list of {{@link InputFormBase}}
 		 */
-		List<InputFormBase> getInputForms();
+		List<InputFormBase> inputForms();
 	}
 
 	/**
@@ -541,6 +491,12 @@ public class WorkerForm {
 		 * @return list of values
 		 */
 		List<WorkerForm.MultiValueChoice.Choice<T>> getChoices();
+
+		/**
+		 * Get the conditional display
+		 * @return the {{@link ConditionalDisplay}}.
+		 */
+		ConditionalDisplay<T> getConditionalDisplay();
 
 	}
 
@@ -560,6 +516,12 @@ public class WorkerForm {
 	 * Interface for input form toggle
 	 */
 	public interface InputFormToggle extends InputFormBase {
+
+		/**
+		 * Get the conditional display
+		 * @return the {{@link ConditionalDisplay}}.
+		 */
+		ConditionalDisplay<Boolean> getConditionalDisplay();
 
 	}
 
@@ -609,6 +571,12 @@ public class WorkerForm {
 		 * @return the {{@link fr.xelians.xdh.studio.translation.Label.Translation}} use for form labels translation.
 		 */
 		Label.Translation getPlaceholder();
+
+		/**
+		 * Get the conditional display
+		 * @return the {{@link ConditionalDisplay}}.
+		 */
+		ConditionalDisplay<T> getConditionalDisplay();
 	}
 
 	/**
@@ -677,13 +645,13 @@ public class WorkerForm {
 		 */
 		Label.Translation getInformation();
 
-		ConditionalDisplay<?> getConditionalDisplay();
+
 	}
 
 	/**
 	 * The class MultiValueChoice is used for multi forms to have the value and her translate label
 	 */
-	public final class MultiValueChoice {
+	public static final class MultiValueChoice {
 
 		private MultiValueChoice (){
 		}
@@ -705,8 +673,8 @@ public class WorkerForm {
 		public static <T> Choice of(T value) { return new Choice<T>(value); }
 
 		public static class Choice<T> {
-			private Label.Translation label;
-			private T value;
+			private final Label.Translation label;
+			private final T value;
 
 			private Choice(Label.Translation label, T value){
 				this.label = label;
