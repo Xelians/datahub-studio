@@ -70,7 +70,7 @@ public class WorkerFormTest {
 				.and()
 				.build();
 
-		List<WorkerForm.InputFormBase> inputFormBases = form.getInputForms();
+		List<WorkerForm.InputFormBase> inputFormBases = form.inputForms();
 		assertEquals(6, inputFormBases.size());
 		WorkerForm.InputFormBase inputFormBase1 = inputFormBases.get(0);
 		WorkerForm.InputFormBase inputFormBase2 = inputFormBases.get(1);

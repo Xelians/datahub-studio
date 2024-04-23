@@ -10,9 +10,9 @@ import java.util.List;
  */
 public final class WorkerFormBuilder implements WorkerForm.Builder{
 
-	private List<WorkerForm.InputFormBase> inputForms = new ArrayList<>();
+	private final List<WorkerForm.InputFormBase> inputForms = new ArrayList<>();
 
-	protected WorkerFormBuilder(){}
+	WorkerFormBuilder(){}
 
 	public WorkerForm.Form build(){
 		return new Form(inputForms);
@@ -163,11 +163,11 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		return this;
 	}
 
-	private class InputTextSpec<T> implements WorkerForm.InputTextSpec<T>{
+	private static class InputTextSpec<T> implements WorkerForm.InputTextSpec<T>{
 
-		private InputFormUnique<T> inputFormUnique;
+		private final InputFormUnique<T> inputFormUnique;
 
-		private WorkerFormBuilder builder;
+		private final WorkerFormBuilder builder;
 
 		private InputTextSpec(InputValueType inputValueType, String parameter, Label.Translation label, boolean mandatory, WorkerFormBuilder builder){
 			this.inputFormUnique = new InputFormUnique<>();
@@ -207,7 +207,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		@Override
 		public WorkerForm.InputTextSpec<T> obfuscate() {
-			inputFormUnique.setObfuscate(true);
+			inputFormUnique.setObfuscate();
 			return this;
 		}
 
@@ -218,11 +218,11 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		}
 	}
 
-	private class InputFormTextAreaSpec implements WorkerForm.InputTextAreaSpec {
+	private static class InputFormTextAreaSpec implements WorkerForm.InputTextAreaSpec {
 
-		private InputFormTextArea inputFormTextArea;
+		private final InputFormTextArea inputFormTextArea;
 
-		private WorkerFormBuilder builder;
+		private final WorkerFormBuilder builder;
 
 		private InputFormTextAreaSpec(String parameter, Label.Translation label, boolean mandatory, WorkerFormBuilder builder){
 			this.inputFormTextArea = new InputFormTextArea();
@@ -251,7 +251,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		@Override
 		public WorkerForm.InputTextAreaSpec obfuscate() {
-			inputFormTextArea.setObfuscate(true);
+			inputFormTextArea.setObfuscate();
 			return this;
 		}
 	}
@@ -283,10 +283,10 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 	}
 
-	private class InputFormToggleSpec implements WorkerForm.InputFormToggleSpec{
+	private static class InputFormToggleSpec implements WorkerForm.InputFormToggleSpec{
 
-		private InputFormToggle inputFormToggle;
-		private WorkerFormBuilder builder;
+		private final InputFormToggle inputFormToggle;
+		private final WorkerFormBuilder builder;
 
 		private InputFormToggleSpec(String parameter, Label.Translation label, boolean mandatory, WorkerFormBuilder builder) {
 			this.inputFormToggle = new InputFormToggle();
@@ -315,10 +315,10 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		}
 	}
 
-	private class InputFormTableSpec implements WorkerForm.InputFormTableSpec{
+	private static class InputFormTableSpec implements WorkerForm.InputFormTableSpec{
 
-		private InputFormTable inputFormTable;
-		private WorkerFormBuilder builder;
+		private final InputFormTable inputFormTable;
+		private final WorkerFormBuilder builder;
 
 		private InputFormTableSpec(String parameter, Label.Translation label, boolean mandatory, WorkerFormBuilder builder){
 			this.inputFormTable = new InputFormTable();
@@ -331,7 +331,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		@Override
 		public WorkerForm.InputFormTableSpec withFields(WorkerForm.Form form) {
-			this.inputFormTable.inputFormColumns = form.getInputForms();
+			this.inputFormTable.inputFormColumns = form.inputForms();
 			return this;
 		}
 
@@ -355,10 +355,10 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 	}
 
-	private class InputFormFileSpec implements WorkerForm.InputFormFileSpec {
+	private static class InputFormFileSpec implements WorkerForm.InputFormFileSpec {
 
-		private InputFormFile inputFormFile;
-		private WorkerFormBuilder builder;
+		private final InputFormFile inputFormFile;
+		private final WorkerFormBuilder builder;
 
 		private InputFormFileSpec(String parameter, Label.Translation label, boolean mandatory, WorkerFormBuilder builder){
 			this.inputFormFile = new InputFormFile();
@@ -384,19 +384,13 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 			return builder.addInput(inputFormFile);
 		}
 
-
-		public WorkerForm.InputFormFileSpec withDisplayDependency(ConditionalDisplay<?> conditionalDisplay) {
-			inputFormFile.setConditionalDisplay(conditionalDisplay);
-			return this;
-		}
-
 	}
 
-	private abstract class InputFormMultiSpec<T> implements WorkerForm.InputFormMultiSpec<T>{
+	private abstract static class InputFormMultiSpec<T> implements WorkerForm.InputFormMultiSpec<T>{
 
 		protected InputFormMulti<T> inputFormMulti;
 
-		private WorkerFormBuilder builder;
+		private final WorkerFormBuilder builder;
 
 		private InputFormMultiSpec(InputValueType inputValueType, String parameter, Label.Translation label, boolean mandatory, WorkerFormBuilder builder){
 			this.inputFormMulti = new InputFormMulti<>();
@@ -416,30 +410,28 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 			return builder.addInput(inputFormMulti);
 		}
 
+		@Override
 		public InputFormMultiSpec<T> withInformation(Label.Translation information){
 			inputFormMulti.setInformation(information);
+			return this;
+		}
+
+		@Override
+		public InputFormMultiSpec<T> withDisplayDependency(ConditionalDisplay<T> conditionalDisplay) {
+			this.inputFormMulti.setConditionalDisplay(conditionalDisplay);
 			return this;
 		}
 	}
 
 
 	// Worker form
-	private class Form implements WorkerForm.Form{
+	private record Form(List<WorkerForm.InputFormBase> inputForms) implements WorkerForm.Form {}
 
-		private List<WorkerForm.InputFormBase> inputForms;
-
-		private Form(List<WorkerForm.InputFormBase> inputForms) {
-			this.inputForms = inputForms;
-		}
-
-		public List<WorkerForm.InputFormBase> getInputForms() {
-			return inputForms;
-		}
-	}
-
-	private class InputFormMulti<T> extends InputFormBase implements WorkerForm.InputFormMulti<T>{
+	private static class InputFormMulti<T> extends InputFormBase implements WorkerForm.InputFormMulti<T>{
 
 		private InputValueType inputValueType;
+
+		private ConditionalDisplay<T> conditionalDisplay;
 
 		private InputFormMulti() {}
 
@@ -447,9 +439,18 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 			this.inputValueType = inputValueType;
 		}
 
+		private void setConditionalDisplay(ConditionalDisplay<T> conditionalDisplay){
+			this.conditionalDisplay = conditionalDisplay;
+		}
+
 		@Override
 		public InputValueType getInputValueType() {
 			return inputValueType;
+		}
+
+		@Override
+		public ConditionalDisplay<T> getConditionalDisplay() {
+			return conditionalDisplay;
 		}
 
 		private void setChoices(List<WorkerForm.MultiValueChoice.Choice<T>> choices) {
@@ -465,7 +466,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 	}
 
-	private class InputFormFile extends InputFormBase implements WorkerForm.InputFormFile{
+	private static class InputFormFile extends InputFormBase implements WorkerForm.InputFormFile{
 
 		private List<String> fileExtensions;
 
@@ -478,14 +479,10 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		}
 	}
 
-	private class InputFormTable extends InputFormBase implements WorkerForm.InputFormTable{
+	private static class InputFormTable extends InputFormBase implements WorkerForm.InputFormTable{
 
 		private List<WorkerForm.InputFormBase> inputFormColumns = new ArrayList<>();
 		private Label.Translation tableLabel;
-
-		private void addInputFormColumn(WorkerForm.InputFormBase inputFormBase){
-			inputFormColumns.add(inputFormBase);
-		}
 
 		@Override
 		public List<WorkerForm.InputFormBase> getInputFormColumns() {
@@ -499,16 +496,28 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 	}
 
-	private class InputFormToggle extends InputFormBase implements WorkerForm.InputFormToggle{
+	private static class InputFormToggle extends InputFormBase implements WorkerForm.InputFormToggle{
+
+		private ConditionalDisplay<Boolean> conditionalDisplay;
+
+		private void setConditionalDisplay(ConditionalDisplay<Boolean> conditionalDisplay){
+			this.conditionalDisplay = conditionalDisplay;
+		}
+
+		@Override
+		public ConditionalDisplay<Boolean> getConditionalDisplay() {
+			return conditionalDisplay;
+		}
 
 	}
 
-	private class InputFormUnique<T> extends InputFormBase implements WorkerForm.InputFormUnique<T>{
+	private static class InputFormUnique<T> extends InputFormBase implements WorkerForm.InputFormUnique<T>{
 
 		private T min;
 		private T max;
 		private Label.Translation placeholder;
 		private InputValueType inputValueType;
+		private ConditionalDisplay<T> conditionalDisplay;
 		private boolean obfuscate;
 
 
@@ -529,8 +538,12 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 			this.max = max;
 		}
 
-		private void setObfuscate(boolean obfuscate){
+		private void setObfuscate(){
 			this.obfuscate = true;
+		}
+
+		private void setConditionalDisplay(ConditionalDisplay<T> conditionalDisplay){
+			this.conditionalDisplay = conditionalDisplay;
 		}
 
 		private void setPlaceholder(Label.Translation placeholder){
@@ -550,12 +563,17 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		}
 
 		@Override
+		public ConditionalDisplay<T> getConditionalDisplay() {
+			return conditionalDisplay;
+		}
+
+		@Override
 		public boolean isObfuscate() {
 			return obfuscate;
 		}
 	}
 
-	private class InputFormTextArea extends InputFormBase implements WorkerForm.InputFormTextArea {
+	private static class InputFormTextArea extends InputFormBase implements WorkerForm.InputFormTextArea {
 
 		private Label.Translation placeholder;
 		private boolean obfuscate;
@@ -570,7 +588,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 			return this.placeholder;
 		}
 
-		private void setObfuscate(boolean obfuscate){
+		private void setObfuscate(){
 			this.obfuscate = true;
 		}
 
@@ -580,7 +598,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		}
 	}
 
-	private abstract class InputFormBase {
+	private abstract static class InputFormBase {
 
 		private InputFormType inputFormType;
 
@@ -591,8 +609,6 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		private boolean mandatory;
 
 		private Label.Translation information;
-
-		private ConditionalDisplay<?> conditionalDisplay;
 
 		public InputFormType getInputFormType() {
 			return inputFormType;
@@ -608,10 +624,6 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 		public boolean isMandatory() {
 			return mandatory;
-		}
-
-		public ConditionalDisplay<?> getConditionalDisplay() {
-			return conditionalDisplay;
 		}
 
 		protected void setInputFormType(InputFormType inputFormType) {
@@ -637,10 +649,7 @@ public final class WorkerFormBuilder implements WorkerForm.Builder{
 		protected void setInformation(Label.Translation information) {
 			this.information = information;
 		}
-
-		protected void setConditionalDisplay(ConditionalDisplay<?> conditionalDisplay) {
-			this.conditionalDisplay = conditionalDisplay;
-		}
+		
 	}
 
 }
