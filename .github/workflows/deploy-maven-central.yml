@@ -15,11 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       # Step that does that actual cache save and restore
-      - uses: actions/cache@v2.1.4
-        with:
-          path: /github/home/.m2/repository
-          key: ${{ runner.os }}-maven-repo-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven-repo
       - name: Setup settings.xml
         uses: s4u/maven-settings-action@v2.5.0
         with:
