@@ -24,67 +24,71 @@ public final class XDHProcessLogger {
     }
 
     public void trace(String s) {
-        logger.trace(collectId + " - " + step + " - " + s);
+        logger.trace(getFormattedMessage(s));
     }
 
     public void trace(String s, Object o) {
-        logger.trace(collectId + " - " + step + " - " + s, o);
+        logger.trace(getFormattedMessage(s), o);
     }
 
     public void trace(String s, Object o, Object o1) {
-        logger.trace(collectId + " - " + step + " - " + s, o, o1);
+        logger.trace(getFormattedMessage(s), o, o1);
     }
 
     public void trace(String s, Object... objects) {
-        logger.trace(collectId + " - " + step + " - " + s, objects);
+        logger.trace(getFormattedMessage(s), objects);
     }
 
     public void debug(String s) {
-        logger.debug(collectId + " - " + step + " - " + s);
+        logger.debug(getFormattedMessage(s));
     }
 
     public void debug(String s, Object o) {
-        logger.debug(collectId + " - " + step + " - " + s, o);
+        logger.debug(getFormattedMessage(s), o);
     }
 
     public void debug(String s, Object o, Object o1) {
-        logger.debug(collectId + " - " + step + " - " + s, o, o1);
+        logger.debug(getFormattedMessage(s), o, o1);
     }
 
     public void debug(String s, Object... objects) {
-        logger.debug(collectId + " - " + step + " - " + s, objects);
+        logger.debug(getFormattedMessage(s), objects);
     }
 
     public void info(String s) {
-        logger.info(collectId + " - " + step + " - " + s);
+        logger.info(getFormattedMessage(s));
     }
 
     public void info(String s, Object o) {
-        logger.info(collectId + " - " + step + " - " + s, o);
+        logger.info(getFormattedMessage(s), o);
     }
 
     public void info(String s, Object o, Object o1) {
-        logger.info(collectId + " - " + step + " - " + s, o, o1);
+        logger.info(getFormattedMessage(s), o, o1);
     }
 
     public void info(String s, Object... objects) {
-        logger.info(collectId + " - " + step + " - " + s, objects);
+        logger.info(getFormattedMessage(s), objects);
     }
 
     public void warn(String s) {
-        logger.warn(collectId + " - " + step + " - " + s);
+        logger.warn(getFormattedMessage(s));
     }
 
     public void warn(String s, Object o) {
-        logger.warn(collectId + " - " + step + " - " + s, o);
+        logger.warn(getFormattedMessage(s), o);
     }
 
     public void warn(String s, Object... objects) {
-        logger.warn(collectId + " - " + step + " - " + s, objects);
+        logger.warn(getFormattedMessage(s), objects);
     }
 
     public void warn(String s, Object o, Object o1) {
-        logger.warn(collectId + " - " + step + " - " + s, o, o1);
+        logger.warn(getFormattedMessage(s), o, o1);
+    }
+
+    private String getFormattedMessage(String s){
+        return  String.format("%-12.12s",Thread.currentThread().getName()) + " - " + collectId + " - " + step + " - " + s;
     }
 
 }
