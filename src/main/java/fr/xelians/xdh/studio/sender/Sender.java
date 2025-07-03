@@ -1,5 +1,6 @@
 package fr.xelians.xdh.studio.sender;
 
+import fr.xelians.xdh.studio.ChannelStore;
 import fr.xelians.xdh.studio.ResourceHandler;
 import fr.xelians.xdh.studio.logging.XDHProcessLogger;
 
@@ -26,5 +27,19 @@ public interface Sender extends ResourceHandler {
 	 * @throws Exception For exception to be displayed as a functional exception you should throw a {{@link SendException}}. To delay the execution you should throw a {{@link  DelayExecutionException}}.
 	 */
 	SenderResult send(String fileName, Path fromDirectory, Path resultDirectory, XDHProcessLogger logger) throws Exception;
+
+	/**
+	 * Send operation
+	 * @param fileName the filename to send
+	 * @param fromDirectory the path of the directory where is the file to send* @param toDirectory the directory where the new file has to be created
+	 * @param resultDirectory the directory where the new file has to be created
+	 * @param logger The logger to use. Log files are in the log folder of the channel directory under the base datahub folder.
+	 * @param channelStore storage for persisting key-value data
+	 * @return The detail of a successful send operation to be displayed on the user interface
+	 * @throws Exception For exception to be displayed as a functional exception you should throw a {{@link SendException}}. To delay the execution you should throw a {{@link  DelayExecutionException}}.
+	 */
+	default SenderResult send(String fileName, Path fromDirectory, Path resultDirectory, XDHProcessLogger logger, ChannelStore channelStore) throws Exception {
+		return send(fileName, fromDirectory, resultDirectory, logger);
+	}
 
 }
