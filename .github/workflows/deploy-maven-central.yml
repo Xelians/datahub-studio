@@ -5,15 +5,10 @@ on:
 
 jobs:
   build:
-    runs-on: arc-runner-set
-    env:
-      DOCKER_HOST: unix:///run/docker/docker.sock
-    container:
-      options: --user 1001:123 --privileged
-      image: cimg/openjdk:21.0.2
-      volumes:
-        - /var/docker:/var/docker
-        - /run/docker:/run/docker
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '21' ]
     steps:
       - uses: actions/checkout@v2
       # Step that does that actual cache save and restore
@@ -39,5 +34,6 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
       - name: Build with Maven
-        run: mvn -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} -Dmaven.repo.local=/github/home/.m2/repository --settings /github/home/.m2/settings.xml clean deploy
+        run: mvn -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} clean deploy
