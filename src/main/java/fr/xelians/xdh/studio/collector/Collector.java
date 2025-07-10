@@ -1,5 +1,6 @@
 package fr.xelians.xdh.studio.collector;
 
+import fr.xelians.xdh.studio.ChannelStore;
 import fr.xelians.xdh.studio.ResourceHandler;
 import fr.xelians.xdh.studio.logging.XDHProcessLogger;
 
@@ -26,5 +27,18 @@ public interface Collector extends ResourceHandler {
 	 * @throws Exception For exception to be displayed as a functional exception you should throw a {{@link CollectException}}
 	 */
 	List<String> collect(Path toDirectory, String webhook, XDHProcessLogger logger) throws Exception;
+
+	/**
+	 * Collect operation
+	 * @param toDirectory The directory path where the files should be collected
+	 * @param webhook The value is set if webhook is available for the channel
+	 * @param logger The logger to use. Log files are in the log folder of the channel directory under the base datahub folder.
+	 * @param channelStore storage for persisting key-value data
+	 * @return The list of filenames collected, be careful to give only the filename not the path.
+	 * @throws Exception For exception to be displayed as a functional exception you should throw a {{@link CollectException}}
+	 */
+	default List<String> collect(Path toDirectory, String webhook, XDHProcessLogger logger, ChannelStore channelStore) throws Exception {
+		return collect(toDirectory, webhook, logger);
+	}
 
 }
