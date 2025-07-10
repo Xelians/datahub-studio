@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       options: --user root
-      image: rg.fr-par.scw.cloud/cicd/xelians-openjdk:17
+      image: rg.fr-par.scw.cloud/cicd/xelians-openjdk:21
       credentials:
         username: nologin
         password: "${{ secrets.REGISTRY_SECRET }}"
