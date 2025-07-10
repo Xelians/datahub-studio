@@ -5,13 +5,15 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
+    env:
+      DOCKER_HOST: unix:///run/docker/docker.sock
     container:
-      options: --user root
+      options: --user 1001:123 --privileged
       image: cimg/openjdk:21.0.2
-      credentials:
-        username: nologin
-        password: "${{ secrets.REGISTRY_SECRET }}"
+      volumes:
+        - /var/docker:/var/docker
+        - /run/docker:/run/docker
     steps:
       - uses: actions/checkout@v2
       # Step that does that actual cache save and restore
