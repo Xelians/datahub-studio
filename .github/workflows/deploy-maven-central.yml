@@ -21,12 +21,7 @@ jobs:
           servers: |
             [
                {
-                  "id":"sonatype-nexus-snapshots",
-                  "username":"${{ secrets.SONATYPE_USER }}",
-                  "password":"${{ secrets.SONATYPE_PASSWORD }}"
-               },
-               {
-                  "id":"sonatype-nexus-staging",
+                  "id":"central",
                   "username":"${{ secrets.SONATYPE_USER }}",
                   "password":"${{ secrets.SONATYPE_PASSWORD }}"
                }
