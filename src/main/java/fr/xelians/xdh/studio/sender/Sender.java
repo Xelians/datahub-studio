@@ -15,14 +15,12 @@ import java.nio.file.Path;
  * destination (API, FTP, webhook, email, etc.).
  * </p>
  *
- * <p>
- * Senders must:
+ * <p>Senders must:</p>
  * <ul>
  *     <li>Process one file per execution</li>
  *     <li>Avoid long-running blocking operations</li>
  *     <li>Return a {@link SenderResult} describing the outcome</li>
  * </ul>
- * </p>
  *
  * <p>
  * Sender parameters are defined through the sender constructor.

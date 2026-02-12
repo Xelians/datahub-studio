@@ -11,23 +11,17 @@ import java.util.List;
 /**
  * Contract to be implemented by every channel collector.
  *
- * <p>
- * A collector is responsible for retrieving 1..n files from an external source
- * and placing them into the provided target directory.
- * </p>
+ * <p>A collector retrieves 1..n files from an external source and writes them into the
+ * provided target directory.</p>
  *
- * <p>
- * Collectors must:
+ * <p>Collectors must:</p>
  * <ul>
- *     <li>Process a small and bounded number of files per execution</li>
- *     <li>Remain non-blocking in terms of long-running operations</li>
- *     <li>Return only file names (not absolute paths)</li>
+ *   <li>Process a small and bounded number of files per execution</li>
+ *   <li>Avoid long-running blocking operations</li>
+ *   <li>Return only file names (not absolute paths)</li>
  * </ul>
- * </p>
  *
- * <p>
- * Collector parameters are defined through the collector constructor.
- * </p>
+ * <p>Collector parameters are defined through the collector constructor.</p>
  */
 public interface Collector extends ResourceHandler {
 
