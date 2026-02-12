@@ -17,8 +17,8 @@ It allows developers to implement custom:
 
 The framework provides:
 
-- Controlled execution lifecycle  
-- Shared and scalable thread pools  
+- Controlled execution lifecycle
+- Shared and scalable thread pools
 - Retry management  
 - Persistent channel state  
 - Metrics publication  
@@ -26,9 +26,9 @@ The framework provides:
 
 ---
 
-# Installation
+## Installation
 
-## Maven
+### Maven
 
 Add the dependency to your `pom.xml`:
 
@@ -42,9 +42,9 @@ Add the dependency to your `pom.xml`:
 
 ---
 
-# Architecture
+## Architecture
 
-## Channel Model
+### Channel Model
 
 A **Channel** represents a complete data transfer pipeline.
 
@@ -60,11 +60,11 @@ Workers are instantiated at channel startup using parameters configured through 
 
 ---
 
-# Execution Model
+## Execution Model
 
 Scheduler -> Collector Pool -> Transformer Pool -> Sender Pool
 
-## Thread Pools
+### Thread Pools
 
 Channels are assigned to a set of shared thread pools:
 
@@ -76,7 +76,7 @@ Channels are assigned to a set of shared thread pools:
 
 Multiple channels may share the same pool instances.
 
-## Guarantees
+### Guarantees
 
 - Single collect execution per channel at a time
 
@@ -90,7 +90,7 @@ Workers must be thread-safe if reused.
 
 ---
 
-# Temporary Working Directory
+## Temporary Working Directory
 
 Workers must use:
 
@@ -111,7 +111,7 @@ Used for:
 
 - Temporary processing
 
-## Important
+### Important
 
 - Workers MUST delete created files and directories.
 
@@ -121,9 +121,9 @@ Used for:
 
 ---
 
-# Collector
+## Collector
 
-## Interface
+### Interface
 
 ```java
 List<String> collect(
@@ -135,7 +135,7 @@ List<String> collect(
 ) throws Exception;
 ```
 
-## Responsibilities
+### Responsibilities
 
 - Retrieve 1..n files
 
@@ -149,7 +149,7 @@ List<String> collect(
 
 - Avoid long blocking operations
 
-## Functional Error
+### Functional Error
 
 ```java
 throw new CollectException("Authentication failed", "AUTH_001");
@@ -157,9 +157,9 @@ throw new CollectException("Authentication failed", "AUTH_001");
 
 ---
 
-# Transformer
+## Transformer
 
-## Interface
+### Interface
 
 ```java
 TransformResult transform(
@@ -172,7 +172,7 @@ TransformResult transform(
 ) throws Exception;
 ```
 
-## Responsibilities
+### Responsibilities
 
 - Transform n input files into 1 output file
 
@@ -182,7 +182,7 @@ TransformResult transform(
 
 - Remain stateless
 
-## Functional Error
+### Functional Error
 
 ```java
 throw new TransformException("Invalid format", "FORMAT_001");
@@ -190,9 +190,9 @@ throw new TransformException("Invalid format", "FORMAT_001");
 
 ---
 
-# Sender
+## Sender
 
-## Interface
+### Interface
 
 ```java
 SenderResult send(
@@ -205,7 +205,7 @@ SenderResult send(
 ) throws Exception;
 ```
 
-## Responsibilities
+### Responsibilities
 
 - Send the file to target system
 
@@ -215,7 +215,7 @@ SenderResult send(
 
 - Be idempotent when possible
 
-## Functional Error
+### Functional Error
 
 ```java
 throw new SendException("Authentication failed", "AUTH_001");
@@ -223,18 +223,18 @@ throw new SendException("Authentication failed", "AUTH_001");
 
 ---
 
-# Retry & Delay Mechanism
+## Retry & Delay Mechanism
 
 To retry a send operation, throw:
 ```java
 throw new DelayExecutionException(60);
 ```
 
-## Behavior
+### Behavior
 
-- The send task will be retried after delay seconds.
+- The send task will be retried after delay seconds
 
-- Can be combined with locking mechanisms to serialize transfers.
+- Can be combined with locking mechanisms to serialize transfers
 
 - Useful for:
 
@@ -246,7 +246,7 @@ throw new DelayExecutionException(60);
 
 ---
 
-# ChannelStore
+## ChannelStore
 
 Persistent key-value storage scoped to the channel.
 
@@ -262,7 +262,7 @@ Use cases:
 
 ---
 
-# ChannelMetricsRepository
+## ChannelMetricsRepository
 
 Provides atomic metric increments.
 
@@ -282,7 +282,7 @@ Metrics are:
 
 ---
 
-# Worker Configuration
+## Worker Configuration
 
 Each worker must define a configuration class:
 
@@ -305,7 +305,7 @@ Requirements:
 
 ---
 
-# Worker Parameters
+## Worker Parameters
 
 Parameters are injected via constructor.
 
@@ -333,7 +333,7 @@ Parameter names must strictly match the form.
 
 ---
 
-# Form Definition
+## Form Definition
 
 Use:
 
@@ -353,7 +353,7 @@ Misconfiguration prevents worker loading.
 
 ---
 
-# Concurrency & Guarantees
+## Concurrency & Guarantees
 
 - Channels may share thread pools.
 
@@ -367,7 +367,7 @@ Misconfiguration prevents worker loading.
 
 ---
 
-# Best Practices
+## Best Practices
 
 - Keep collectors bounded and fast
 
@@ -387,7 +387,7 @@ Misconfiguration prevents worker loading.
 
 ---
 
-# Deployment
+## Deployment
 
 1. Package your project as a JAR
 
@@ -399,7 +399,7 @@ Workers are automatically discovered and loaded at startup.
 
 ---
 
-# Conclusion
+## Conclusion
 
 Xelians DataHub Studio provides a robust and scalable framework for building production-grade integration workflows that are:
 
