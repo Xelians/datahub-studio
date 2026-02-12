@@ -1,5 +1,6 @@
 package fr.xelians.xdh.studio.transformer;
 
+import fr.xelians.xdh.studio.ChannelMetricsRepository;
 import fr.xelians.xdh.studio.ChannelStore;
 import fr.xelians.xdh.studio.ResourceHandler;
 import fr.xelians.xdh.studio.logging.XDHProcessLogger;
@@ -8,39 +9,57 @@ import java.nio.file.Path;
 import java.util.List;
 
 /**
- * This interface has to be implemented for every transformer.
- * Transformer parameters are the parameters defined in the constructor of the transformer.
- * Every transformer should transform 1..n files to a new file.
- */
-
-/**
- * @author aurelien on 10/01/2022
+ * Contract to be implemented by every channel transformer.
+ *
+ * <p>
+ * A transformer takes 1..n input files (provided by name and located in the given source directory)
+ * and produces a new file in the target directory.
+ * </p>
+ *
+ * <p>
+ * Transformer parameters are defined through the transformer constructor.
+ * </p>
  */
 public interface Transformer extends ResourceHandler {
 
 	/**
-	 * The transform method to be implemented for transformation
-	 * @param fileNames the list of filenames to transform
-	 * @param fromDirectory the directory where the files are
-	 * @param toDirectory the directory where the new file has to be created
-	 * @param logger The logger to use. Log files are in the log folder of the channel directory under the base datahub folder.
-	 * @return The result containing success message and the name of the produced file.
-	 * @throws Exception For exception to be displayed as a functional exception you should throw a {{@link TransformException}}
+	 * Executes the transform operation.
+	 *
+	 * @param fileNames       list of input file names to transform (filenames only, no paths)
+	 * @param sourceDirectory directory containing input files
+	 * @param targetDirectory directory where the produced file must be created
+	 * @param logger          process logger (log files are stored under the channel log directory)
+	 *
+	 * @return a {@link TransformResult} containing the produced file name and related information
+	 *
+	 * @throws TransformException for functional errors
+	 * @throws Exception          for unexpected technical errors
 	 */
-	TransformResult transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger) throws Exception;
+	TransformResult transform(List<String> fileNames,
+							  Path sourceDirectory,
+							  Path targetDirectory,
+							  XDHProcessLogger logger) throws Exception;
 
 	/**
-	 * The transform method to be implemented for transformation
-	 * @param fileNames the list of filenames to transform
-	 * @param fromDirectory the directory where the files are
-	 * @param toDirectory the directory where the new file has to be created
-	 * @param logger The logger to use. Log files are in the log folder of the channel directory under the base datahub folder.
-	 * @param channelStore storage for persisting key-value data
-	 * @return The result containing success message and the name of the produced file.
-	 * @throws Exception For exception to be displayed as a functional exception you should throw a {{@link TransformException}}
+	 * Executes the transform operation with access to the channel key-value store.
 	 */
-	default TransformResult transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger, ChannelStore channelStore) throws Exception{
-		return  transform(fileNames, fromDirectory, toDirectory, logger);
+	default TransformResult transform(List<String> fileNames,
+									  Path sourceDirectory,
+									  Path targetDirectory,
+									  XDHProcessLogger logger,
+									  ChannelStore channelStore) throws Exception {
+		return transform(fileNames, sourceDirectory, targetDirectory, logger);
 	}
 
+	/**
+	 * Executes the transform operation with access to the channel store and metrics repository.
+	 */
+	default TransformResult transform(List<String> fileNames,
+									  Path sourceDirectory,
+									  Path targetDirectory,
+									  XDHProcessLogger logger,
+									  ChannelStore channelStore,
+									  ChannelMetricsRepository metricsRepository) throws Exception {
+		return transform(fileNames, sourceDirectory, targetDirectory, logger, channelStore);
+	}
 }

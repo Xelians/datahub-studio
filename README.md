@@ -1,16 +1,36 @@
 # Xelians DataHub Studio
 
+[![license](https://img.shields.io/badge/license-Apache--2.0-green)](http://www.apache.org/licenses/LICENSE-2.0)  
+[![maven](https://img.shields.io/badge/maven--central-v4.2.0-blue)](https://mvnrepository.com/artifact/fr.xelians/datahub-studio/4.2.0)
 
-[![license](https://img.shields.io/badge/license-Apache--2.0-green)](http://www.apache.org/licenses/LICENSE-2.0)
-[![maven](https://img.shields.io/badge/maven--central-v4.1.0-blue)](https://mvnrepository.com/artifact/fr.xelians/datahub-studio/4.1.0)
+---
 
-Module ayant pour but d'ajouter des workers externes (collector, transformer et sender) à la solution Xelians Datahub.
-Pour cela il suffit d'importer le module dans un nouveau projet java et de suivre les instructions qui suivent.
-Dans la mesure du possible utiliser les librairies déjà disponibles dans **le datahub-studio** pour éviter au maximum des problèmes de compatibilité.
+## Overview
+
+**Xelians DataHub Studio** is the official extension framework for building external integration workers for the Xelians DataHub platform.
+
+It allows developers to implement custom:
+
+- **Collectors** — retrieve data from external systems  
+- **Transformers** — process and consolidate data  
+- **Senders** — deliver processed data to target systems  
+
+The framework provides:
+
+- Controlled execution lifecycle  
+- Shared and scalable thread pools  
+- Retry management  
+- Persistent channel state  
+- Metrics publication  
+- Structured configuration model  
+
+---
+
+# Installation
 
 ## Maven
 
-Ajouter la dépendance dans le pom.xml
+Add the dependency to your `pom.xml`:
 
 ```xml
 <dependency>
@@ -20,211 +40,377 @@ Ajouter la dépendance dans le pom.xml
 </dependency>
 ```
 
-## Fonctionnement de la solution
+---
 
+# Architecture
 
-### Canal
+## Channel Model
 
-Le transfert de donnée via le datahub est modelisé par un canal. Un canal possède une instance de 3 types de **workers** appelés **Collector**, **Transformer** et **Sender**.
-Lors du démarrage d'un canal les workers sont instanciés avec les valeurs entrées lors du paramétrage du canal via l'interface du datahub.
+A **Channel** represents a complete data transfer pipeline.
 
-### Workflow
+Each channel contains:
 
-![alt xdh core](img/xdh_core.png)
+- 1 Collector
 
-#### 1 Scheduler
+- 1 Transformer
 
-Le scheduler planifie des tâches de collecte régulièrement pour tous les canaux démarrés.
+- 1 Sender
 
-#### 2 Collecte
+Workers are instantiated at channel startup using parameters configured through the DataHub UI.
 
-Un pool de thread fixe est chargé d'effectuer les tâches de collecte en récupérant l'instance du **collector** correspondant et en appliquant la méthode ```collect``` expliquée plus bas.
-Le ou les fichiers collectés sont écrit sur le disque dans un repertoire spécifique attribué au canal. Un broker permet de transmettre une tâche de transformation au pool suivant.
+---
 
-#### 3 transformation
+# Execution Model
 
-Un pool de thread fixe est chargé d'effectuer les tâches de transformation en récupérant l'instance du **transformer** correspondant et en appliquant la méthode ```transform``` expliquée plus bas.
-Le ou les fichiers sont transformés en un seul fichier écrit sur le disque dans un répertoire spécifique attribué au canal. Un broker permet de transmettre une tâche de transfert au pool suivant.
+Scheduler -> Collector Pool -> Transformer Pool -> Sender Pool
 
-#### 4 Transfert
+## Thread Pools
 
-Un pool de thread fixe est chargé d'effectuer les tâches de transfert en récupérant l'instance du **sender** correspondant et en applicant la méthode ```send``` expliquée plus bas.
-Le fichier est envoyé et un détail du transfert est visible via l'interface du datahub.
+Channels are assigned to a set of shared thread pools:
 
-## Collector
+- A Collect Pool
 
+- A Transform Pool
 
-### Interface
-Un collector doit nécessairement implémenter l'interface **Collector**
+- A Send Pool
+
+Multiple channels may share the same pool instances.
+
+## Guarantees
+
+- Single collect execution per channel at a time
+
+- Transform and Send tasks are queued
+
+- Execution model: at-least-once
+
+- Senders may be retried
+
+Workers must be thread-safe if reused.
+
+---
+
+# Temporary Working Directory
+
+Workers must use:
 
 ```java
-List<String> collect(Path toDirectory, String webhook, XDHProcessLogger logger) throws Exception;
+TempWorkDir.dir();
 ```
-La méthode **collect** prend en paramètre :
-- le chemin du répertoire ou doivent être stockés les fichiers collectés.
-- webhook si le canal utilise les webhooks comme notification de collecte. L'argument correspond au body de la requête webhook.
-- Le loggeur à utiliser pour écrire des logs dans le fichier de log du canal
+Location:
 
-Cette méthode renvoie le nom des fichiers stockés, si une liste vide est renvoyée aucun traitement n'est créé. Faire attention à nommer de manière unique les fichiers collectés (par exemple ajouter un suffix ou un prefix auto-généré)
-La lecture ne doit pas être bloquée indéfiniment, elle doit stocker un nombre fini de fichier et renvoyer la liste. Les n fichiers correspondent à un flux de collecte et sont envoyés par paquet au transformer.
-A chaque opération de lecture entre 1 et n (éviter de dépasser un max d'une centaine de fichiers) fichiers doivent être stockés, on peut donc avoir un collector stateful pour stocker l'état de la lecture sur le canal.
-Les collectes se font de manières non concurrentes un seul thread à la fois effectuera une opération de collecte sur 1 canal particulier.
+```java
+${java.io.tmpdir}/xdh
+```
 
-Les paramètres du collector correspondent à des variables d'instances de l'implémentation qui doivent être initialisées via le constructeur.
-Pour ajouter des paramètres, il suffira donc de définir des paramètres dans le constructeur de l'implémentation.
-Les types de paramètres autorisés :
+Used for:
+
+- Archive extraction
+
+- Intermediate file generation
+
+- Temporary processing
+
+## Important
+
+- Workers MUST delete created files and directories.
+
+- This directory is periodically purged by the application.
+
+- It must NOT be used for persistent state.
+
+---
+
+# Collector
+
+## Interface
+
+```java
+List<String> collect(
+    Path targetDirectory,
+    String webhook,
+    XDHProcessLogger logger,
+    ChannelStore channelStore,
+    ChannelMetricsRepository metricsRepository
+) throws Exception;
+```
+
+## Responsibilities
+
+- Retrieve 1..n files
+
+- Write files to targetDirectory
+
+- Return filenames only (no absolute paths)
+
+- Generate unique filenames
+
+- Keep execution bounded
+
+- Avoid long blocking operations
+
+## Functional Error
+
+```java
+throw new CollectException("Authentication failed", "AUTH_001");
+```
+
+---
+
+# Transformer
+
+## Interface
+
+```java
+TransformResult transform(
+        List<String> fileNames,
+        Path sourceDirectory,
+        Path targetDirectory,
+        XDHProcessLogger logger,
+        ChannelStore channelStore,
+        ChannelMetricsRepository metricsRepository
+) throws Exception;
+```
+
+## Responsibilities
+
+- Transform n input files into 1 output file
+
+- Write output to targetDirectory
+
+- Generate unique filenames
+
+- Remain stateless
+
+## Functional Error
+
+```java
+throw new TransformException("Invalid format", "FORMAT_001");
+```
+
+---
+
+# Sender
+
+## Interface
+
+```java
+SenderResult send(
+        String fileName,
+        Path sourceDirectory,
+        Path resultDirectory,
+        XDHProcessLogger logger,
+        ChannelStore channelStore,
+        ChannelMetricsRepository metricsRepository
+) throws Exception;
+```
+
+## Responsibilities
+
+- Send the file to target system
+
+- Optionally write acknowledgment files to resultDirectory
+
+- Return SenderResult
+
+- Be idempotent when possible
+
+## Functional Error
+
+```java
+throw new SendException("Authentication failed", "AUTH_001");
+```
+
+---
+
+# Retry & Delay Mechanism
+
+To retry a send operation, throw:
+```java
+throw new DelayExecutionException(60);
+```
+
+## Behavior
+
+- The send task will be retried after delay seconds.
+
+- Can be combined with locking mechanisms to serialize transfers.
+
+- Useful for:
+
+  - Rate limiting
+
+  - Remote throttling
+
+  - Temporary external failures
+
+---
+
+# ChannelStore
+
+Persistent key-value storage scoped to the channel.
+
+Use cases:
+
+- Pagination cursors
+
+- Incremental synchronization
+
+- Execution flags
+
+- Retry state
+
+---
+
+# ChannelMetricsRepository
+
+Provides atomic metric increments.
+
+Example:
+
+```java
+metricsRepository.increment("files.sent", 1);
+```
+
+Metrics are:
+
+- Atomic
+
+- Persisted
+
+- Exposed via supervision APIs
+
+---
+
+# Worker Configuration
+
+Each worker must define a configuration class:
+
+```java
+Class<? extends Worker> getWorkerClass();
+Label.Translation getName();
+Label.Translation description();
+String id();
+String version();
+WorkerForm.Form getForm();
+```
+
+Requirements:
+
+- Unique ID
+
+- Versioning recommended
+
+- Constructor aligned with form definition
+
+---
+
+# Worker Parameters
+
+Parameters are injected via constructor.
+
+- Supported types:
+
 - Integer / int
+
 - Boolean / boolean
-- Double /  double
+
+- Double / double
+
 - Float / float
+
 - Long / long
+
 - String
+
 - Path
+
 - List<Map>
-- List<Integer | Boolean | Double | Float | Long | String>
 
-### Gestion des erreurs
+- List<Primitive>
 
-Pour afficher une erreur fonctionnelle sur l'interface et dans les logs, il suffit de lancer une ```CollectException```.
-Il est possible de rajouter un code erreur :
+Parameter names must strictly match the form.
 
-```java
-throw new CollectException("message d'erreur", "CODE_1");
-```
+---
 
-### Configuration
+# Form Definition
 
-Pour qu'un collector soit pris en compte il faudra définir une configuration implémentant l'interface **CollectorConfiguration**
+Use:
 
 ```java
-Class<? extends Collector> getCollectorClass(); // renvoi la classe de l'implémentation du collector en question
-Label.Translation getName(); // le nom du collector afficher sur l'interface
-Label.Translation description(); // La description du collector, par défaut vide
-String id(); // id du collector
-String version(); // La version du collector
-WorkerForm.Form getForm(); // la définition du formulaire de paramétrage du collector
+WorkerForm.builder()
 ```
 
-## Transformer
+Constraints:
 
+- Parameter name consistency
 
-### Interface
-Un transformer doit nécessairement implémenter l'interface **Transformer**
+- Type consistency
 
-```java
-TransformResult transform(List<String> fileNames, Path fromDirectory, Path toDirectory, XDHProcessLogger logger) throws Exception;
-```
-La méthode **transform** prend en paramètre :
-- La liste des noms de fichiers à transformer
-- le chemin du répertoire ou sont stockés les fichiers à transformer.
-- le nom du répertoire ou il faut stocker le fichier transformé.
-- Le loggeur à utiliser pour écrire des logs dans le fichier de log du canal.
+- Constructor signature alignment
 
-Cette étape correspond à la transformation de n fichiers en 1 fichier. Faire attention à nommer de manière unique les fichiers transformés.\
-Cette méthode renvoie le nom du fichier transformé ainsi qu'un message optionnel, de succés ou de succés avec alerte.\
-La transformation est nécessairement stateless
+Misconfiguration prevents worker loading.
 
-Les paramètres du transformer correspondent à des variables d'instances de l'implémentation qui doivent être initialisées via le constructeur.
-Pour ajouter des paramètres, il suffira donc de définir des paramètres dans le constructeur de l'implémentation.
-Les types de paramètres autorisés :
-- Integer / int
-- Boolean / boolean
-- Double /  double
-- Float / float
-- Long / long
-- String
-- Path
-- List<Map>
-- List<Integer | Boolean | Double | Float | Long | String>
+---
 
-### Gestion des erreurs
+# Concurrency & Guarantees
 
-Pour afficher une erreur fonctionnelle sur l'interface et dans les logs, il suffit de lancer une ```TransformException```.
-Il est possible de rajouter un code erreur :
+- Channels may share thread pools.
 
-```java
-throw new TransformException("message d'erreur", "CODE_1");
-```
+- Execution model is at-least-once.
 
-### Configuration
+- Sender may be retried.
 
-Pour qu'un transformer soit pris en compte il faudra définir une configuration implémentant l'interface **TransformerConfiguration**
+- Workers should be idempotent.
 
-```java
-Class<? extends Transformer> getTransformerClass(); // renvoi la classe de l'implémentation du transformer en question
-Label.Translation getName(); // le nom du transformer afficher sur l'interface
-Label.Translation description(); // La description du transformer, par défaut vide
-String id(); // id du transformer
-String version(); // La version du transformer
-WorkerForm.Form getForm(); // la définition du formulaire de paramétrage du transformer
-```
+- Avoid static mutable state.
 
+---
 
-## Sender
+# Best Practices
 
+- Keep collectors bounded and fast
 
-### Interface
-Un sender doit nécessairement implémenter l'interface **Sender**
+- Avoid long blocking operations
 
-```java
-SenderResult send(String fileName, Path fromDirectory, Path resultDirectory, XDHProcessLogger logger) throws Exception;
-```
-La méthode **send** prend en paramètre :
-- Le nom du fichier à envoyer
-- le chemin du répertoire ou se situe le fichier
-- Le chemin du répertoire ou l'on peut insérer des fichiers de retours ou résultats du transfert
-- Le loggeur à utiliser pour écrire des logs dans le fichier de log du canal.
-  
-Cette méthode renvoie un message de succés ou de succés avec alerte qui sera affiché dans l'interface de supervision.
+- Clean temporary files
 
-Les paramètres du sender correspondent à des variables d'instances de l'implémentation qui doivent être initialisées via le constructeur.
-Pour ajouter des paramètres, il suffira donc de définir des paramètres dans le constructeur de l'implémentation.
-Les types de paramètres autorisés :
-- Integer / int
-- Boolean / boolean
-- Double /  double
-- Float / float
-- Long / long
-- String
-- Path
-- List<Map>
-- List<Integer | Boolean | Double | Float | Long | String>
+- Use ChannelStore for state persistence
 
-### Gestion des erreurs
+- Publish meaningful metrics
 
-Pour afficher une erreur fonctionnelle sur l'interface et dans les logs, il suffit de lancer une ```SendException```.
-Il est possible de rajouter un code erreur :
+- Generate unique filenames
 
-```java
-throw new SendException("message d'erreur", "CODE_1");
-```
+- Make senders retry-safe
 
-### Configuration
+- Implement idempotency for external calls
 
-Pour qu'un sender soit pris en compte il faudra définir une configuration implémentant l'interface **TransformerConfiguration**
+---
 
-```java
-Class<? extends Sender> getSenderClass(); // renvoi la classe de l'implémentation du sender en question
-Label.Translation getName(); // le nom du sender afficher sur l'interface
-Label.Translation description(); // La description du sender, par défaut vide
-String id(); // id du sender
-String version(); // La version du sender
-WorkerForm.Form getForm(); // la définition du formulaire de paramétrage du sender
-```
+# Deployment
 
-### temporisation
+1. Package your project as a JAR
 
-Il est possible de temporiser le transfert en lançant une exception de type ```DelayExecutionException```. L'utilisation d'un lock à l'interieur de la méthode ```send``` combiné au lancement d'une ```DelayExecutionException``` permet donc de sérializer et temporiser l'envoi.
-il est possible de rajouter un délai en paramètre, le transfert du fichier sera retenté apres expiration du délai.
+2. Place it in the /lib directory at application root
 
-## Formulaire
+3. Restart DataHub
 
+Workers are automatically discovered and loaded at startup.
 
-Pour construire le formulaire  ```WorkerForm.Form ```  il est conseillé d'utiliser le builder ```WorkerFormBuilder ``` en utilisant la méthode ```WorkerForm.builder()```
-Bien suivre les instructions de la javadoc de l'interface ```WorkerForm```. Bien veiller à respecter le nom des paramètres et le type des inputs qui doit être cohérent avec le type des paramètres, sinon le worker ne sera pas ajouté au démarrage de l'application.
+---
 
-## Ajout des nouveaux workers
+# Conclusion
 
+Xelians DataHub Studio provides a robust and scalable framework for building production-grade integration workflows that are:
 
-Pour ajouter le nouveau plugin à la solution, il suffit de packager le projet en une archive de type **jar** et déposer cette archive dans un dossier "**/lib**" à créer à la racine du répertoire root de l'application.
-Lors du lancement de l'application les collectors, transformers et senders implémentés correctement seront chargés dans le contexte de worker de l'application.
+- Observable
+
+- Retry-safe
+
+- Thread-safe
+
+- Scalable
+
+- Maintainable
+
+By respecting the contracts and execution model described in this document, workers integrate seamlessly into the DataHub platform.
