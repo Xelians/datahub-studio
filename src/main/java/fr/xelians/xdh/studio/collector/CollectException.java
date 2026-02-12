@@ -3,9 +3,6 @@ package fr.xelians.xdh.studio.collector;
 /**
  * Throw this exception to print a collect functional error on the user interface.
  */
-/**
- * @author aurelien on 01/06/2022
- */
 public class CollectException extends Exception{
 
 	private String code;

@@ -5,9 +5,7 @@ import fr.xelians.xdh.studio.translation.Label;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author aurelien on 04/03/2022
- */
+
 public final class WorkerFormBuilder implements WorkerForm.Builder{
 
 	private final List<WorkerForm.InputFormBase> inputForms = new ArrayList<>();

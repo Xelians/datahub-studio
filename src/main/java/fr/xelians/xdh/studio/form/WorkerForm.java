@@ -5,7 +5,6 @@ import fr.xelians.xdh.studio.translation.Label;
 import java.util.List;
 
 /**
- * @author aurelien on 08/03/2022
  *
  * This class contain all the interfaces for builders and form components
  */

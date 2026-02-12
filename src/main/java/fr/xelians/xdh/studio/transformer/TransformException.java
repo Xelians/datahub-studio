@@ -3,10 +3,6 @@ package fr.xelians.xdh.studio.transformer;
 /**
  * Throw this exception to print a transformation functional error on the user interface.
  */
-
-/**
- * @author aurelien on 01/06/2022
- */
 public class TransformException extends Exception{
 
 	private String code;

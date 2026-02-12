@@ -10,14 +10,13 @@ import java.nio.file.Paths;
  *
  * <p>
  * This directory must be used by collectors, transformers and senders
- * whenever they need to:
+ * whenever they need to:</p>
  * <ul>
  *     <li>Write temporary files</li>
  *     <li>Unzip archives</li>
  *     <li>Generate intermediate artifacts</li>
  *     <li>Perform file-based processing</li>
  * </ul>
- * </p>
  *
  * <p>
  * ⚠ Connectors are responsible for deleting any files or subdirectories

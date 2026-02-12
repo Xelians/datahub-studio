@@ -5,7 +5,6 @@ import fr.xelians.xdh.studio.form.WorkerForm;
 import fr.xelians.xdh.studio.translation.Label;
 
 /**
- * @author aurelien on 17/01/2022
  *
  * Every worker must have a configuration class which implements WorkerConfiguration
  */

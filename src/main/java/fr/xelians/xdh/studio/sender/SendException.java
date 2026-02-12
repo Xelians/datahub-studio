@@ -3,10 +3,6 @@ package fr.xelians.xdh.studio.sender;
 /**
  * Throw this exception to print a send functional error on the user interface.
  */
-
-/**
- * @author aurelien on 01/06/2022
- */
 public class SendException extends Exception{
 
 	private String code;

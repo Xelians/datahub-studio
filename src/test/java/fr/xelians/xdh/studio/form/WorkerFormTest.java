@@ -7,9 +7,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * @author aurelien on 08/03/2022
- */
 
 public class WorkerFormTest {
 

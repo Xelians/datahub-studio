@@ -3,10 +3,6 @@ package fr.xelians.xdh.studio.translation;
 /**
  * The class Label is used to translate label in French and English for worker forms
  **/
-
-/**
- * @author aurelien on 02/06/2022
- **/
 public final class Label {
 
 	private Label() {
