@@ -36,7 +36,7 @@ Add the dependency to your `pom.xml`:
 <dependency>
     <groupId>fr.xelians</groupId>
     <artifactId>datahub-studio</artifactId>
-    <version>4.0.3</version>
+    <version>4.2.0</version>
 </dependency>
 ```
 
