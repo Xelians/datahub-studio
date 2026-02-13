@@ -309,7 +309,7 @@ Requirements:
 
 Parameters are injected via constructor.
 
-- Supported types:
+Supported types:
 
 - Integer / int
 
@@ -325,9 +325,9 @@ Parameters are injected via constructor.
 
 - Path
 
-- List<Map>
+- List < Map < String, Object > > 
 
-- List<Primitive>
+- List < Integer | Boolean | Double | Float | Long | String >
 
 Parameter names must strictly match the form.
 
