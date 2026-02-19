@@ -28,6 +28,10 @@ The framework provides:
 
 ## Installation
 
+### Requirements
+
+- **Java Version:** 17 (minimum) to 25 (maximum)
+
 ### Maven
 
 Add the dependency to your `pom.xml`:
