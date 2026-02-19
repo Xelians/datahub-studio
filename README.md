@@ -282,6 +282,47 @@ Metrics are:
 
 ---
 
+## XDHProcessLogger
+
+**IMPORTANT:** The `XDHProcessLogger` must be used imperatively for all logging operations within workers.
+
+This logger allows to record processing information and events that are:
+
+- **Structured** — associated with the channel execution context
+
+- **Persisted** — stored in the DataHub workspace directory
+
+- **Accessible** — viewable through the supervision interface
+
+### Usage
+
+The logger is provided as a parameter to all worker methods:
+
+```java
+logger.info("File processing started: {}", fileName);
+logger.error("Failed to process file: {}", fileName, exception);
+```
+
+### Log Levels
+
+- `logger.debug()` — detailed diagnostic information
+
+- `logger.info()` — general informational messages
+
+- `logger.warn()` — warning conditions
+
+- `logger.error()` — error events
+
+### Important Notes
+
+- **Do NOT use standard logging frameworks** (e.g., SLF4J, Log4j) directly in workers
+
+- Logs written with `XDHProcessLogger` are displayed in the supervision UI
+
+- They provide essential traceability for production troubleshooting
+
+---
+
 ## Worker Configuration
 
 Each worker must define a configuration class:
