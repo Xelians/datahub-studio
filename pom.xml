@@ -68,7 +68,7 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <maven.source.version>3.2.1</maven.source.version>
+        <maven.source.version>3.4.0</maven.source.version>
         <javadoc.source.version>3.4.1</javadoc.source.version>
         <gpg.plugin.version>3.0.1</gpg.plugin.version>
         <slf4j.version>1.7.32</slf4j.version>
