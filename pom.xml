@@ -62,7 +62,7 @@
     <scm>
         <connection>scm:git:git://github.com/Xelians/datahub-studio.git</connection>
         <developerConnection>scm:git:ssh://github.com:Xelians/datahub-studio.git</developerConnection>
-        <url>https://github.com/Xelians/datahub-studio/tree/master</url>
+        <url>https://github.com/Xelians/datahub-studio/tree/main</url>
     </scm>
 
     <properties>
