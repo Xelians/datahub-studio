@@ -64,6 +64,55 @@ Workers are instantiated at channel startup using parameters configured through 
 
 ---
 
+### Atomicity Principle
+
+Every worker performs **exactly one atomic operation**. This is a hard design rule, not a guideline:
+
+- A **Collector** only collects.
+- A **Transformer** only transforms.
+- A **Sender** only transfers.
+
+**Do NOT** build a worker that combines several steps. In particular:
+
+- Do not build a Collector that also transforms or sends.
+- Do not build a Sender that transfers to several destinations in a single execution.
+- Do not embed extra processing inside a worker "to save a step".
+
+When you need more than one operation, **keep each worker atomic and compose them through
+channel chaining** (see below). Never fatten a worker.
+
+---
+
+### Channel Chaining
+
+To perform additional operations after a channel completes, **chain channels** instead of
+adding responsibilities to a worker.
+
+**Mechanism:** a channel's **Sender** writes its output where the next channel's
+**Chained Collector** picks it up. Chaining channels this way forms a pipeline:
+
+```
+collect → transform → send → collect → transform → send → …
+```
+
+**Chaining several transformations:** combine the **No-Op Sender** (a pass-through sender that
+writes its input through unchanged, with no real destination) with the **Chained Collector**.
+This lets a channel collect + transform and leave its output for a downstream channel to apply
+the next transformation. A **No-Op Transformer** (pass-through transformer) exists for the
+symmetric case.
+
+**Platform-provided workers** (available in the DataHub UI):
+
+- **Chained collector** (*Connecteur de collecte chaîné*) — collects the transfer result of
+  another channel.
+- **No-Op Sender** — pass-through sender enabling collect + transform without a real target.
+- **No-Op Transformer** — pass-through transformer.
+
+> These chaining workers are built into the DataHub platform. They are not classes provided by
+> the SDK jar — you select them in the UI when configuring channels, you do not implement them.
+
+---
+
 ## Execution Model
 
 Scheduler -> Collector Pool -> Transformer Pool -> Sender Pool
