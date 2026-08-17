@@ -1,5 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["local>Xelians/renovate-config"],
-  "enabledManagers": ["maven", "github-actions"]
+  "extends": [
+    "local>Xelians/renovate-config",
+    "local>Xelians/renovate-config:java",
+    "local>Xelians/renovate-config:shared-library"
+  ]
 }
