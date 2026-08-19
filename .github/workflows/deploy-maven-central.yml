@@ -14,7 +14,16 @@ jobs:
         java: [ '21' ]
     steps:
       - uses: actions/checkout@v2
-      # Step that does that actual cache save and restore
+
+      - name: Restore cache for maven dependencies
+        id: cache-maven-restore
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-repo-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2-
+
       - name: Setup settings.xml
         uses: s4u/maven-settings-action@v2.5.0
         with:
@@ -35,3 +44,11 @@ jobs:
 
       - name: Build with Maven
         run: mvn -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} clean deploy
+
+      - name: Update cache for maven dependencies
+        id: cache-maven-save
+        if: steps.cache-maven-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-repo-${{ hashFiles('**/pom.xml') }}

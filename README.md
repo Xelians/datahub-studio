@@ -28,6 +28,10 @@ The framework provides:
 
 ## Installation
 
+### Requirements
+
+- **Java Version:** 17 (minimum) to 25 (maximum)
+
 ### Maven
 
 Add the dependency to your `pom.xml`:
@@ -36,7 +40,7 @@ Add the dependency to your `pom.xml`:
 <dependency>
     <groupId>fr.xelians</groupId>
     <artifactId>datahub-studio</artifactId>
-    <version>4.0.3</version>
+    <version>4.2.0</version>
 </dependency>
 ```
 
@@ -57,6 +61,55 @@ Each channel contains:
 - 1 Sender
 
 Workers are instantiated at channel startup using parameters configured through the DataHub UI.
+
+---
+
+### Atomicity Principle
+
+Every worker performs **exactly one atomic operation**. This is a hard design rule, not a guideline:
+
+- A **Collector** only collects.
+- A **Transformer** only transforms.
+- A **Sender** only transfers.
+
+**Do NOT** build a worker that combines several steps. In particular:
+
+- Do not build a Collector that also transforms or sends.
+- Do not build a Sender that transfers to several destinations in a single execution.
+- Do not embed extra processing inside a worker "to save a step".
+
+When you need more than one operation, **keep each worker atomic and compose them through
+channel chaining** (see below). Never fatten a worker.
+
+---
+
+### Channel Chaining
+
+To perform additional operations after a channel completes, **chain channels** instead of
+adding responsibilities to a worker.
+
+**Mechanism:** a channel's **Sender** writes its output where the next channel's
+**Chained Collector** picks it up. Chaining channels this way forms a pipeline:
+
+```
+collect → transform → send → collect → transform → send → …
+```
+
+**Chaining several transformations:** combine the **No-Op Sender** (a pass-through sender that
+writes its input through unchanged, with no real destination) with the **Chained Collector**.
+This lets a channel collect + transform and leave its output for a downstream channel to apply
+the next transformation. A **No-Op Transformer** (pass-through transformer) exists for the
+symmetric case.
+
+**Platform-provided workers** (available in the DataHub UI):
+
+- **Chained collector** (*Connecteur de collecte chaîné*) — collects the transfer result of
+  another channel.
+- **No-Op Sender** — pass-through sender enabling collect + transform without a real target.
+- **No-Op Transformer** — pass-through transformer.
+
+> These chaining workers are built into the DataHub platform. They are not classes provided by
+> the SDK jar — you select them in the UI when configuring channels, you do not implement them.
 
 ---
 
@@ -282,6 +335,47 @@ Metrics are:
 
 ---
 
+## XDHProcessLogger
+
+**IMPORTANT:** The `XDHProcessLogger` must be used imperatively for all logging operations within workers.
+
+This logger allows to record processing information and events that are:
+
+- **Structured** — associated with the channel execution context
+
+- **Persisted** — stored in the DataHub workspace directory
+
+- **Accessible** — viewable through the supervision interface
+
+### Usage
+
+The logger is provided as a parameter to all worker methods:
+
+```java
+logger.info("File processing started: {}", fileName);
+logger.error("Failed to process file: {}", fileName, exception);
+```
+
+### Log Levels
+
+- `logger.debug()` — detailed diagnostic information
+
+- `logger.info()` — general informational messages
+
+- `logger.warn()` — warning conditions
+
+- `logger.error()` — error events
+
+### Important Notes
+
+- **Do NOT use standard logging frameworks** (e.g., SLF4J, Log4j) directly in workers
+
+- Logs written with `XDHProcessLogger` are displayed in the supervision UI
+
+- They provide essential traceability for production troubleshooting
+
+---
+
 ## Worker Configuration
 
 Each worker must define a configuration class:
@@ -309,7 +403,7 @@ Requirements:
 
 Parameters are injected via constructor.
 
-- Supported types:
+Supported types:
 
 - Integer / int
 
@@ -325,9 +419,9 @@ Parameters are injected via constructor.
 
 - Path
 
-- List<Map>
+- List < Map < String, Object > > 
 
-- List<Primitive>
+- List < Integer | Boolean | Double | Float | Long | String >
 
 Parameter names must strictly match the form.
 
