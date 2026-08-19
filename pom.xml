@@ -71,7 +71,7 @@
         <maven.source.version>3.2.1</maven.source.version>
         <javadoc.source.version>3.4.1</javadoc.source.version>
         <gpg.plugin.version>3.0.1</gpg.plugin.version>
-        <slf4j.version>1.7.32</slf4j.version>
+        <slf4j.version>1.7.36</slf4j.version>
         <jupiter.version>5.8.2</jupiter.version>
 
     </properties>
