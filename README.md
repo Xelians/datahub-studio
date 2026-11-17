@@ -1,7 +1,7 @@
 # Xelians DataHub Studio
 
 [![license](https://img.shields.io/badge/license-Apache--2.0-green)](http://www.apache.org/licenses/LICENSE-2.0)  
-[![maven](https://img.shields.io/badge/maven--central-v4.2.0-blue)](https://mvnrepository.com/artifact/fr.xelians/datahub-studio/4.2.0)
+[![maven](https://img.shields.io/badge/maven--central-v4.3.0-blue)](https://mvnrepository.com/artifact/fr.xelians/datahub-studio/4.3.0)
 
 ---
 
@@ -40,7 +40,7 @@ Add the dependency to your `pom.xml`:
 <dependency>
     <groupId>fr.xelians</groupId>
     <artifactId>datahub-studio</artifactId>
-    <version>4.2.0</version>
+    <version>4.3.0</version>
 </dependency>
 ```
 
@@ -88,8 +88,8 @@ channel chaining** (see below). Never fatten a worker.
 To perform additional operations after a channel completes, **chain channels** instead of
 adding responsibilities to a worker.
 
-**Mechanism:** a channel's **Sender** writes its output where the next channel's
-**Chained Collector** picks it up. Chaining channels this way forms a pipeline:
+**Mechanism:** a channel's **Sender** publishes its result files where the next channel's
+**Chained Collector** picks them up. Chaining channels this way forms a pipeline:
 
 ```
 collect → transform → send → collect → transform → send → …
@@ -139,38 +139,69 @@ Multiple channels may share the same pool instances.
 
 - Senders may be retried
 
-Workers must be thread-safe if reused.
+Workers must be thread-safe: the same instance may be called concurrently for different executions.
+Keep the state of an execution in local variables, never in instance or static fields.
 
 ---
 
-## Temporary Working Directory
+## Files and Storage
 
-Workers must use:
+Since version 4.3, workers no longer receive directories. They read their input from an
+`InputBin` and publish what they produce to an `OutputBin`. The platform decides where the files
+are stored (local disk or object storage); a worker written against the bins runs unchanged on
+both.
+
+### InputBin
+
+The files to process in one execution, read-only.
 
 ```java
-TempWorkDir.dir();
+List<StoredFile> files();
+StoredFile get(String name);
+StoredFile single();      // the only file of the bin
+boolean isEmpty();
 ```
-Location:
+
+A `StoredFile` exposes `name()`, `size()`, `lastModified()` and `open()`. For libraries that
+require a `Path`, `materialize()` returns the file as a read-only local path.
+
+### OutputBin
+
+Where a worker publishes its files.
 
 ```java
-${java.io.tmpdir}/xdh
+OutputStream create(String name);        // published when the stream is closed
+void put(String name, Path localFile);   // publishes a file produced locally
+void put(StoredFile file);               // publishes an input file unchanged
+String uniqueName(String desired);
+List<String> published();
 ```
 
-Used for:
+Publication is atomic: a file becomes visible to the platform and to the next step once it is
+complete, never before. If the worker fails, what was not published is discarded.
 
-- Archive extraction
+### WorkerContext
 
-- Intermediate file generation
+The services of one execution, passed to every worker method.
 
-- Temporary processing
+```java
+XDHProcessLogger logger();
+ChannelStore store();
+ChannelMetricsRepository metrics();
+Path tempDir();
+String channelId();
+String collectId();   // null during a collect
+String webhook();     // body of the webhook that triggered the collect, or null
+```
 
-### Important
+### Temporary Directory
 
-- Workers MUST delete created files and directories.
+`context.tempDir()` is the only place where a worker may write on the local disk: archive
+extraction, intermediate files, files to publish with `OutputBin.put(name, path)`.
 
-- This directory is periodically purged by the application.
-
-- It must NOT be used for persistent state.
+- It is specific to the execution: two executions never share it.
+- The platform creates it before the call and deletes it afterwards, on success and on failure.
+- It must not be used for persistent state; use `ChannelStore` instead.
 
 ---
 
@@ -179,24 +210,29 @@ Used for:
 ### Interface
 
 ```java
-List<String> collect(
-    Path targetDirectory,
-    String webhook,
-    XDHProcessLogger logger,
-    ChannelStore channelStore,
-    ChannelMetricsRepository metricsRepository
-) throws Exception;
+StepResult collect(OutputBin collected, WorkerContext context) throws Exception;
+```
+
+### Example
+
+```java
+@Override
+public StepResult collect(OutputBin collected, WorkerContext context) throws Exception {
+    for (RemoteFile remote : client.listNewFiles()) {
+        try (InputStream in = client.download(remote);
+             OutputStream out = collected.create(collected.uniqueName(remote.name()))) {
+            in.transferTo(out);
+        }
+    }
+    return new StepResult(collected.published().size() + " file(s) collected");
+}
 ```
 
 ### Responsibilities
 
-- Retrieve 1..n files
+- Retrieve 1..n files and publish them to `collected`
 
-- Write files to targetDirectory
-
-- Return filenames only (no absolute paths)
-
-- Generate unique filenames
+- Publish nothing when there is nothing to collect: no collect is started
 
 - Keep execution bounded
 
@@ -215,23 +251,26 @@ throw new CollectException("Authentication failed", "AUTH_001");
 ### Interface
 
 ```java
-TransformResult transform(
-        List<String> fileNames,
-        Path sourceDirectory,
-        Path targetDirectory,
-        XDHProcessLogger logger,
-        ChannelStore channelStore,
-        ChannelMetricsRepository metricsRepository
-) throws Exception;
+StepResult transform(InputBin collected, OutputBin transformed, WorkerContext context) throws Exception;
+```
+
+### Example
+
+```java
+@Override
+public StepResult transform(InputBin collected, OutputBin transformed, WorkerContext context) throws Exception {
+    Path archive = context.tempDir().resolve("archive.zip");
+    archiveBuilder.build(collected.files(), archive);
+    transformed.put(transformed.uniqueName("archive.zip"), archive);
+    return new StepResult("Archive built");
+}
 ```
 
 ### Responsibilities
 
-- Transform n input files into 1 output file
+- Transform the files of `collected` and publish the result to `transformed`
 
-- Write output to targetDirectory
-
-- Generate unique filenames
+- Each published file is sent separately; publishing nothing ends the collect without any send
 
 - Remain stateless
 
@@ -248,21 +287,29 @@ throw new TransformException("Invalid format", "FORMAT_001");
 ### Interface
 
 ```java
-SenderResult send(
-        String fileName,
-        Path sourceDirectory,
-        Path resultDirectory,
-        XDHProcessLogger logger,
-        ChannelStore channelStore,
-        ChannelMetricsRepository metricsRepository
-) throws Exception;
+SenderResult send(InputBin toSend, OutputBin results, WorkerContext context) throws Exception;
+```
+
+### Example
+
+```java
+@Override
+public SenderResult send(InputBin toSend, OutputBin results, WorkerContext context) throws Exception {
+    StoredFile file = toSend.single();
+    try (InputStream in = file.open();
+         OutputStream receipt = results.create("receipt.xml")) {
+        client.upload(file.name(), in, receipt);
+    }
+    return new SenderResult("File delivered");
+}
 ```
 
 ### Responsibilities
 
-- Send the file to target system
+- Send the single file of `toSend` to the target system
 
-- Optionally write acknowledgment files to resultDirectory
+- Optionally publish result files (acknowledgments, responses) to `results`; a chained
+  channel can collect them
 
 - Return SenderResult
 
@@ -273,6 +320,35 @@ SenderResult send(
 ```java
 throw new SendException("Authentication failed", "AUTH_001");
 ```
+
+---
+
+## Migrating from 4.2
+
+Version 4.3 is binary compatible with 4.2: a worker built against 4.2 runs without being
+recompiled. The directory-based methods are deprecated and will be removed in version 5.0.
+
+| 4.2 | 4.3 |
+| --- | --- |
+| `collect(Path targetDirectory, String webhook, XDHProcessLogger logger, ...)` | `collect(OutputBin collected, WorkerContext context)` |
+| `transform(List<String> fileNames, Path sourceDirectory, Path targetDirectory, ...)` | `transform(InputBin collected, OutputBin transformed, WorkerContext context)` |
+| `send(String fileName, Path sourceDirectory, Path resultDirectory, ...)` | `send(InputBin toSend, OutputBin results, WorkerContext context)` |
+| returned file names, `TransformResult.getFileName()` | files published to the `OutputBin` |
+| `logger`, `channelStore`, `metricsRepository` parameters | `context.logger()`, `context.store()`, `context.metrics()` |
+| `TempWorkDir.dir()` | `context.tempDir()` |
+
+Until 5.0, the directory-based method with the shortest signature remains abstract. A worker
+migrated to the bins still has to declare it:
+
+```java
+@Override
+public List<String> collect(Path targetDirectory, String webhook, XDHProcessLogger logger) {
+    throw new UnsupportedOperationException();
+}
+```
+
+A worker that is not migrated keeps working: the platform exposes its bins as directories.
+On object storage this implies local copies, which a migrated worker avoids.
 
 ---
 
@@ -349,14 +425,17 @@ This logger allows to record processing information and events that are:
 
 ### Usage
 
-The logger is provided as a parameter to all worker methods:
+The logger is provided by the worker context:
 
 ```java
+XDHProcessLogger logger = context.logger();
 logger.info("File processing started: {}", fileName);
-logger.error("Failed to process file: {}", fileName, exception);
+logger.warn("File skipped: {}", fileName);
 ```
 
 ### Log Levels
+
+- `logger.trace()` — fine-grained diagnostic information
 
 - `logger.debug()` — detailed diagnostic information
 
@@ -364,11 +443,12 @@ logger.error("Failed to process file: {}", fileName, exception);
 
 - `logger.warn()` — warning conditions
 
-- `logger.error()` — error events
+Errors are not logged by the worker: throw `CollectException`, `TransformException`,
+`SendException` or any other exception, and the platform records the failure.
 
 ### Important Notes
 
-- **Do NOT use standard logging frameworks** (e.g., SLF4J, Log4j) directly in workers
+- **Do NOT use standard logging frameworks** (e.g., SLF4J, Log4j) or `System.out` directly in workers
 
 - Logs written with `XDHProcessLogger` are displayed in the supervision UI
 
@@ -381,13 +461,16 @@ logger.error("Failed to process file: {}", fileName, exception);
 Each worker must define a configuration class:
 
 ```java
-Class<? extends Worker> getWorkerClass();
-Label.Translation getName();
+Label.Translation name();
 Label.Translation description();
 String id();
 String version();
-WorkerForm.Form getForm();
+WorkerForm.Form form();
 ```
+
+The configuration implements `CollectorConfiguration`, `TransformerConfiguration` or
+`SenderConfiguration`, which adds the worker class: `getCollectorClass()`,
+`getTransformerClass()` or `getSenderClass()`.
 
 Requirements:
 
@@ -467,13 +550,13 @@ Misconfiguration prevents worker loading.
 
 - Avoid long blocking operations
 
-- Clean temporary files
+- Write local files only in the temporary directory of the execution
 
 - Use ChannelStore for state persistence
 
 - Publish meaningful metrics
 
-- Generate unique filenames
+- Generate unique filenames with `OutputBin.uniqueName`
 
 - Make senders retry-safe
 
