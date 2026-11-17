@@ -6,37 +6,24 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * Provides access to the temporary working directory used by connectors.
+ * Provides access to the temporary working directory used by workers.
  *
  * <p>
- * This directory must be used by collectors, transformers and senders
- * whenever they need to:</p>
- * <ul>
- *     <li>Write temporary files</li>
- *     <li>Unzip archives</li>
- *     <li>Generate intermediate artifacts</li>
- *     <li>Perform file-based processing</li>
- * </ul>
- *
- * <p>
- * ⚠ Connectors are responsible for deleting any files or subdirectories
- * they create once processing is complete.
+ * During an execution, {@link #dir()} returns the temporary directory of that execution, the
+ * same as {@link fr.xelians.xdh.studio.WorkerContext#tempDir()}: the platform creates it before
+ * the call and deletes it afterwards. Outside an execution it returns the shared directory
+ * {@code ${java.io.tmpdir}/xdh}, which the platform purges periodically.
  * </p>
  *
- * <p>
- * The application periodically purges this directory to prevent uncontrolled
- * disk usage growth.
- * </p>
- *
- * <p>
- * The directory is created automatically at application startup under:
- * {@code ${java.io.tmpdir}/xdh}
- * </p>
+ * @deprecated use {@link fr.xelians.xdh.studio.WorkerContext#tempDir()} instead
  */
+@Deprecated(since = "4.3", forRemoval = true)
 public final class TempWorkDir {
 
     private static final Path DIR =
             Paths.get(System.getProperty("java.io.tmpdir"), "xdh");
+
+    private static final ThreadLocal<Path> EXECUTION_DIR = new ThreadLocal<>();
 
     static {
         try {
@@ -48,11 +35,30 @@ public final class TempWorkDir {
     }
 
     /**
-     * Returns the root temporary working directory for connectors.
+     * Returns the temporary working directory.
      *
-     * @return the temporary working directory path
+     * @return the temporary directory of the current execution, or the shared directory when
+     *         called outside an execution
      */
     public static Path dir() {
-        return DIR;
+        Path executionDir = EXECUTION_DIR.get();
+        return executionDir != null ? executionDir : DIR;
+    }
+
+    /**
+     * Binds the temporary directory of an execution to the current thread. Reserved for the
+     * platform, which calls it around each worker execution.
+     *
+     * @param executionDir the temporary directory of the execution
+     */
+    public static void bind(Path executionDir) {
+        EXECUTION_DIR.set(executionDir);
+    }
+
+    /**
+     * Removes the binding set by {@link #bind(Path)}. Reserved for the platform.
+     */
+    public static void unbind() {
+        EXECUTION_DIR.remove();
     }
 }

@@ -3,7 +3,11 @@ package fr.xelians.xdh.studio.sender;
 import fr.xelians.xdh.studio.ChannelMetricsRepository;
 import fr.xelians.xdh.studio.ChannelStore;
 import fr.xelians.xdh.studio.ResourceHandler;
+import fr.xelians.xdh.studio.WorkerContext;
 import fr.xelians.xdh.studio.logging.XDHProcessLogger;
+import fr.xelians.xdh.studio.storage.InputBin;
+import fr.xelians.xdh.studio.storage.LegacyBridge;
+import fr.xelians.xdh.studio.storage.OutputBin;
 
 import java.nio.file.Path;
 
@@ -25,8 +29,39 @@ import java.nio.file.Path;
  * <p>
  * Sender parameters are defined through the sender constructor.
  * </p>
+ *
+ * <p>New senders implement {@link #send(InputBin, OutputBin, WorkerContext)}. The
+ * directory-based methods are deprecated and still work unchanged.</p>
  */
 public interface Sender extends ResourceHandler {
+
+	/**
+	 * Executes the send operation.
+	 *
+	 * <p>The files published in the result bin (acknowledgments, response files) are kept with
+	 * the collect and can be collected by a chained channel. The default implementation
+	 * delegates to the directory-based method.</p>
+	 *
+	 * @param toSend  bin holding the single file to send
+	 * @param results bin in which result files may be published
+	 * @param context services and information of the execution
+	 *
+	 * @return a {@link SenderResult} describing the successful send operation
+	 *
+	 * @throws SendException           for functional send errors
+	 * @throws DelayExecutionException if the execution must be postponed
+	 * @throws Exception               for unexpected technical errors
+	 * @since 4.3
+	 */
+	default SenderResult send(InputBin toSend, OutputBin results, WorkerContext context) throws Exception {
+		LegacyBridge bridge = context.legacyBridge();
+		String fileName = toSend.single().name();
+		Path sourceDirectory = bridge.expose(toSend);
+		Path resultDirectory = bridge.stage(results);
+		SenderResult result = send(fileName, sourceDirectory, resultDirectory, context.logger(), context.store(), context.metrics());
+		bridge.publishAll(results, resultDirectory);
+		return result;
+	}
 
 	/**
 	 * Executes the send operation.
@@ -41,7 +76,9 @@ public interface Sender extends ResourceHandler {
 	 * @throws SendException           for functional send errors
 	 * @throws DelayExecutionException if the execution must be postponed
 	 * @throws Exception               for unexpected technical errors
+	 * @deprecated implement {@link #send(InputBin, OutputBin, WorkerContext)} instead
 	 */
+	@Deprecated(since = "4.3", forRemoval = true)
 	SenderResult send(String fileName,
 					  Path sourceDirectory,
 					  Path resultDirectory,
@@ -49,7 +86,10 @@ public interface Sender extends ResourceHandler {
 
 	/**
 	 * Executes the send operation with access to the channel key-value store.
+	 *
+	 * @deprecated implement {@link #send(InputBin, OutputBin, WorkerContext)} instead
 	 */
+	@Deprecated(since = "4.3", forRemoval = true)
 	default SenderResult send(String fileName,
 							  Path sourceDirectory,
 							  Path resultDirectory,
@@ -60,7 +100,10 @@ public interface Sender extends ResourceHandler {
 
 	/**
 	 * Executes the send operation with access to the channel store and metrics repository.
+	 *
+	 * @deprecated implement {@link #send(InputBin, OutputBin, WorkerContext)} instead
 	 */
+	@Deprecated(since = "4.3", forRemoval = true)
 	default SenderResult send(String fileName,
 							  Path sourceDirectory,
 							  Path resultDirectory,
