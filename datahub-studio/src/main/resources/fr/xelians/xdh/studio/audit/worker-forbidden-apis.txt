@@ -1,0 +1,72 @@
+# Forbidden APIs for a Xelians DataHub worker.
+#
+# Checked by the forbiddenapis plugin on the classes of the worker, configured by
+# fr.xelians:datahub-studio-worker-parent. A worker reads its inputs from an InputBin, publishes
+# through an OutputBin, writes on the local disk only under WorkerContext.tempDir(), logs only
+# through XDHProcessLogger, and runs in the thread the platform gives it.
+#
+# These rules only see the code of the worker: what a library does at run time is checked by the
+# conformance kit (fr.xelians:datahub-studio-worker-test).
+
+@defaultMessage A worker must not stop the JVM: throw an exception, the platform records the failure
+java.lang.System#exit(int)
+java.lang.Runtime#exit(int)
+java.lang.Runtime#halt(int)
+
+@defaultMessage A worker runs in the thread the platform gives it: no thread nor pool of its own (capacity, timeout and execution context belong to the platform)
+java.lang.Thread#start()
+java.lang.Thread#startVirtualThread(java.lang.Runnable)
+java.lang.Thread#ofPlatform()
+java.lang.Thread#ofVirtual()
+java.lang.Thread$Builder
+java.util.concurrent.Executors
+java.util.concurrent.ThreadPoolExecutor
+java.util.concurrent.ScheduledThreadPoolExecutor
+java.util.concurrent.ForkJoinPool
+java.util.concurrent.StructuredTaskScope
+java.util.Timer
+java.util.concurrent.CompletableFuture#runAsync(java.lang.Runnable)
+java.util.concurrent.CompletableFuture#supplyAsync(java.util.function.Supplier)
+java.util.Collection#parallelStream()
+java.util.stream.BaseStream#parallel()
+
+@defaultMessage Temporary files go under WorkerContext.tempDir(): pass it as the directory
+java.io.File#createTempFile(java.lang.String,java.lang.String)
+java.nio.file.Files#createTempFile(java.lang.String,java.lang.String,java.nio.file.attribute.FileAttribute[])
+java.nio.file.Files#createTempDirectory(java.lang.String,java.nio.file.attribute.FileAttribute[])
+
+@defaultMessage A worker logs only through XDHProcessLogger (WorkerContext.logger()), so that its lines reach the supervision of the collect
+java.lang.System#out
+java.lang.System#err
+org.slf4j.**
+ch.qos.logback.**
+java.util.logging.**
+
+@defaultMessage A worker never builds a path from a string or a URI: resolve against WorkerContext.tempDir() or use the files of the bins
+java.nio.file.Path#of(java.lang.String,java.lang.String[])
+java.nio.file.Path#of(java.net.URI)
+java.nio.file.Paths#get(java.lang.String,java.lang.String[])
+java.nio.file.Paths#get(java.net.URI)
+java.nio.file.FileSystems#getDefault()
+java.nio.file.FileSystems#newFileSystem(java.net.URI,java.util.Map)
+java.nio.file.FileSystems#newFileSystem(java.net.URI,java.util.Map,java.lang.ClassLoader)
+java.io.File#<init>(java.lang.String)
+java.io.File#<init>(java.lang.String,java.lang.String)
+java.io.File#<init>(java.net.URI)
+java.io.File#listRoots()
+java.io.FileInputStream#<init>(java.lang.String)
+java.io.FileOutputStream#<init>(java.lang.String)
+java.io.FileOutputStream#<init>(java.lang.String,boolean)
+java.io.FileReader#<init>(java.lang.String)
+java.io.FileWriter#<init>(java.lang.String)
+java.io.FileWriter#<init>(java.lang.String,boolean)
+java.io.PrintWriter#<init>(java.lang.String)
+java.io.PrintStream#<init>(java.lang.String)
+java.io.RandomAccessFile#<init>(java.lang.String,java.lang.String)
+java.util.zip.ZipFile#<init>(java.lang.String)
+
+@defaultMessage A worker does not depend on the machine it runs on: take its settings from its form
+java.nio.file.Path#getRoot()
+java.lang.System#getProperty(java.lang.String)
+java.lang.System#getenv(java.lang.String)
+java.lang.System#getenv()

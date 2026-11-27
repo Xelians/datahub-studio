@@ -34,15 +34,57 @@ The framework provides:
 
 ### Maven
 
-Add the dependency to your `pom.xml`:
+Inherit the worker parent and declare the SDK, without version nor scope (the parent provides
+both: the platform ships the SDK, so it is `provided`):
 
 ```xml
-<dependency>
+<parent>
     <groupId>fr.xelians</groupId>
-    <artifactId>datahub-studio</artifactId>
+    <artifactId>datahub-studio-worker-parent</artifactId>
     <version>4.3.0</version>
-</dependency>
+    <relativePath/>
+</parent>
+
+<dependencies>
+    <dependency>
+        <groupId>fr.xelians</groupId>
+        <artifactId>datahub-studio</artifactId>
+    </dependency>
+</dependencies>
 ```
+
+With the parent, `mvn verify` audits the worker (see [Auditing a worker](#auditing-a-worker)).
+A worker that cannot inherit it may still declare the SDK alone, in `provided` scope, but it is
+not audited.
+
+### Auditing a worker
+
+`datahub-studio-worker-parent` checks, on every build, the rules a worker follows inside the
+platform:
+
+| Check | Phase | Fails when |
+| --- | --- | --- |
+| Maven Enforcer | `validate` | the SDK is not `provided`, or older than 4.3.0; a dependency ships Spring, Logback or an AWS SDK |
+| forbiddenapis | `process-classes` | the worker calls an API it must not use (below) |
+
+The forbidden APIs are listed in the SDK jar
+(`fr/xelians/xdh/studio/audit/worker-forbidden-apis.txt`), each with the reason given in the
+build log:
+
+- stopping the JVM (`System.exit`, `Runtime.halt`);
+- creating threads or pools (`Thread#start`, `Executors`, `ForkJoinPool`, `Timer`, asynchronous
+  `CompletableFuture`, parallel streams): a worker runs in the thread the platform gives it, see
+  [Execution Model](#execution-model). `Thread.sleep` stays allowed;
+- temporary files outside `WorkerContext.tempDir()` (`File.createTempFile` without a directory);
+- logging outside `XDHProcessLogger` (`System.out`, SLF4J, Logback, `java.util.logging`);
+- building a path from a string or a URI (`Paths.get`, `Path.of`, `new File(String)`…);
+- reading machine settings (`System.getenv`, `System.getProperty`).
+
+These rules see the code of the worker only. What a library does at run time (a thread it starts,
+a file it writes elsewhere) is the job of the conformance kit, to come in
+`datahub-studio-worker-test`.
+
+`-Dxdh.audit.skip=true` runs a build without the audit, for local trials only.
 
 ---
 
@@ -141,6 +183,10 @@ Multiple channels may share the same pool instances.
 
 Workers must be thread-safe: the same instance may be called concurrently for different executions.
 Keep the state of an execution in local variables, never in instance or static fields.
+
+Workers must not start threads nor pools of their own: the platform sizes the pools, applies the
+task timeout to the thread it gives, and attaches the logs and `tempDir()` of the execution to it.
+The worker parent rejects such code at build time.
 
 ---
 
