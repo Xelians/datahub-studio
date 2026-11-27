@@ -14,10 +14,10 @@ jobs:
       image: cimg/openjdk:21.0.2
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Setup settings.xml
-        uses: s4u/maven-settings-action@v2.5.0
+        uses: s4u/maven-settings-action@88ff0798c9895763d3f1d265ebeb1d08a71c1eb8 # v2.5.0
         with:
           servers: |
             [
