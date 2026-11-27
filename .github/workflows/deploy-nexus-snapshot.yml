@@ -1,0 +1,43 @@
+name: Deploy SNAPSHOT to Xelians Nexus
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: arc-runner-set
+    container:
+      options: --user 1001:123
+      image: cimg/openjdk:21.0.2
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Setup settings.xml
+        uses: s4u/maven-settings-action@88ff0798c9895763d3f1d265ebeb1d08a71c1eb8 # v2.5.0
+        with:
+          servers: |
+            [
+               {
+                  "id":"xelians-maven-snapshots",
+                  "username":"${{ secrets.NEXUS_USER }}",
+                  "password":"${{ secrets.NEXUS_SECRET }}"
+               }
+            ]
+
+      # Turn the pom version (e.g. 4.3.0) into 4.3.0-SNAPSHOT, only inside the CI workspace
+      - name: Set SNAPSHOT version
+        run: |
+          VERSION=$(mvn -q -B help:evaluate -Dexpression=project.version -DforceStdout --settings /github/home/.m2/settings.xml)
+          mvn -q -B versions:set -DnewVersion="${VERSION%-SNAPSHOT}-SNAPSHOT" -DgenerateBackupPoms=false --settings /github/home/.m2/settings.xml
+
+      # Calls maven-deploy-plugin directly: bypasses central-publishing-maven-plugin (no Maven Central) and GPG signing
+      - name: Deploy to Nexus
+        run: >
+          mvn -B -Dmaven.repo.local=/github/home/.m2/repository --settings /github/home/.m2/settings.xml
+          -Dgpg.skip
+          -DaltDeploymentRepository=xelians-maven-snapshots::https://nexus.xelians-dev.fr/repository/xelians-maven-snapshots/
+          clean package org.apache.maven.plugins:maven-deploy-plugin:3.1.4:deploy
