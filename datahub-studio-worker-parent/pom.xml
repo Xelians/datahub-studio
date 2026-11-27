@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Parent POM of a Xelians DataHub worker. A worker inherits it and declares the SDK; mvn verify is
+  the audit:
+    - Enforcer: the SDK in provided scope and in the supported range, no dependency that ships
+      Spring, Logback or an AWS SDK;
+    - forbiddenapis: the APIs a worker must not call (fr/xelians/xdh/studio/audit/worker-forbidden-apis.txt
+      in the SDK jar): JVM exit, threads and pools, temporary files outside tempDir(), logging
+      outside XDHProcessLogger, paths built from strings, machine settings;
+    - Surefire and Failsafe, for the conformance kit (fr.xelians:datahub-studio-worker-test).
+
+  It does not inherit datahub-studio-parent on purpose: a worker must not inherit the Central
+  publication nor its repositories.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>fr.xelians</groupId>
+    <artifactId>datahub-studio-worker-parent</artifactId>
+    <version>4.3.0</version>
+    <packaging>pom</packaging>
+
+    <name>datahub-studio-worker-parent</name>
+    <description>Parent POM of a Xelians DataHub worker: the audit rules run by mvn verify</description>
+    <url>https://github.com/Xelians/datahub-studio</url>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Aurelien Bonnafont</name>
+            <email>aurelien.bonnafont@xelians.fr</email>
+            <organization>Xelians</organization>
+            <organizationUrl>https://www.xelians.fr/</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:git://github.com/Xelians/datahub-studio.git</connection>
+        <developerConnection>scm:git:ssh://github.com:Xelians/datahub-studio.git</developerConnection>
+        <url>https://github.com/Xelians/datahub-studio/tree/main</url>
+    </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>17</maven.compiler.release>
+
+        <!-- The SDK this parent audits against: kept equal to the version of this POM -->
+        <datahub-studio.version>4.3.0</datahub-studio.version>
+        <!-- Lowest SDK a worker may compile against: the bin-based API -->
+        <datahub-studio.minimum.version>4.3.0</datahub-studio.minimum.version>
+
+        <!-- Set to true to run the build without the audit, never in CI -->
+        <xdh.audit.skip>false</xdh.audit.skip>
+
+        <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
+        <maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>
+        <maven.surefire.plugin.version>3.6.1</maven.surefire.plugin.version>
+        <maven.failsafe.plugin.version>3.6.1</maven.failsafe.plugin.version>
+        <maven.enforcer.plugin.version>3.7.0</maven.enforcer.plugin.version>
+        <forbiddenapis.version>3.11</forbiddenapis.version>
+        <maven.invoker.plugin.version>3.10.1</maven.invoker.plugin.version>
+
+        <!-- Publication of this POM on Maven Central (release profile) -->
+        <gpg.plugin.version>3.0.1</gpg.plugin.version>
+        <central.publishing.version>0.8.0</central.publishing.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>fr.xelians</groupId>
+                <artifactId>datahub-studio</artifactId>
+                <version>${datahub-studio.version}</version>
+                <!-- The platform provides the SDK: never shipped in the worker jar -->
+                <scope>provided</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven.jar.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${maven.failsafe.plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven.enforcer.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>xdh-worker-dependencies</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${xdh.audit.skip}</skip>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[17,)</version>
+                                </requireJavaVersion>
+                                <bannedDependencies>
+                                    <message>The SDK is provided by the platform (scope provided) and must be ${datahub-studio.minimum.version} or later.</message>
+                                    <excludes>
+                                        <exclude>fr.xelians:datahub-studio:*:jar:compile</exclude>
+                                        <exclude>fr.xelians:datahub-studio:*:jar:runtime</exclude>
+                                        <exclude>fr.xelians:datahub-studio:(,${datahub-studio.minimum.version})</exclude>
+                                    </excludes>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <message>A worker runs inside the platform: it must not ship Spring, Logback or an AWS SDK (they clash with the platform's own).</message>
+                                    <excludes>
+                                        <exclude>org.springframework:*</exclude>
+                                        <exclude>org.springframework.*:*</exclude>
+                                        <exclude>ch.qos.logback:*</exclude>
+                                        <exclude>software.amazon.awssdk:*</exclude>
+                                        <exclude>com.amazonaws:*</exclude>
+                                    </excludes>
+                                </bannedDependencies>
+                            </rules>
+                        </configuration>
+                    </execution>
+                    <!--
+                      Guard of this POM, not inherited: the SDK it audits against is the one
+                      released with it. A version change (versions:set -DprocessAllModules) must
+                      also update datahub-studio.version (versions:set-property).
+                    -->
+                    <execution>
+                        <id>worker-parent-sdk-version</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <rules>
+                                <requireProperty>
+                                    <property>datahub-studio.version</property>
+                                    <regex>\Q${project.version}\E</regex>
+                                    <regexMessage>datahub-studio.version must equal the version of datahub-studio-worker-parent (${project.version}).</regexMessage>
+                                </requireProperty>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>de.thetaphi</groupId>
+                <artifactId>forbiddenapis</artifactId>
+                <version>${forbiddenapis.version}</version>
+                <executions>
+                    <execution>
+                        <id>xdh-worker-forbidden-apis</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${xdh.audit.skip}</skip>
+                            <failOnUnsupportedJava>false</failOnUnsupportedJava>
+                            <!-- Logback, SLF4J or JUL are usually absent from the classpath of a worker -->
+                            <ignoreSignaturesOfMissingClasses>true</ignoreSignaturesOfMissingClasses>
+                            <signaturesArtifacts>
+                                <signaturesArtifact>
+                                    <groupId>fr.xelians</groupId>
+                                    <artifactId>datahub-studio</artifactId>
+                                    <version>${datahub-studio.version}</version>
+                                    <type>jar</type>
+                                    <path>fr/xelians/xdh/studio/audit/worker-forbidden-apis.txt</path>
+                                </signaturesArtifact>
+                            </signaturesArtifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--
+              Tests of this POM: sample workers in src/it built against it (one clean, the others
+              breaking a rule). Not inherited: a worker has nothing to do with them.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-invoker-plugin</artifactId>
+                <version>${maven.invoker.plugin.version}</version>
+                <inherited>false</inherited>
+                <configuration>
+                    <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+                    <pomIncludes>
+                        <pomInclude>*/pom.xml</pomInclude>
+                    </pomIncludes>
+                    <postBuildHookScript>verify</postBuildHookScript>
+                    <goals>
+                        <goal>verify</goal>
+                    </goals>
+                    <extraArtifacts>
+                        <extraArtifact>fr.xelians:datahub-studio:${datahub-studio.version}:jar</extraArtifact>
+                    </extraArtifacts>
+                    <showErrors>true</showErrors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>worker-parent-it</id>
+                        <goals>
+                            <goal>install</goal>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <!--
+          Publication of this POM on Maven Central with the SDK (mvn -Pxdh-studio-release deploy from the
+          aggregator). A worker inherits this profile but never activates it.
+        -->
+        <profile>
+            <id>xdh-studio-release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${gpg.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>${central.publishing.version}</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

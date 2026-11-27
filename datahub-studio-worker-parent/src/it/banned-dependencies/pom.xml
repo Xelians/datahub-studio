@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>fr.xelians</groupId>
+        <artifactId>datahub-studio-worker-parent</artifactId>
+        <version>@project.version@</version>
+        <relativePath/>
+    </parent>
+    <groupId>fr.xelians.it</groupId>
+    <artifactId>banned-dependencies</artifactId>
+    <version>1.0</version>
+    <dependencies>
+        <dependency>
+            <groupId>fr.xelians</groupId>
+            <artifactId>datahub-studio</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.8</version>
+        </dependency>
+    </dependencies>
+</project>

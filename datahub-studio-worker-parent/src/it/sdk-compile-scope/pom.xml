@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>fr.xelians</groupId>
+        <artifactId>datahub-studio-worker-parent</artifactId>
+        <version>@project.version@</version>
+        <relativePath/>
+    </parent>
+    <groupId>fr.xelians.it</groupId>
+    <artifactId>sdk-compile-scope</artifactId>
+    <version>1.0</version>
+    <dependencies>
+        <dependency>
+            <groupId>fr.xelians</groupId>
+            <artifactId>datahub-studio</artifactId>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+</project>
